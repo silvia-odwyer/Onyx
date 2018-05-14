@@ -294,7 +294,63 @@ client.on('message', msg => {
             .catch(err => { throw err });
             
         }
+        // Live Earth Footage
+        else if (cmd === "earth"){
+            msg.reply("Pinging the Nasa Database for live earth footage . . .")
+            var earth_link = "https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY"
+    
+            fetch(earth_link)
+            .then(res => res.json())
+            .then((out) => {
+            var earth_output = out;
+            console.log(earth_output)   
+            var randomNumber = getRandomNumber(0, earth_output.length)
+            var image_name = earth_output[randomNumber].image
+            var date = earth_output[randomNumber].date;
+            var date_split = date.split("-")
+            console.log(date_split)
+            var year = date_split[0];
+            console.log(year)
+            var month = date_split[1];
+            console.log(month)
+            var day_and_time = date_split[2];
+            var sliced_date = day_and_time.slice(0, 2);
+            console.log(sliced_date)
+            
+            var image_link = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${sliced_date}/png/` + image_name + ".png"
+            msg.reply(image_link)
+            msg.reply("This image was taken on " + date)
+            msg.reply(earth_output[randomNumber].caption)
+            
+            })
+            .catch(err => { throw err });
+            
+        }
+    
+
+
+
+
+    // CoinBin 
+
+
+    // if (cmd === "wiki"){
+    //     var search_term = msg_content.slice(5, msg_content.length);
+    //     console.log(search_term)
+    //     search_term = search_term.split(" ").join("%20");
+    //     console.log(search_term)
+    //     var wiki_link = `https://en.wikitionary.org/w/api.php?action=query&titles=${search_term}&prop=revisions&rvprop=content&format=json&formatversion=2`
+    //     fetch(wiki_link)
+    //     .then(res => res.json())
+    //     .then((out) => {
+    //     var wiki_info = out;
+    //     var wiki_content = wiki_info.query.pages[0].revisions[0].content;
+    //     console.log(wiki_content)
+    //     msg.reply(wiki_content)
+    //     })
+    //     .catch(err => { throw err });
         
+    // }
     
     // HELP COMMAND
     else if (cmd === 'help') {
