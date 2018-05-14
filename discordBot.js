@@ -327,6 +327,53 @@ client.on('message', msg => {
             
         }
     
+        // Behind The Name API
+    
+        //Meme Generator, thanks to the imgflip API
+        else if (cmd === "!meme"){
+            // !meme !waitingskeleton !hithere !hello
+            console.log(msg_content)
+            var new_msg_array = msg_content.split("-");
+            console.log(new_msg_array);
+    
+            for (var i = 0; i += 1; i < new_msg_array.length - 3){
+                var item = new_msg_array[i];
+                console.log(item);
+                item.trim()
+    
+                new_msg_array[i] = item;
+            }
+            console.log(new_msg_array)
+    
+            var meme_type = msg_array[1];
+            console.log(meme_type)
+            var meme_dict = {"Idon'talways":"61532", "waitingskeleton":"4087833", "onedoesnotsimply":"61579", "braceyourselves":"61546"}
+            var meme_type_id = meme_dict[meme_type];
+    
+            var meme_text = msg_array.slice(2, msg_array.length)
+            console.log(meme_text)
+            msg.reply("Generating a nice m3me for you. . .")
+            //var imgflip_password = 
+            var formData = {
+                // Pass a simple key-value pair
+                template_id: meme_type_id,
+                username: 'silvod9',
+                password: imgflip_pass,
+                text0: "I don't always . . . ",
+                text1: "but when I do, it's cos I love coding."
+              };
+              request.post({url:'https://api.imgflip.com/caption_image', formData: formData}, function optionalCallback(err, httpResponse, body) {
+                if (err) {
+                  return console.error('upload failed:', err);
+                }
+                console.log('M3me request successful!  Server responded with:', body);
+                var json_m3me_obj = JSON.parse(body);
+                var m3me_url = json_m3me_obj.data.url;
+                console.log(m3me_url)
+                msg.reply(m3me_url)
+              });
+        }
+
 
 
 
