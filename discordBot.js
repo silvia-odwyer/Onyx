@@ -374,7 +374,37 @@ client.on('message', msg => {
               });
         }
 
-
+        else if (cmd === "bitcoin"){
+            // BitCoin Charts
+            var bitcoin_charts = "http://api.bitcoincharts.com/v1/markets.json"
+            fetch(bitcoin_charts)
+            .then(res => res.json())
+            .then((out) => {
+            var bitcoin_info = out;
+            //var randomNumber = getRandomNumber(0, bitcoin_info.length)
+            
+            var usd_currency = bitcoin_info[1]
+            var eur_currency = bitcoin_info[2]
+            console.log(usd_currency)
+    
+            var bc_to_usd = usd_currency.ask;
+            console.log(bc_to_usd)
+    
+            var bc_to_eur = eur_currency.ask;
+            console.log(bc_to_eur)
+    
+            var header = "```ml" + "\n" +
+            "BITCOIN DATA FROM BITCOINCHARTS.COM 👀" + "\n" +
+            "```"
+            msg.channel.send(header)
+            msg.reply("USD --> 1 bitcoin equals: $" + bc_to_usd)
+            msg.reply("EUR --> 1 bitcoin equals: €" + bc_to_eur)
+    
+        
+            })
+            .catch(err => { throw err });
+            
+        }
 
 
 
@@ -596,3 +626,4 @@ client.login(token);
 // EmojiPasta --> improve
 // Unsplash Integration --> need to apply for an API Key.
 // allow the user to get the avatar of another use.
+// Oxford Dictionaries API
