@@ -464,6 +464,30 @@ client.on('message', msg => {
         
     }
 
+    // Computer Scienc-y/SysAdmin Trivia
+    else if (cmd === "trivia"){
+    
+
+        var trivia_link = "https://opentdb.com/api.php?amount=1&category=18&difficulty=easy"
+        fetch(trivia_link)
+        .then(res => res.json())
+        .then((out) => {
+        var trivia_info = out;
+        console.log(trivia_info);
+        var question = trivia_info.results[0].question;
+        msg.channel.send(question)
+        var answer = trivia_info.results[0].answer;
+
+        client.on('message', ans => {
+            console.log(ans)
+            if (ans === answer){
+                msg.reply("Wow, you were right!")
+            }
+        });
+        })
+        .catch(err => { throw err });
+        
+    }
 
     // CoinBin 
 
@@ -567,12 +591,6 @@ client.on('message', msg => {
         "```"
    
       }
-
-    
-   
-
-
-
 
 });
 
