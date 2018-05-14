@@ -513,6 +513,45 @@ client.on('message', msg => {
         .catch(err => { throw err });
     }
 
+    else if (cmd === "astronauts"){
+        // Getting Astronauts in Space
+var astro_link = "http://api.open-notify.org/astros.json"
+fetch(astro_link)
+.then(res => res.json())
+.then((out) => {
+var astro_list = out;
+var number_astronauts = astro_list["number"];
+
+console.log(number_astronauts);
+var astro_output = "```ml" + "\n" +
+"Number of Astronauts In Space Right Now 🌌🌠🌃" + "\n" + `There are ${number_astronauts} astronauts aboard the International Space Station right now.` +
+"```"
+console.log(astro_output);
+msg.channel.send(astro_output);
+})
+.catch(err => { throw err });
+}
+
+else if (cmd === "iss_passes"){
+    // Getting the ISS Pass-by Dates for a certain location, given latitude and longitude co-ordinates.
+    var latitude = msg_array[1];
+    var longitude = msg_array[2];
+    console.log(latitude + longitude)
+    var iss_passes_link = `http://api.open-notify.org/iss-pass.json?lat=${latitude}&lon=${longitude}`
+    fetch(iss_passes_link)
+    .then(res => res.json())
+    .then((out) => {
+    var passes_list = out;
+    console.log(passes_list)
+
+    var astro_output = "```ml" + "\n" +
+    "When The ISS Will Pass By 🌌🌠🌃" + "\n" + `` +
+    "```"
+
+    })
+    .catch(err => { throw err });
+    }
+
 
     // CoinBin 
 
