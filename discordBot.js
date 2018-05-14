@@ -595,7 +595,33 @@ else if (cmd === "iss_passes"){
     
     }
     
-
+    else if (cmd === "identify"){
+        var text = msg_content.slice(9, msg_content.length);
+    
+        var languageTranslator = createLanguageTranslator();
+    
+        languageTranslator.identify(
+            {
+              text: text
+            },
+            function(err, language) {
+              if (err)  {
+                console.log('error:', err);
+                msg.reply(`Sorry, Watson couldn't seem to identify the language. :/`)
+          
+              } else {
+                console.log(JSON.stringify(language, null, 2));
+                var most_confident_lang = language.languages[0].language;
+                var confidence = language.languages[0].confidence * 100;
+                msg.reply(`IBM's Watson predicts with ${confidence}% confidence that the language is ${most_confident_lang}`);
+    
+    
+              }
+            }
+          );
+    }
+    
+ 
     // CoinBin 
 
 
@@ -786,7 +812,7 @@ function sendImage(msg, image){
             .catch(console.error);
 }
 
-function getAsset(nasa_id){
+function getAsset(msg, nasa_id){
     var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
     fetch(asset_link)
     .then(res => res.json())
@@ -821,3 +847,4 @@ client.login(token);
 // Unsplash Integration --> need to apply for an API Key.
 // allow the user to get the avatar of another use.
 // Oxford Dictionaries API
+// HALO APIS https://developer.haloapi.com/docs/services/58acdc2e21091812784ce8c2/operations/5969689a2109180f287972a8/console
