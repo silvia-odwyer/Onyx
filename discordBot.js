@@ -621,7 +621,72 @@ else if (cmd === "iss_passes"){
           );
     }
     
- 
+    // Text Formatting Commands.
+    else if (cmd === "fmt"){
+        var fmt_array = msg_content.slice(4, msg_content.length);
+        fmt_array = fmt_array.split(" ")
+        var fmt_cmd = fmt_array[0]
+        var message = msg_content.slice(5 + fmt_cmd.length, msg_content.length)
+        console.log(fmt_cmd)
+        console.log(message)
+        var color_cmds_list = ["red", "yellow", "blue", "orange"]
+        var syntax_highlighting_list = ["bash", "md", "python", "java", "kotlin", "javascript"]
+        var font_cmds_list = ["old", "circular", "hex", "binary", "1337", "adv1337", "mono", "cursive", "currency"]
+    
+        if (color_cmds_list.indexOf(fmt_cmd)){
+            // Map the colour to a specific programming language, so that Discord can syntax highlight their text, allowing them to have their message in a certain colour.
+            colour = fmt_cmd;
+            var colour_to_language = {"highlighted":"tex", "yellow":"css", "orange":"py"}
+            var language = colour_to_language[colour];
+            var examples_template = "```ml" + "\n" +
+            "Example Commands 👀" + "\n" +
+            "\n" +
+            "```" + "`" + examples + "`"
+            
+            var fmtMessage = "```" + `${language}` + "\n" + 
+            `${message}` + "\n" +
+            "```"
+            msg.channel.send(fmtMessage);
+        }
+    
+        else if (font_cmds_list.indexOf(fmt_cmd)){
+            var convertedFontMessage = "";
+            var translatedLetter = "";
+            var message_array = message.split("");
+            console.log(message_array);
+            // EXTRACTING THE APPROPRIATE CHARACTER LIST.
+            var font_cmds_object = require('font_lists.json');
+            var characterList = font_cmds_object[fmt_cmd];
+            console.log(characterList);
+            
+            for (var i = 0; i < message_array.length; i += 1) {
+                console.log(i);
+                var letter = message_array[i];
+                console.log(letter)
+                var symbolList = [" ", "\n", "\r\n", '\'', "\"", "!", ",", ".", "?", ">", "<", "$", "Ã¢â€šÂ¬", "/", "(", ")", "=", "+", ":", ";", "*"];
+                var numberList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    
+                if (symbolList.indexOf(letter) >= 0 || numberList.indexOf(letter) >= 0) {
+                    translatedLetter = letter
+                    console.log("Found symbol.")
+                }
+                else {
+                    console.log(letter)
+                    translatedLetter = characterList[letter] // Need the list where the converted characters are.
+                    console.log(translatedLetter)
+                    console.log("Else executed.")
+                }
+                convertedFontMessage += translatedLetter;
+            }
+            console.log(convertedFontMessage);
+            msg.channel.send(convertedFontMessage);
+        }
+     
+        // edit the user's message by replacing their cmdded message with the translated message.
+    }
+    
+
+
     // CoinBin 
 
 
