@@ -276,27 +276,25 @@ client.on('message', msg => {
         
     }
 
-
-    // CoinBin 
-
-
-    // if (cmd === "wiki"){
-    //     var search_term = msg_content.slice(5, msg_content.length);
-    //     console.log(search_term)
-    //     search_term = search_term.split(" ").join("%20");
-    //     console.log(search_term)
-    //     var wiki_link = `https://en.wikitionary.org/w/api.php?action=query&titles=${search_term}&prop=revisions&rvprop=content&format=json&formatversion=2`
-    //     fetch(wiki_link)
-    //     .then(res => res.json())
-    //     .then((out) => {
-    //     var wiki_info = out;
-    //     var wiki_content = wiki_info.query.pages[0].revisions[0].content;
-    //     console.log(wiki_content)
-    //     msg.reply(wiki_content)
-    //     })
-    //     .catch(err => { throw err });
+        // NASA Near-Earth-Object Checker
+        else if (cmd === "neo"){
+            msg.reply("Pinging the Nasa Database for live near-earth info . . .")
+            var nasa_neo_checker = "https://api.nasa.gov/neo/rest/v1/feed/today?detailed=true&api_key=DEMO_KEY"
+    
+            fetch(nasa_neo_checker)
+            .then(res => res.json())
+            .then((out) => {
+            var randomNumber = getRandomNumber(0, 26)
+            var nasa_output = out;
+            console.log(nasa_output)   
+            var total_nearearth_objects = out.element_count;
+            msg.reply("There are a total of " + total_nearearth_objects + " near-earth objects circulating around Earth right now.")
+            
+            })
+            .catch(err => { throw err });
+            
+        }
         
-    // }
     
     // HELP COMMAND
     else if (cmd === 'help') {
