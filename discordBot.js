@@ -685,7 +685,70 @@ else if (cmd === "iss_passes"){
         // edit the user's message by replacing their cmdded message with the translated message.
     }
     
-
+    // Construct an EmojiPasta using regular expressions to search for matching emojis
+    else if (cmd === "emojify"){
+        var keys = Object.keys(emoji);
+        // console.log(keywords)
+    
+        var msg_array_length = msg_array.length;
+        // // NEED TO REVISIT BELOW LINE.
+        msg_array = msg_array.slice(1, msg_array_length);
+        console.log(msg_array.length);
+    
+        var emojip = "";
+        var matched_emojis = [];
+        
+    
+        for (var i = 0; i < msg_array.length; i += 1){
+            var sub_matched_emojis = [];
+             var word = msg_array[i];
+             console.log("Checking" + word)
+    
+            
+        //     console.log(emojip)
+        //     msg.channel.send(emojip)
+        for (var k = 0; k < keys.length; k += 1){
+            var keywords = emoji[keys[k]]["keywords"];
+            if (keys[k] === word){
+                console.log(keys[k] + " matched " + word);
+                console.log(keywords)
+                sub_matched_emojis.push(keys[k])
+            }
+            else{
+            for (var j = 0; j < keywords.length; j += 1){
+    
+                if (keywords[j] === word){
+                    console.log(keys[k] + " matched " + word);
+                    console.log(keywords)
+                    sub_matched_emojis.push(keys[k])
+                }
+            }
+        }
+    
+        }
+        if (sub_matched_emojis.length > 0){
+        // Get random matched emojis
+        var randomNumber = getRandomNumber(0, sub_matched_emojis.length - 1);
+        var randomEmoji = sub_matched_emojis[randomNumber]
+        var emoji_md = `:${randomEmoji}:`
+        emojip += ` ${word} ${emoji_md}`
+        }
+        else{
+            emojip += ` ${word}`
+        }
+        
+    
+    
+    
+        }
+        console.log("completed for loop")
+        console.log(matched_emojis)
+        console.log(emojip)
+        msg.channel.send(emojip)
+    
+    }
+    
+  
 
     // CoinBin 
 
