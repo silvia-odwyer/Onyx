@@ -748,7 +748,38 @@ else if (cmd === "iss_passes"){
     
     }
     
-  
+    // Word Pyramid
+    else if (cmd === "pyramid"){    
+        var msg_array_length = msg_array.length;
+        msg_array = msg_array.slice(1, msg_array_length);
+        console.log(msg_array);
+        var word_pyramid = "";
+        var pyramid2 = " "
+        for (var i = 0; i < msg_array.length; i += 1){
+            var word = msg_array[i];
+            word_pyramid += ` ${word}`;
+            console.log(word_pyramid);
+            pyramid2 += `\n${word_pyramid}`
+        }
+        msg.channel.send(pyramid2);
+    } 
+    else if (cmd === "reverse"){    
+        var msg_array_length = msg_array.length;
+        msg_array = msg_array.slice(1, msg_array_length);
+        msg_string = msg_content.slice(8, msg_content.length)
+        
+        var reverse_string = "";
+        var word;
+        var split_word;
+        for (var i =  msg_string.length - 1; i >= 0; i -= 1){
+    
+            console.log(msg_string[i])
+            reverse_string += msg_string[i];
+        }
+        msg.channel.send(reverse_string);
+    } 
+    
+
 
     // CoinBin 
 
@@ -976,3 +1007,4 @@ client.login(token);
 // allow the user to get the avatar of another use.
 // Oxford Dictionaries API
 // HALO APIS https://developer.haloapi.com/docs/services/58acdc2e21091812784ce8c2/operations/5969689a2109180f287972a8/console
+// https://api.igdb.com/
