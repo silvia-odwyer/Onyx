@@ -406,6 +406,30 @@ client.on('message', msg => {
             
         }
 
+    
+        // QR CODE Generator
+        // Sample Command: qr yellow blue Silvia
+        // Creates a qr encoding of "Silvia" with yellow in the foreground (where the black would usually be) and a blue background
+        else if (cmd === "qr"){
+            var user_text = msg.content.slice(3, msg.content.length)
+            console.log(user_text)
+            var user_text_array = user_text.split(" ")
+            console.log(user_text_array)
+    
+            var fg_color = user_text_array[0]
+            console.log(fg_color)
+            var bg_color = user_text_array[1]
+            console.log(user_text)
+            console.log(bg_color)
+            var amt_slice = fg_color.length + bg_color.length + 2
+            user_text = user_text.slice(amt_slice, msg_content.length);
+    
+            user_text = user_text.split(" ").join("%20");
+            console.log(user_text)
+    
+            var qr_generator = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=${fg_color}&bgcolor=${bg_color}&data=${user_text}`;
+            msg.reply(qr_generator)
+        }
 
 
     // CoinBin 
