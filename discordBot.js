@@ -258,6 +258,27 @@ client.on('message', msg => {
         
     }
 
+    
+    // The Movie DB API Caller
+    else if (cmd === "movie"){
+        msg.reply("Pinging the Movie DB for film info . . .")
+        var movie_db_url = "https://www.themoviedb.org/documentation/api/discover/movie?primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22";
+        
+        fetch(movie_db_url)
+        .then(res => res.text())
+        .then((out) => {
+        var randomNumber = getRandomNumber(0, 26)
+        var film_data = out;
+        console.log(film_data)   
+        
+        })
+        .catch(err => { throw err });
+        
+    }
+
+
+    // CoinBin 
+
 
     // if (cmd === "wiki"){
     //     var search_term = msg_content.slice(5, msg_content.length);
