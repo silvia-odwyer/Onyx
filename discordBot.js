@@ -489,6 +489,31 @@ client.on('message', msg => {
         
     }
 
+    else if (cmd === "iss"){
+        var iss_link = "http://api.open-notify.org/iss-now.json"
+        fetch(iss_link)
+        .then(res => res.json())
+        .then((out) => {
+        var iss_info = out;
+        var position = iss_info["iss_position"];
+        console.log(position)
+        var latitude = position["latitude"];
+        var longitude = position["longitude"];
+        console.log(latitude)
+        console.log(longitude)
+
+        var iss_output = "```ml" + "\n" +
+        "Location of the International Space Station 🌌🌠🌃" + "\n" + `Latitude: ${longitude} \n Latitude: ${latitude}` +
+        "```"
+        // var iss_location = `Latitude: ${longitude} \n Latitude: ${latitude}`
+        // var output = iss_header + iss_location; 
+
+        msg.channel.send(iss_output);
+        })
+        .catch(err => { throw err });
+    }
+
+
     // CoinBin 
 
 
