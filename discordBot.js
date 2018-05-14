@@ -431,6 +431,39 @@ client.on('message', msg => {
             msg.reply(qr_generator)
         }
 
+      // XKCD Comics
+      else if (cmd === "xkcd"){
+        var randomNumber = getRandomNumber(0, 670)        
+        // var xkcd_link = "https://xkcd.com/info.0.json"
+        //     console.log("Random comic called.")
+        //     fetch(xkcd_link)
+        //     .then(res => res.json())
+        //     .then((out) => {
+        //     var xkcd_info = out;
+        //     var last_num = xkcd_info.num;
+        //     var randomNumber = getRandomNumber(1, last_num - 1)
+        //     console.log(randomNumber)
+        //     var xkcd_link = `https://xkcd.com/${randomNumber}/info.0.json`
+
+        //     })
+        //     .catch(err => { throw err });
+
+
+        var xkcd_link = `https://xkcd.com/${randomNumber}/info.0.json`
+        fetch(xkcd_link)
+        .then(res => res.json())
+        .then((out) => {
+        var xkcd_info = out;
+        var image = xkcd_info.img;
+        msg.channel.send(image)
+        var name = xkcd_info.title;
+        msg.channel.send(`Comic #${randomNumber} entitled ${name} from XKCD.`)
+    
+        })
+        .catch(err => { throw err });
+        
+    }
+
 
     // CoinBin 
 
@@ -476,9 +509,9 @@ client.on('message', msg => {
         }
         else {
             var help_output = ""
-            var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` "
+            var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `!meme` `identify` `fmt`"
+            var fun_cmds = "`xkcd` `qr` `!meme` `identify` `fmt` `emojify`"
 
             var search_header = "```ml" + "\n" +
             "Info Commands 🔍" + "\n" +
