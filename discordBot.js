@@ -552,6 +552,49 @@ else if (cmd === "iss_passes"){
     .catch(err => { throw err });
     }
 
+    else if (cmd === "translate"){
+        var languages_array = ["en", "es", "it", "de", "fr"]
+        var to_language = msg_content.slice(10, 12)
+        var text = msg_content.slice(13, msg_content.length)
+        console.log(to_language);
+        
+        if (languages_array.indexOf(to_language) >= 0){
+            console.log("Language in array")
+            var languageTranslator = createLanguageTranslator();
+    
+            var parameters = {
+                text: text,
+                source: 'en', 
+                target: to_language
+              };
+              
+              languageTranslator.translate(
+                parameters,
+                function(error, response) {
+                  if (error){
+                    console.log(error)
+                    msg.reply(`Sorry, your desired language is not available at this time. 
+                    Supported languages include en, fr, de, it, and es`)
+                  }
+                  else{
+                    console.log(response);
+                    var translated_text = response.translations[0].translation;
+                    console.log(translated_text);
+                    msg.reply(translated_text);
+                  }
+    
+                }
+              );
+    
+        }
+        else{
+            msg.reply(`Sorry, your desired language is not available at this time. 
+            Supported languages include en, fr, de, it, and es`)
+        }
+     
+    
+    }
+    
 
     // CoinBin 
 
@@ -741,6 +784,18 @@ function sendImage(msg, image){
         })
             .then(console.log)
             .catch(console.error);
+}
+
+function getAsset(nasa_id){
+    var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
+    fetch(asset_link)
+    .then(res => res.json())
+    .then((out) => {
+        var image = out.collection.items[0].href;
+      console.log(image)
+      msg.channel.send(image)
+    })
+    .catch(err => { throw err });
 }
 
 client.login(token);
