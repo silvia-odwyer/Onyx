@@ -1045,6 +1045,57 @@ client.on('message', msg => {
 
 
 
+    }
+    // Set Presence
+    if (cmd === "setPresence") {
+        var randomPresenceMessages = [`on ${client.guilds.size} servers`]
+        var randomNumber = getRandomNumber(0, randomPresenceMessages.length - 1);
+        var randomPresenceMessage = randomPresenceMessages[randomNumber];
+        client.user.setPresence({ game: { name: randomPresenceMessage }, status: 'online' })
+            .then(console.log)
+            .catch(console.error);
+    }
+
+    else if (cmd === "letterEm") {
+        var string = msg_content.slice(9, msg_content.length);
+        console.log("Msg : " + string)
+        var letter;
+        emoji_string = ""
+        for (var i = 0; i < string.length; i += 1) {
+            letter = string[i];
+            if (alphabet.includes(letter) === true) {
+                emoji_letter = `:regional_indicator_${letter}:      `;
+                emoji_string += emoji_letter;
+            }
+            else {
+                emoji_string += letter;
+                console.log("Found a symbol or space!");
+            }
+
+        }
+        msg.channel.send(emoji_string)
+    }
+
+    else if (cmd === "replaceB") {
+        var string = msg_content.slice(9, msg_content.length);
+
+        var letter;
+        emoji_string = ""
+        for (var i = 0; i < string.length; i += 1) {
+            letter = string[i];
+            if ((letter === "b") || (letter === "B")) {
+                b_emoji = `:b:`;
+                emoji_string += b_emoji;
+            }
+            else {
+                emoji_string += letter;
+                console.log("Found a symbol or space!");
+            }
+
+        }
+        msg.channel.send(emoji_string)
+    }
+
 
     // Typing Contest
     // CoinBin 
