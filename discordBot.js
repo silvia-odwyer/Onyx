@@ -98,12 +98,24 @@ client.on('message', msg => {
     }
 
     else if (cmd === "define"){
-        msg.reply("Query successful.")
+        if (msg_array.length < 2){
+            msg.reply("You must specifiy a word to define, eg: `define dancing`");
+        }
+        else {
+
         var word = msg.content.slice(7, msg_content.length)
         word = word.toUpperCase();
-        msg.reply(word);
-        var definition = json1[word];
-        msg.reply(definition);
+       var definition = json1[word];
+        if (definition != undefined){
+            msg.reply("Found a definition")
+            msg.channel.send(word);
+            msg.channel.send(definition);
+        }
+        else{
+            msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
+        }
+
+        }
     }
 
     else if (cmd === "population"){
@@ -117,7 +129,8 @@ client.on('message', msg => {
         console.log(total_population)
         msg.reply(`There are ${total_population} humans living on Earth right now.`);
         })
-        .catch(err => { throw err });
+        .catch(err => { throw err })
+        .catch(err => {msg.channel.send("I couldn't seem to get the population for you :/")});
     }
     else if (cmd === "reddit"){
         msg.reply("Getting you some nice Reddit posts . . .")
@@ -179,18 +192,26 @@ client.on('message', msg => {
     }
     else if (cmd === "search"){
         var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
-        msg.reply("Query successful.")
-        var word = msg.content.slice(7, msg_content.length)
-        var synonyms = moby.search(word);
-        if (synonyms.length > 100){
-            console.log(synonyms)
-
+        
+        if (message_array.length > 1){
+            msg.reply("Query successful.")
+            var word = msg.content.slice(7, msg_content.length)
+            var synonyms = moby.search(word);
+            if (synonyms.length > 100){
+                console.log(synonyms)
+    
+            }
+            else{
+                msg.reply(synonyms);
+    
+            }
+    
         }
-        else{
-            msg.reply(synonyms);
-
+        else {
+            msg.reply("You must specifiy a word to get synonyms for, eg: `search dancing`");
         }
-
+        
+      
     }
 
     else if (cmd === "acronym"){
@@ -826,7 +847,19 @@ else if (cmd === "iss_passes"){
     
     }
     
-
+    else if (cmd === "resize"){
+        var width = Number(msg_array[1]);
+        console.log(width)
+        var height = Number(msg_array[2]);
+        console.log(height)
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.resize(width, height);
+            });
+    
+            sendImage(msg, new_image_name)
+        
+    }
 
 
     // Typing Contest
