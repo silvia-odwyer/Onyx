@@ -18,6 +18,7 @@ const client = new Discord.Client();
 // RESOURCES
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 
 // NPM PACKAGES
@@ -645,11 +646,11 @@ client.on('message', msg => {
 
     else if (cmd === "identify") {
 
-        if (msg_array.length > 1){
+        if (msg_array.length > 1) {
             var text = msg_content.slice(9, msg_content.length);
 
             var languageTranslator = createLanguageTranslator();
-    
+
             languageTranslator.identify(
                 {
                     text: text
@@ -658,7 +659,7 @@ client.on('message', msg => {
                     if (err) {
                         console.log('error:', err);
                         msg.reply(`Sorry, Watson couldn't seem to identify the language. :/`)
-    
+
                     } else {
                         console.log(JSON.stringify(language, null, 2));
                         var most_confident_lang = language.languages[0].language;
@@ -669,10 +670,10 @@ client.on('message', msg => {
             );
         }
 
-        else{
+        else {
             msg.reply("You must include a piece of text with your command, eg: `identify Bonjour, la vie est belle!` ")
         }
-       
+
     }
 
     // Text Formatting Commands.
@@ -1045,9 +1046,9 @@ client.on('message', msg => {
 
 
 
-    }
+
     // Set Presence
-    if (cmd === "setPresence") {
+    else if (cmd === "setPresence") {
         var randomPresenceMessages = [`on ${client.guilds.size} servers`]
         var randomNumber = getRandomNumber(0, randomPresenceMessages.length - 1);
         var randomPresenceMessage = randomPresenceMessages[randomNumber];
@@ -1057,7 +1058,12 @@ client.on('message', msg => {
     }
 
     else if (cmd === "letterEm") {
+        
+        var numbers = {"1":"one", "2":"two", "3":"three", "4":"four", "5":"five", "6":"six", "7":"seven", "8":"eight", "9":"nine"};
+        var number_keys = Object.keys(numbers);
+
         var string = msg_content.slice(9, msg_content.length);
+        string = string.toLowerCase();
         console.log("Msg : " + string)
         var letter;
         emoji_string = ""
@@ -1066,6 +1072,11 @@ client.on('message', msg => {
             if (alphabet.includes(letter) === true) {
                 emoji_letter = `:regional_indicator_${letter}:      `;
                 emoji_string += emoji_letter;
+            }
+            else if (number_keys.includes(letter) === true){
+                var num_string = numbers[letter];
+                emoji_letter = `:${num_string}: ` 
+                emoji_string += emoji_letter
             }
             else {
                 emoji_string += letter;
@@ -1095,8 +1106,34 @@ client.on('message', msg => {
         }
         msg.channel.send(emoji_string)
     }
+    if (cmd === "nasapic") {
+        var apod_link = `https://images-api.nasa.gov/search?q=Orion&media_type=image`;
+        fetch(apod_link)
+            .then(res => res.json())
+            .then((out) => {
+
+                var link_result = out.collection.items[0].links[0].href
+                var nasa_id = out.collection.items[0].data[0].nasa_id
+
+                getAsset(msg, nasa_id)
+            })
+            .catch(err => { throw err });
 
 
+    }
+    if (cmd === "airQuality") {
+        var openaq_link = "https://api.openaq.org/v1/measurements?country=Sweden"
+        fetch(openaq_link)
+            .then(res => res.json())
+            .then((out) => {
+
+                console.log(out)
+
+
+            })
+            .catch(err => { throw err });
+
+    }
     // Typing Contest
     // CoinBin 
 
@@ -1328,3 +1365,4 @@ client.login(token);
 // https://exchangeratesapi.io/
 // https://www.cryptocompare.com/api#-api-data-price-
 // Add numerical support for letterEm
+// https://www.npmjs.com/package/base64-img

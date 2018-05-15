@@ -14,52 +14,51 @@ Just click here to invite Onyx to your server!
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
 | earth         | See live footage of Earth, as seen from the NOAA DSCVRY probe.                                   |     |
-| neo           | Make a meme, as so !meme waitingskeleton top_text-bottom_text                                    |      |
+| neo           | Find out how many Near-Earth objects are near Earth right now.                              |      |
 | astronauts    | Find out how many astronauts are aboard the International Space Station.                         |      |
-| iss           | Get the location of the International Space Station. \n Updates every second.                    |      |
+| iss           | Get the location of the International Space Station. Updates every second.                    |      |
 
 ### Search Commands
 | Command       | Description   | Examples  |
-| ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
-| xkcd          | Get a randomized XKCD comic.                                                                     |      |
-| population    | Get the total number of humans on Earth right now.                                               |      |
-| search        | Get all the synonyms for a word.                                                                 |  search azure \n search wonderful \n search knowledge    |
+| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
+| search        | Get all the synonyms for a word.                                                                 |  `search azure \n search wonderful \n search knowledge `   |
 | bitcoin       | Retrieve today's bitcoin rates.                                                                  |      |
-| acronym       | Get the meaning of an acronym. --> acronym lol                                                   | acronym tfw \n acronym rofl \n acronym lol   |
-
-| define        | Get an old-style definition of a word like it's 1859.                                            |   define earth \n define dancing \n define knowledge   |
-| translate     | Translate to a variety of languages, including French (fr), Italian (it), German (de), and more! | translate fr How are you?|
-| identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! | identify Hello there, how are you? |
-| getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| getem hearts \n getem happy \n getem nature     |
+| acronym       | Get the meaning of an acronym. --> acronym lol                                                   | `acronym rofl` |
+| define        | Get an old-style definition of a word like it's 1859.                                            |  ` define earth \n define dancing \n define knowledge`   |
+| translate     | Translate to a variety of languages, including French (fr), Italian (it), German (de), and more! | `translate fr How are you?`|
+| identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |` identify Hello there, how are you?` |
+| getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `getem hearts `  |
+| population    | Get the total number of humans on Earth right now.                                               |      |
 
 ### Image Commands
 | Command       | Description   | Examples  |
-| ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
+| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | meme          | Make a meme, as so !meme waitingskeleton top_text-bottom_text                                    |     |
 | slowblur      | Add a gentler blur effect to an image. |    |
 | extremeblur   | Add a stronger blur effect to an image.|     |
 | dotify        |Add this cool effect to an image.|      |
 | invert        | Invert an image, so that it's mirror image is seen. |    |
-| reverse       | Reverse your message. | reverse Hello There \n reverse example sentence|
 | flip          | Flip an image, so that its mirror image will be displayed. |      |
 | sepia         | Add a sepia effect to an image (image URLs supported, as well as local images).|      |
 | imgedit       | Add random effects and filters to an image. |      |
 
 ### Fun Commands
 | Command       | Description   | Examples  |
-| ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
+| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | qr            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `qr fff 000 This is a qr-encoded message \n qr fff 040 Hello there.`|
+| xkcd          | Get a randomized XKCD comic.                                                                     |      |
 |pls react      | Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉                                |     |
-| emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | emojify So I went shopping today, it was pretty fun actually! Haha, I got a cute dress btw.     |
+| emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `emojify So I went shopping today, it was pretty fun actually! Haha, I got a cute dress btw.`     |
 
 ### Message Formatting Commands
 | Command       | Description   | Examples  |
-| ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
-| randomCase    |Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.|   randomCase this is a sample sentence   |
+| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
+| randomCase    |Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.| `randomCase this is a sample sentence`   |
 | letterEm      | Convert all the letters in a message to emoji letters. |  |
 | replaceB      | Replace all the b's in a message with the 🅱️ emoji. |   |
 | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      |
 | pyramid       | Convert a sentence into a word pyramid. Try it out! |      |
+| reverse       | Reverse your message. | `reverse Hello There \n reverse example sentence`|
 
 
 ### Social Commands
