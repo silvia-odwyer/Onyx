@@ -193,17 +193,34 @@ client.on('message', msg => {
     else if (cmd === "search"){
         var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
         
-        if (message_array.length > 1){
+        if (msg_array.length > 1){
             msg.reply("Query successful.")
             var word = msg.content.slice(7, msg_content.length)
             var synonyms = moby.search(word);
-            if (synonyms.length > 100){
-                console.log(synonyms)
-    
+
+            if (synonyms.length === 0){
+                msg.reply("Couldn't find any synonyms related to" + "`" + word + "` Try another maybe? :D")
             }
             else{
-                msg.reply(synonyms);
-    
+                var synonyms_string = synonyms.join(" ,");
+                console.log(synonyms_string)
+                if (synonyms_string.length < 2000){
+                    msg.reply(synonyms_string);
+                }
+                else if (synonyms_string.length > 2000 && synonyms_string.length < 4000){
+                    var middle_index = synonyms.length / 2;
+                    var floored_middle_index = Math.floor(middle_index);
+                    var synonyms1 = synonyms.slice(0, floored_middle_index);
+                    console.log(synonyms1.length);
+                    var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
+                    console.log(synonyms2.length)
+                    msg.channel.send(synonyms1.join(", "))
+                    msg.channel.send(synonyms2.join(", "));
+
+                }
+                else {
+                    msg.channel.send("There are too many synonyms related to this word, and I don't want to spam this channel. xD Try DMMing me, and I'll send you all the results.")
+                }
             }
     
         }
@@ -860,8 +877,66 @@ else if (cmd === "iss_passes"){
             sendImage(msg, new_image_name)
         
     }
-
-
+    
+    else if (cmd === "flip"){
+        var w_or_h = msg_array[1];
+        switch (w_or_h){
+            case "w":
+                var param = "width";
+            case "h":
+                var param = "height";
+        }
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.flip(param)
+            });
+    
+            sendImage(msg, new_image_name)
+        
+    }
+    
+    else if (cmd === "slowblur"){
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.blur(5);
+            });
+    
+            sendImage(msg, new_image_name)
+        
+    }
+    
+    else if (cmd === "extremeblur"){
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.blur(10);
+            });
+    
+        sendImage(msg, new_image_name)
+        
+    }
+    
+    else if (cmd === "invert"){
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.invert();
+            });
+    
+        sendImage(msg, new_image_name)
+        
+    }
+    
+    else if (cmd === "dotify"){
+        Jimp.read("test.jpg", function (err, test) {
+            if (err) throw err;
+            test.dither256();
+            });
+    
+        sendImage(msg, new_image_name)
+        
+    }
+    
+    
+   
     // Typing Contest
     // CoinBin 
 
