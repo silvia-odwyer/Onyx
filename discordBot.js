@@ -9,11 +9,9 @@ let token_obj = require(`token.json`);
 var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
 var imgflip_pass = imgflip_pass_obj["pass"];
-let cmd_info_obj = require(`commands_info.json`);
-
+let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 
 let translate_creds_obj = require(`translate-creds.json`);
-
 
 const client = new Discord.Client();
 
@@ -22,13 +20,13 @@ var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂"
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 
 // NPM PACKAGES
-var moby = require('moby')
-const fetch = require('node-fetch');
-const request = require('request');
-const formData = require('form-data');
-var fs = require('fs');
-var emoji = require("emojilib/emojis.json")
-var Jimp = require("jimp");
+
+const fetch = require('node-fetch'); // Simulates the window.fetch() method for Node.JS
+const request = require('request'); // NodeJS request sending.
+const formData = require('form-data'); // Needed for sending POST requests to servers.
+var fs = require('fs'); // Core Node.JS package required for writing to files.
+var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
+var Jimp = require("jimp"); // Image Manipulation with JS.
 
 // Global Variables
 var new_image_name = "test56.jpg" 
@@ -73,15 +71,6 @@ client.on('message', msg => {
     fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`, (err) => {  
         if (err) throw err;
     });
-    // TEST EMOJIS
-    // var keys = Object.keys(emoji);
-    // var emojip = ""
-    // for (var i = 101; i < 200; i += 1){
-    //     var emoji_md = ` :${keys[i]}: `
-    //     emojip += emoji_md
-    // }
-    // msg.reply(emojip)
-    //
 
   if (msg.content === "hi"){
     msg.reply("It's so lovely to see you, " + msg.author);
@@ -89,7 +78,7 @@ client.on('message', msg => {
     }
 
     else if (cmd === "avatar"){
-        var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey, guys! Check out ${msg.author}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
+        var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${msg.author}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
         var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
         var randomCompliment = avatar_compliments[randomNumber];
         msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
@@ -188,6 +177,7 @@ client.on('message', msg => {
         .catch(err => { throw err });
     }
     else if (cmd === "search"){
+        var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
         msg.reply("Query successful.")
         var word = msg.content.slice(7, msg_content.length)
         var synonyms = moby.search(word);
@@ -801,7 +791,31 @@ else if (cmd === "iss_passes"){
         msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
     }
     
+    else if (cmd === "imgedit"){
     
+        var randomNumber = getRandomNumber(0, 250)
+    
+        var randomQuality = getRandomNumber(5, 100)
+        var width = getRandomNumber(100, 350);
+        var height = getRandomNumber(100, 350)
+    
+    Jimp.read("test.jpg", function (err, test) {
+        if (err) throw err;
+        test.resize(width, height)            // resize
+         .quality(randomQuality)                 // set JPEG quality
+         .greyscale()                 // set greyscale
+         .write(new_image_name); // save
+    
+    
+        });
+    
+        sendImage(msg, new_image_name)
+    
+    }
+    
+
+
+    // Typing Contest
     // CoinBin 
 
 
