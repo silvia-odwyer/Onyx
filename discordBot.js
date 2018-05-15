@@ -664,8 +664,6 @@ client.on('message', msg => {
                         var most_confident_lang = language.languages[0].language;
                         var confidence = language.languages[0].confidence * 100;
                         msg.reply(`IBM's Watson predicts with ${confidence}% confidence that the language is ${most_confident_lang} \n :flag_${most_confident_lang}:`);
-    
-    
                     }
                 }
             );
@@ -998,7 +996,56 @@ client.on('message', msg => {
         msg.channel.send(randomCaseString);
     }
 
- 
+    // Find Emojis Related To A Keyword
+    else if (cmd === "getem") {
+        msg.channel.startTyping(1)
+        var search_term = msg_array[1];
+        console.log("Search term" + search_term)
+
+        var keys = Object.keys(emoji);
+
+        var reply = "";
+
+        var matched_emojis = [];
+        for (var k = 0; k < keys.length; k += 1) {
+            var keywords = emoji[keys[k]]["keywords"];
+            if (keys[k] === search_term) {
+                console.log(keys[k] + " matched " + word);
+                console.log(keywords)
+                matched_emojis.push(keys[k])
+            }
+            else {
+                for (var j = 0; j < keywords.length; j += 1) {
+
+                    if (keywords[j] === search_term) {
+                        console.log(keys[k] + " matched " + search_term);
+                        console.log(keywords)
+                        matched_emojis.push(keys[k])
+                    }
+                }
+            }
+
+        }
+        if (matched_emojis.length > 0) {
+            var emoji_item;
+            reply = `Here are emojis related to: ${search_term}`
+            for (var j = 0; j < matched_emojis.length; j += 1) {
+                emoji_item = matched_emojis[j];
+                emoji_md = `:${emoji_item}:`
+                reply += ` ${emoji_md}`
+            }
+        }
+        else {
+            reply = "I couldn't find any matching emojis for your search term :( Try again maybe? :D"
+        }
+        console.log(matched_emojis)
+        msg.channel.stopTyping()
+        msg.channel.send(reply)
+    }
+
+
+
+
     // Typing Contest
     // CoinBin 
 
@@ -1229,3 +1276,4 @@ client.login(token);
 // https://api.igdb.com/
 // https://exchangeratesapi.io/
 // https://www.cryptocompare.com/api#-api-data-price-
+// Add numerical support for letterEm
