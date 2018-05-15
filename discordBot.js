@@ -125,7 +125,7 @@ client.on('message', msg => {
         .then((out) => {
         var total_population = out.total_population[1].population;    
         console.log(total_population)
-        msg.reply("There are" + total_population + "humans living on Earth right now.");
+        msg.reply(`There are ${total_population} humans living on Earth right now.`);
         })
         .catch(err => { throw err });
     }
@@ -779,8 +779,29 @@ else if (cmd === "iss_passes"){
         msg.channel.send(reverse_string);
     } 
     
-
-
+    else if (cmd === "poke"){
+        var poker = msg.author.username;
+        var pokee = msg_array[1];
+        console.log(poker)
+        msg.channel.send(`${poker} just poked ${pokee} :eyes:`)
+    }
+    else if (cmd === "gift"){
+        var sender = msg.author.username;
+        var receiver = msg_array[1];
+    
+        var giftMessages = [`${sender} just sent a gift to ${receiver} :gift:`, `${receiver} just received a gift :gift: from ${sender}`]
+        var randomNumber = getRandomNumber(0, giftMessages.length - 1);
+        var randomMessage = giftMessages[randomNumber]
+        msg.channel.send(randomMessage)
+    }
+    else if (cmd === "wave"){
+        var sender = msg.author.username;
+        var receiver = msg_array[1];
+    
+        msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
+    }
+    
+    
     // CoinBin 
 
 
@@ -1008,3 +1029,5 @@ client.login(token);
 // Oxford Dictionaries API
 // HALO APIS https://developer.haloapi.com/docs/services/58acdc2e21091812784ce8c2/operations/5969689a2109180f287972a8/console
 // https://api.igdb.com/
+// https://exchangeratesapi.io/
+// https://www.cryptocompare.com/api#-api-data-price-
