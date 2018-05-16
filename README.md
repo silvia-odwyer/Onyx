@@ -1,6 +1,7 @@
 # NodeJS Discord Bot (Onyx/AzuraBot)
-Onyx/AzuraBot is a data-fetching, multi-lingual Discord bot, coded using Discord.JS and Node.JS, and has over thirty commands, 
-including meme generation, social commands, image editing, music production, fetching info/live imagery from NASA, crypto support, interacting with IBM's Watson API, providing definitions/synonyms for words, and more.
+Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot coded using Discord.JS and Node.JS.
+
+Onyx has over thirty commands, including those for meme generation, image editing, music production, fetching info/live imagery from NASA, crypto support, interacting with IBM's Watson API, providing definitions/synonyms for words, and more.
 
 A complete list of currently working commands can be found below.
 
@@ -8,6 +9,14 @@ A complete list of currently working commands can be found below.
 Just click here to invite Onyx to your server!
 
 ## Commands
+
+### Make Electronic Music
+You can make your own electronic music just by typing commands, and connecting to a Voice Channel.
+Onyx comes with a series of built-in, royalty-free samples, which you can play through a Voice Channel. You can then mix samples together to create songs, and have everyone listen to them.
+Firstly, go through some of the samples available by typing `music_cmds`.
+Before playing any samples, make sure you're connected to a Voice Channel beforehand, because Onyx will join your Voice Channel then.
+Then, combine a drum beat with a melody to create a single audio file, which Onyx will then play for you.
+Each of the links to the samples are provided when you play each one, so you can go and download it at LooperMan.com.
 
 ### Space/Astronomy/NASA Commands
 
@@ -21,10 +30,10 @@ Just click here to invite Onyx to your server!
 ### Search Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
-| search        | Get all the synonyms for a word.                                                                 |  `search azure \n search wonderful \n search knowledge `   |
+| search        | Get all the synonyms for a word.                                                                 |  `search azure `   |
 | bitcoin       | Retrieve today's bitcoin rates.                                                                  |      |
 | acronym       | Get the meaning of an acronym. --> acronym lol                                                   | `acronym rofl` |
-| define        | Get an old-style definition of a word like it's 1859.                                            |  ` define earth \n define dancing \n define knowledge`   |
+| define        | Get an old-style definition of a word like it's 1859.                                            |  `define dancing`  |
 | translate     | Translate to a variety of languages, including French (fr), Italian (it), German (de), and more! | `translate fr How are you?`|
 | identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |` identify Hello there, how are you?` |
 | getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `getem hearts `  |
@@ -45,7 +54,7 @@ Just click here to invite Onyx to your server!
 ### Fun Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
-| qr            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `qr fff 000 This is a qr-encoded message \n qr fff 040 Hello there.`|
+| qr            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `qr fff 000 This is a qr-encoded message`|
 | xkcd          | Get a randomized XKCD comic.                                                                     |      |
 |pls react      | Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉                                |     |
 | emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `emojify So I went shopping today, it was pretty fun actually! Haha, I got a cute dress btw.`     |
@@ -58,13 +67,13 @@ Just click here to invite Onyx to your server!
 | replaceB      | Replace all the b's in a message with the 🅱️ emoji. |   |
 | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      |
 | pyramid       | Convert a sentence into a word pyramid. Try it out! |      |
-| reverse       | Reverse your message. | `reverse Hello There \n reverse example sentence`|
+| reverse       | Reverse your message. | `reverse Hello There`|
 
 
 ### Social Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
-| avatar        | are neat                                 |      |
+| avatar        | See your, or someone else's avatar.                              |      |
 | wave          | Wave at another user! |      |
 | poke          | Poke another user! |      |
 | gift          | Send a gift to another user! |      |
