@@ -10,7 +10,7 @@ var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
 var imgflip_pass = imgflip_pass_obj["pass"];
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-
+var ffmpeg = require('ffmpeg');
 let translate_creds_obj = require(`translate-creds.json`);
 
 const client = new Discord.Client();
@@ -740,13 +740,15 @@ client.on('message', msg => {
         // edit the user's message by replacing their cmdded message with the translated message.
     }
 
-    // Construct an EmojiPasta using regular expressions to search for matching emojis
+    // Match words to Emoji. English supported only.
     else if (cmd === "emojify") {
+
+        if (msg_array.length > 1){
         var keys = Object.keys(emoji);
         // console.log(keywords)
 
         var msg_array_length = msg_array.length;
-        // // NEED TO REVISIT BELOW LINE.
+
         msg_array = msg_array.slice(1, msg_array_length);
         console.log(msg_array.length);
 
@@ -791,20 +793,22 @@ client.on('message', msg => {
             else {
                 emojip += ` ${word}`
             }
-
-
-
-
         }
         console.log("completed for loop")
         console.log(matched_emojis)
         console.log(emojip)
         msg.channel.send(emojip)
+    }
+    else{
+        msg.reply("You must specify at least another word along with your command.")
+    }
 
     }
 
     // Word Pyramid
     else if (cmd === "pyramid") {
+        
+        if (msg_array.length > 3){
         var msg_array_length = msg_array.length;
         msg_array = msg_array.slice(1, msg_array_length);
         console.log(msg_array);
@@ -816,44 +820,82 @@ client.on('message', msg => {
             console.log(word_pyramid);
             pyramid2 += `\n${word_pyramid}`
         }
+
+        if (msg_array.length < 4 && msg_array.length > 2){
+            pyramid2 += "\nTry adding more words to your pyramid to make it more impressive :eyes:"
+        }
         msg.channel.send(pyramid2);
     }
+
+    else if (msg_array.length === 1){
+        msg.reply("You must include a piece of text along with your command, eg: \n `pyramid Hello there`")
+
+    }
+    else if (msg_array.length === 2){
+        msg.reply("Try adding at least another word to your sentence, cos I can't make a pyramid with one word. I'll be waiting . . . :D")
+    }
+
+    }
     else if (cmd === "reverse") {
-        var msg_array_length = msg_array.length;
-        msg_array = msg_array.slice(1, msg_array_length);
-        msg_string = msg_content.slice(8, msg_content.length)
-
-        var reverse_string = "";
-        var word;
-        var split_word;
-        for (var i = msg_string.length - 1; i >= 0; i -= 1) {
-
-            console.log(msg_string[i])
-            reverse_string += msg_string[i];
+        if (msg_array.length > 1){
+            var msg_array_length = msg_array.length;
+            msg_array = msg_array.slice(1, msg_array_length);
+            msg_string = msg_content.slice(8, msg_content.length)
+    
+            var reverse_string = "";
+            var word;
+            var split_word;
+            for (var i = msg_string.length - 1; i >= 0; i -= 1) {
+    
+                console.log(msg_string[i])
+                reverse_string += msg_string[i];
+            }
+            msg.channel.send(reverse_string);
         }
-        msg.channel.send(reverse_string);
+
+        else{
+            msg.reply("You must include a piece of text along with your command, eg: \n `reverse Hello there`")
+
+        }
+
     }
 
     else if (cmd === "poke") {
-        var poker = msg.author.username;
-        var pokee = msg_array[1];
-        console.log(poker)
-        msg.channel.send(`${poker} just poked ${pokee} :eyes:`)
+        if (msg_array.length === 1) {
+            msg.reply("Tee hee, you never told me who to poke :) Did you actually want to poke me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
+        }
+        else{
+            var poker = msg.author.username;
+            var pokee = msg_array[1];
+            console.log(poker)
+            msg.channel.send(`${poker} just poked ${pokee} :eyes:`)
+        }
     }
     else if (cmd === "gift") {
-        var sender = msg.author.username;
-        var receiver = msg_array[1];
 
-        var giftMessages = [`${sender} just sent a gift to ${receiver} :gift:`, `${receiver} just received a gift :gift: from ${sender}`]
-        var randomNumber = getRandomNumber(0, giftMessages.length - 1);
-        var randomMessage = giftMessages[randomNumber]
-        msg.channel.send(randomMessage)
+        if (msg_array.length === 1) {
+            msg.reply("Tee hee, you never told me who to send the gift to :) Did you actually want to send it to me? ^^ \n Try mentioning someone along with your command :eyes:.")
+        }
+        else {
+            var sender = msg.author.username;
+            var receiver = msg_array[1];
+
+            var giftMessages = [`${sender} just sent a gift to ${receiver} :gift:`, `${receiver} just received a gift :gift: from ${sender}`]
+            var randomNumber = getRandomNumber(0, giftMessages.length - 1);
+            var randomMessage = giftMessages[randomNumber]
+            msg.channel.send(randomMessage)
+        }
     }
     else if (cmd === "wave") {
+        if (msg_array.length === 1) {
+            msg.reply("Tee hee, you never told me who you wanted to wave at :) Did you actually want to wave at me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
+        }
+        else{
         var sender = msg.author.username;
         var receiver = msg_array[1];
 
         msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
+        }
     }
 
     else if (cmd === "imgedit") {
@@ -963,85 +1005,97 @@ client.on('message', msg => {
 
 
     else if (cmd === "randomCase") {
-        msg_string = msg_content.slice(11, msg_content.length)
-        msg_string = msg_string.toLowerCase();
-        console.log("msg " + msg_string)
-        var randomCaseString = "";
 
-        var word, letter;
+        if (msg_array.length > 1) {
+            msg_string = msg_content.slice(11, msg_content.length)
+            msg_string = msg_string.toLowerCase();
+            console.log("msg " + msg_string)
+            var randomCaseString = "";
 
-        for (var i = 0; i < msg_string.length; i += 1) {
-            console.log(msg_string[i]);
+            var word, letter;
+
+            for (var i = 0; i < msg_string.length; i += 1) {
+                console.log(msg_string[i]);
 
 
-            if (alphabet.indexOf(msg_string[i])) {
-                var randomNumber = getRandomNumber(0, 1);
+                if (alphabet.indexOf(msg_string[i])) {
+                    var randomNumber = getRandomNumber(0, 1);
 
-                switch (randomNumber) {
+                    switch (randomNumber) {
 
-                    case 0:
-                        letter = msg_string[i].toLowerCase();
-                        console.log(randomNumber + letter + "Lowercase")
-                        break;
-                    case 1:
-                        letter = msg_string[i].toUpperCase();
-                        console.log(randomNumber + letter + "Uppercase")
+                        case 0:
+                            letter = msg_string[i].toLowerCase();
+                            console.log(randomNumber + letter + "Lowercase")
+                            break;
+                        case 1:
+                            letter = msg_string[i].toUpperCase();
+                            console.log(randomNumber + letter + "Uppercase")
 
+                    }
                 }
+                else {
+                    letter = msg_string[i];
+                }
+                randomCaseString += letter;
             }
-            else {
-                letter = msg_string[i];
-            }
-            randomCaseString += letter;
+            msg.channel.send(randomCaseString);
         }
-        msg.channel.send(randomCaseString);
+        else {
+            msg.reply("You must include a piece of text along with your command, eg: \n `randomCase Hello there`")
+        }
     }
 
     // Find Emojis Related To A Keyword
     else if (cmd === "getem") {
-        msg.channel.startTyping(1)
-        var search_term = msg_array[1];
-        console.log("Search term" + search_term)
 
-        var keys = Object.keys(emoji);
-
-        var reply = "";
-
-        var matched_emojis = [];
-        for (var k = 0; k < keys.length; k += 1) {
-            var keywords = emoji[keys[k]]["keywords"];
-            if (keys[k] === search_term) {
-                console.log(keys[k] + " matched " + word);
-                console.log(keywords)
-                matched_emojis.push(keys[k])
-            }
-            else {
-                for (var j = 0; j < keywords.length; j += 1) {
-
-                    if (keywords[j] === search_term) {
-                        console.log(keys[k] + " matched " + search_term);
-                        console.log(keywords)
-                        matched_emojis.push(keys[k])
-                    }
-                }
-            }
-
-        }
-        if (matched_emojis.length > 0) {
-            var emoji_item;
-            reply = `Here are emojis related to: ${search_term}`
-            for (var j = 0; j < matched_emojis.length; j += 1) {
-                emoji_item = matched_emojis[j];
-                emoji_md = `:${emoji_item}:`
-                reply += ` ${emoji_md}`
-            }
+        if (msg_array.length == 1) {
+            msg.reply("You must specify a search term along with your command, eg: \n `getem nature` \n `getem hearts`")
         }
         else {
-            reply = "I couldn't find any matching emojis for your search term :( Try again maybe? :D"
+            msg.channel.startTyping(1)
+            var search_term = msg_array[1];
+            console.log("Search term" + search_term)
+
+            var keys = Object.keys(emoji);
+
+            var reply = "";
+
+            var matched_emojis = [];
+            for (var k = 0; k < keys.length; k += 1) {
+                var keywords = emoji[keys[k]]["keywords"];
+                if (keys[k] === search_term) {
+                    console.log(keys[k] + " matched " + word);
+                    console.log(keywords)
+                    matched_emojis.push(keys[k])
+                }
+                else {
+                    for (var j = 0; j < keywords.length; j += 1) {
+
+                        if (keywords[j] === search_term) {
+                            console.log(keys[k] + " matched " + search_term);
+                            console.log(keywords)
+                            matched_emojis.push(keys[k])
+                        }
+                    }
+                }
+
+            }
+            if (matched_emojis.length > 0) {
+                var emoji_item;
+                reply = `Here are emojis related to: ${search_term}`
+                for (var j = 0; j < matched_emojis.length; j += 1) {
+                    emoji_item = matched_emojis[j];
+                    emoji_md = `:${emoji_item}:`
+                    reply += ` ${emoji_md}`
+                }
+            }
+            else {
+                reply = "I couldn't find any matching emojis for your search term :( Try again maybe? :D"
+            }
+            console.log(matched_emojis)
+            msg.channel.stopTyping()
+            msg.channel.send(reply)
         }
-        console.log(matched_emojis)
-        msg.channel.stopTyping()
-        msg.channel.send(reply)
     }
 
 
@@ -1058,53 +1112,66 @@ client.on('message', msg => {
     }
 
     else if (cmd === "letterEm") {
-        
-        var numbers = {"1":"one", "2":"two", "3":"three", "4":"four", "5":"five", "6":"six", "7":"seven", "8":"eight", "9":"nine"};
-        var number_keys = Object.keys(numbers);
+        if (msg_array.length > 1) {
+            var numbers = { "1": "one", "2": "two", "3": "three", "4": "four", "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine" };
+            var number_keys = Object.keys(numbers);
 
-        var string = msg_content.slice(9, msg_content.length);
-        string = string.toLowerCase();
-        console.log("Msg : " + string)
-        var letter;
-        emoji_string = ""
-        for (var i = 0; i < string.length; i += 1) {
-            letter = string[i];
-            if (alphabet.includes(letter) === true) {
-                emoji_letter = `:regional_indicator_${letter}:      `;
-                emoji_string += emoji_letter;
+            var string = msg_content.slice(9, msg_content.length);
+            string = string.toLowerCase();
+            console.log("Msg : " + string)
+            var letter;
+            emoji_string = ""
+            for (var i = 0; i < string.length; i += 1) {
+                letter = string[i];
+                if (alphabet.includes(letter) === true) {
+                    emoji_letter = `:regional_indicator_${letter}:      `;
+                    emoji_string += emoji_letter;
+                }
+                else if (number_keys.includes(letter) === true) {
+                    var num_string = numbers[letter];
+                    emoji_letter = `:${num_string}: `
+                    emoji_string += emoji_letter
+                }
+                else {
+                    emoji_string += letter;
+                    console.log("Found a symbol or space!");
+                }
+
             }
-            else if (number_keys.includes(letter) === true){
-                var num_string = numbers[letter];
-                emoji_letter = `:${num_string}: ` 
-                emoji_string += emoji_letter
-            }
-            else {
-                emoji_string += letter;
-                console.log("Found a symbol or space!");
-            }
+            msg.channel.send(emoji_string)
 
         }
-        msg.channel.send(emoji_string)
+        else {
+            msg.reply("You need to include a message along with the command, eg: \n `replaceB `")
+        }
     }
 
     else if (cmd === "replaceB") {
-        var string = msg_content.slice(9, msg_content.length);
 
-        var letter;
-        emoji_string = ""
-        for (var i = 0; i < string.length; i += 1) {
-            letter = string[i];
-            if ((letter === "b") || (letter === "B")) {
-                b_emoji = `:b:`;
-                emoji_string += b_emoji;
-            }
-            else {
-                emoji_string += letter;
-                console.log("Found a symbol or space!");
-            }
+        if (msg_array.length > 1) {
+            var string = msg_content.slice(9, msg_content.length);
 
+            var letter;
+            emoji_string = ""
+            for (var i = 0; i < string.length; i += 1) {
+                letter = string[i];
+                if ((letter === "b") || (letter === "B")) {
+                    b_emoji = `:b:`;
+                    emoji_string += b_emoji;
+                }
+                else {
+                    emoji_string += letter;
+                    console.log("Found a symbol or space!");
+                }
+
+            }
+            msg.channel.send(emoji_string)
         }
-        msg.channel.send(emoji_string)
+
+        else {
+            msg.reply("You need to include a message along with the command, eg: \n `replaceB `")
+        }
+
     }
     if (cmd === "nasapic") {
         var apod_link = `https://images-api.nasa.gov/search?q=Orion&media_type=image`;
@@ -1121,7 +1188,7 @@ client.on('message', msg => {
 
 
     }
-    if (cmd === "airQuality") {
+    else if (cmd === "airQuality") {
         var openaq_link = "https://api.openaq.org/v1/measurements?country=Sweden"
         fetch(openaq_link)
             .then(res => res.json())
@@ -1133,6 +1200,22 @@ client.on('message', msg => {
             })
             .catch(err => { throw err });
 
+    }
+
+    else if (cmd === "music") {
+        const scribble = require('scribbletune');
+        var clip = scribble.clip({
+            notes: 'c4'
+        });
+        scribble.midi(clip);
+
+
+        const broadcast = client.createVoiceBroadcast();
+        broadcast.playFile('fx.wav');
+
+        for (const connection of client.voiceConnections.values()) {
+            connection.playBroadcast(broadcast);
+        }
     }
     // Typing Contest
     // CoinBin 
