@@ -19,6 +19,7 @@ const client = new Discord.Client();
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
+var music_cmds = ["futurebass", "trapdrums", "rise", "nightbass", "build", "deepbass", "trapdrums", "distortion"];
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 
 // NPM PACKAGES
@@ -1202,13 +1203,67 @@ client.on('message', msg => {
 
     }
 
+    // ELECTRONIC MUSIC MANIPULATION
+
+    // Starting Point
+
+    else if (cmd === "music_cmds"){
+        msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just type its name. \n eg: Type ` + "`futurebass`")
+        
+    }
+    else if (cmd === "fx"){
+        var sample1 = msg_array[1]
+        var sample2 = msg_array[2]
+        var ffmpeg = require('fluent-ffmpeg');
+        var command = ffmpeg();
+        ffmpeg()
+        .input(`${sample1}.wav`)
+        .input(`${sample2}.wav`)
+        .complexFilter([
+            {
+                filter: "amix",
+                inputs: 2,
+                duration: "first",
+                dropout_transition: 3
+            }
+        ])
+  .output('output7.wav')
+  .run()
+
+        playSound(msg, "output7.wav")
+    }
+
+    else if (cmd === "merge"){
+        var ffmpeg = require('fluent-ffmpeg');
+        var command = ffmpeg();
+        ffmpeg('build.wav')
+  .input('trapdrums.wav')
+  .mergeToFile('output.wav')
+    }
+
+    else if (cmd === "play"){
+        playSound(msg, "output6.wav");
+    }
+
+    else if (music_cmds.includes(cmd)) {
+        playSound(msg, `${cmd}.wav`);
+        // const broadcast = client.createVoiceBroadcast();
+        // broadcast.playFile('fx.wav');
+
+        // for (const connection of client.voiceConnections.values()) {
+        //     connection.playBroadcast(broadcast);
+        //     console.log("Playing")
+        // }
+    }
+
+
+    // ScribbleTune use
     else if (cmd === "music") {
         const scribble = require('scribbletune');
         var clip = scribble.clip({
             notes: 'c4'
         });
         scribble.midi(clip);
-        playSound(msg, "build-loop.wav");
 
         // const broadcast = client.createVoiceBroadcast();
         // broadcast.playFile('fx.wav');
@@ -1219,30 +1274,8 @@ client.on('message', msg => {
         // }
     }
 
-    else if (cmd === "rise") {
-        playSound(msg, "fx.wav");
-        // const broadcast = client.createVoiceBroadcast();
-        // broadcast.playFile('fx.wav');
-
-        // for (const connection of client.voiceConnections.values()) {
-        //     connection.playBroadcast(broadcast);
-        //     console.log("Playing")
-        // }
-    }
-
-    else if (cmd === "nightbass") {
-        playSound(msg, "nightride.wav");
-    }
-
-    else if (cmd === "futurebass") {
-        playSound(msg, "hardfuturehousebass.wav");
-
-    }
-
-    else if (cmd === "deepbass") {
-        playSound(msg, "rxvird-bass.wav");
-
-    }
+    
+ 
     // Typing Contest
     // CoinBin 
 
