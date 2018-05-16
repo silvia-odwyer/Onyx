@@ -922,7 +922,7 @@ client.on('message', msg => {
 
     else if (cmd === "sepia") {
 
-        Jimp.read("test.jpg", function (err, test) {
+        Jimp.read("https://apod.nasa.gov/apod/image/1805/M101_3Days_New_APOD.jpg", function (err, test) {
             if (err) throw err;
             test.sepia()
                 .write(new_image_name);
@@ -1208,14 +1208,40 @@ client.on('message', msg => {
             notes: 'c4'
         });
         scribble.midi(clip);
+        playSound(msg, "build-loop.wav");
 
+        // const broadcast = client.createVoiceBroadcast();
+        // broadcast.playFile('fx.wav');
 
-        const broadcast = client.createVoiceBroadcast();
-        broadcast.playFile('fx.wav');
+        // for (const connection of client.voiceConnections.values()) {
+        //     connection.playBroadcast(broadcast);
+        //     console.log("Playing")
+        // }
+    }
 
-        for (const connection of client.voiceConnections.values()) {
-            connection.playBroadcast(broadcast);
-        }
+    else if (cmd === "rise") {
+        playSound(msg, "fx.wav");
+        // const broadcast = client.createVoiceBroadcast();
+        // broadcast.playFile('fx.wav');
+
+        // for (const connection of client.voiceConnections.values()) {
+        //     connection.playBroadcast(broadcast);
+        //     console.log("Playing")
+        // }
+    }
+
+    else if (cmd === "nightbass") {
+        playSound(msg, "nightride.wav");
+    }
+
+    else if (cmd === "futurebass") {
+        playSound(msg, "hardfuturehousebass.wav");
+
+    }
+
+    else if (cmd === "deepbass") {
+        playSound(msg, "rxvird-bass.wav");
+
     }
     // Typing Contest
     // CoinBin 
@@ -1413,11 +1439,20 @@ function getAsset(msg, nasa_id) {
     fetch(asset_link)
         .then(res => res.json())
         .then((out) => {
-            var image = out.collection.items[0].href;
+            var image = out.collection.items[4].href;
             console.log(image)
             msg.channel.send(image)
+            console.log(out.collection.items)
         })
         .catch(err => { throw err });
+}
+
+function playSound(msg, file){
+    var voiceChannel = msg.member.voiceChannel;
+    voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
+
+}).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+
 }
 
 client.login(token);
