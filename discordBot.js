@@ -19,7 +19,8 @@ const client = new Discord.Client();
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
-var music_cmds = ["futurebass", "trapdrums", "rise", "nightbass", "build", "deepbass", "trapdrums", "distortion"];
+var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
+var loop_dict = require('loop_dict.json') 
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 
 // NPM PACKAGES
@@ -1208,29 +1209,51 @@ client.on('message', msg => {
     // Starting Point
 
     else if (cmd === "music_cmds"){
-        msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just type its name. \n eg: Type ` + "`futurebass`")
+        msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just join a Voice Channel, and type its name. \n eg: Type ` + "`futurebass`")
         
     }
-    else if (cmd === "fx"){
-        var sample1 = msg_array[1]
-        var sample2 = msg_array[2]
-        var ffmpeg = require('fluent-ffmpeg');
-        var command = ffmpeg();
-        ffmpeg()
-        .input(`${sample1}.wav`)
-        .input(`${sample2}.wav`)
-        .complexFilter([
-            {
-                filter: "amix",
-                inputs: 2,
-                duration: "first",
-                dropout_transition: 3
-            }
-        ])
-  .output('output7.wav')
-  .run()
 
-        playSound(msg, "output7.wav")
+    else if (cmd === "fx"){
+        var sample1 = msg_array[0];
+        var sample2 = msg_array[1];
+
+        if ( msg_array.length < 3){
+            msg.reply("You need to add two sound effects along with your command, eg: \n `fx futurebass build` \n Both `futurebass` and `build` are samples.`")
+        }
+
+        else if (msg_array.length === 3){
+
+            if (music_cmds.includes(sample1) && music_cmds.includes(sample2)){
+   
+                var ffmpeg = require('fluent-ffmpeg');
+                var command = ffmpeg();
+                ffmpeg()
+                .input(`${sample1}.wav`)
+                .input(`${sample2}.wav`)
+                .complexFilter([
+                    {
+                        filter: "amix",
+                        inputs: 2,
+                        duration: "shortest",
+                        dropout_transition: 3
+                    }
+                ])
+          .output('output7.wav')
+          .run()
+        
+                playSound(msg, "output7.wav") // Defined below.
+            }
+
+            else{
+                msg.reply("Sorry, I don't recognise those samples. Probably a typo :stuck_out_tongue_winking_eye:")
+            }
+        
+        }
+
+        else{
+            msg.reply("You can only combine two samples/loops at a time for now, eg: \n `fx build futurebass`")
+        }
+        
     }
 
     else if (cmd === "merge"){
@@ -1241,19 +1264,10 @@ client.on('message', msg => {
   .mergeToFile('output.wav')
     }
 
-    else if (cmd === "play"){
-        playSound(msg, "output6.wav");
-    }
-
+    // Playback samples.
     else if (music_cmds.includes(cmd)) {
         playSound(msg, `${cmd}.wav`);
-        // const broadcast = client.createVoiceBroadcast();
-        // broadcast.playFile('fx.wav');
 
-        // for (const connection of client.voiceConnections.values()) {
-        //     connection.playBroadcast(broadcast);
-        //     console.log("Playing")
-        // }
     }
 
 
@@ -1482,10 +1496,21 @@ function getAsset(msg, nasa_id) {
 
 function playSound(msg, file){
     var voiceChannel = msg.member.voiceChannel;
-    voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
+    console.log(voiceChannel)
 
+    if (voiceChannel === undefined){
+        msg.reply("You need to join a Voice Channel first. Then type your command again.")
+    }
+    else{
+        voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
+        var link = loop_dict[file]
+        console.log(link)
+        msg.channel.send("Futurebass sample free here:" + link)
+        msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
+    
 }).catch(err => msg.channel.send("No one to join."), err => console.log(err));
 
+}
 }
 
 client.login(token);

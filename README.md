@@ -6,13 +6,20 @@ Onyx has over thirty commands, including those for meme generation, image editin
 A complete list of currently working commands can be found below.
 
 ## Invite To Your Server
-Just click here to invite Onyx to your server!
+[Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
+
+![Ask Onyx for Acronym Meanings]( "Ask Onyx for Acronym Meanings")
+
+## Test Onyx Out In This Support Server
+If you want to test Onyx out before adding her to your server, just join this server, and leave when you want.
+Onyx runs 24/7, so she'll always be online. :D
 
 ## Commands
 
 ### Make Electronic Music
 You can make your own electronic music just by typing commands, and connecting to a Voice Channel.
 Onyx comes with a series of built-in, royalty-free samples, which you can play through a Voice Channel. You can then mix samples together to create songs, and have everyone listen to them.
+
 Firstly, go through some of the samples available by typing `music_cmds`.
 Before playing any samples, make sure you're connected to a Voice Channel beforehand, because Onyx will join your Voice Channel then.
 Then, combine a drum beat with a melody to create a single audio file, which Onyx will then play for you.
