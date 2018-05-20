@@ -25,9 +25,11 @@ var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trap
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
+var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party":"5496396", "fwp":"61539", "oprah":"28251713", "great":"563423", "wonka":"61582", "bf":"112126428"}
 
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
+const fetch = require('node-fetch')
 const formData = require('form-data'); // Needed for sending POST requests to servers.
 var fs = require('fs'); // Core Node.JS package required for writing to files.
 
@@ -92,6 +94,25 @@ function playSound(msg, file) {
         }).catch(err => msg.channel.send("No one to join."), err => console.log(err));
 
     }
+}
+
+function checkInServer(msg, username){
+    var guild = msg.guild.members;
+
+    console.log(guild)
+    var guild_members = msg.guild.members.map(u => u.id)
+    console.log(guild_members)
+    if (guild_members.includes(username)){
+
+        console.log("Returning TRUE")
+        return true;
+    }
+    else{
+        console.log("Returning FALSE")
+        return false;
+    }
+
+    console.log(guild_members);
 }
 
 client.on('ready', () => {
@@ -254,7 +275,7 @@ client.on('message', msg => {
     }
 
     else if (msg.content === "hi") {
-        var greetings = ["Hi there! :D", "Oh, wow, lovely to see you!", ":wave: Hey there!"]
+        var greetings = ["Hi there! :D ", "Oh, wow, lovely to see you! ", ":wave: Hey there! "]
         var randomNumber = getRandomNumber(0, greetings.length - 1)
         msg.channel.send(greetings[randomNumber] + msg.author);
         msg.react("😄")
@@ -262,12 +283,16 @@ client.on('message', msg => {
 
     else if (cmd === "avatar") {
         console.log(msg_array.length)
-        var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${msg.author}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
-        var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
-        var randomCompliment = avatar_compliments[randomNumber];
-
+        var user = ""
+    
         // User Wants Their Avatar
         if (msg_array.length === 1) {
+            user = msg.author.username;
+            console.log("User " + user)
+            var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${user}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
+            var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
+            var randomCompliment = avatar_compliments[randomNumber];
+    
             msg.channel.send(randomCompliment + "\n" + msg.author.avatarURL);
             for (var i = 0; i < 10; i += 1) {
                 var randomNumber = getRandomNumber(0, emoji_list.length - 1);
@@ -277,9 +302,17 @@ client.on('message', msg => {
         }
         // User Wants Someone Else's Avatar
         else if (msg_array.length === 2) {
-            var avatar_link = msg.mentions.users.map(u => u.avatarURL)
+            // Need to check if the user is actually in the server
+            var inServer = checkInServer(msg, msg_array[1])
+            if (inServer){
+                var avatar_link = msg.mentions.users.map(u => u.avatarURL)
             
-            msg.channel.send(avatar_link);
+                msg.channel.send(avatar_link);
+            }
+            else{
+                msg.channel.send("404: That User Doesn't Exist :(")
+            }
+         
         }
         else {
             msg.reply("I can only send one avatar per command.")
@@ -427,40 +460,27 @@ client.on('message', msg => {
     // Behind The Name API
 
     //Meme Generator, thanks to the imgflip API
-    else if (cmd === "!meme") {
+    else if (cmd === "meme") {
         // !meme !waitingskeleton !hithere !hello
         //  !meme !waitingskeleton hithere-hello
-        // Split based on spaces, ["!meme", "!waitingskeleton", "hithere-hello"] -- msg_array might already have this.
+        //Remove first two elements in msg_array.
         console.log(msg_array)
+        console.log(msg_content)
+
+        var first_words_length = msg_array[0].length + msg_array[1].length + 2;
+        console.log(first_words_length)
+        var text = msg_content.slice(first_words_length, msg_content.length);
+        console.log(text)
+     
         var template = msg_array[1]
-        // get last element of that list, then split based on a hyphen.
-        var meme_text = msg_array[msg_array.length - 1].split("-")
+      
+        var meme_text = text.split("-")
+
         var top_text = meme_text[0]
         var bottom_text = meme_text[1]
+        
+        var meme_type_id = meme_dict[template];
 
-
-        //
-        //
-        console.log(msg_content)
-        var new_msg_array = msg_content.split("-");
-        console.log(new_msg_array);
-
-        for (var i = 0; i += 1; i < new_msg_array.length - 3) {
-            var item = new_msg_array[i];
-            console.log(item);
-            item.trim()
-
-            new_msg_array[i] = item;
-        }
-        console.log(new_msg_array)
-
-        var meme_type = msg_array[1];
-        console.log(meme_type)
-        var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546" }
-        var meme_type_id = meme_dict[meme_type];
-
-        var meme_text = msg_array.slice(2, msg_array.length)
-        console.log(meme_text)
         msg.reply("Generating a nice m3me for you. . .")
         //var imgflip_password = 
         var formData = {
@@ -468,8 +488,8 @@ client.on('message', msg => {
             template_id: meme_type_id,
             username: 'silvod9',
             password: imgflip_pass,
-            text0: "I don't always . . . ",
-            text1: "but when I do, it's cos I love coding."
+            text0: top_text,
+            text1: bottom_text
         };
         request.post({ url: 'https://api.imgflip.com/caption_image', formData: formData }, function optionalCallback(err, httpResponse, body) {
             if (err) {
@@ -552,26 +572,27 @@ client.on('message', msg => {
         if (msg_array.length === 1 || msg_content === "xkcd today") {
             // User wants a random comic.
             if (msg_array.length === 1) {
-                number = getRandomNumber(0, 670);
+                number = getRandomNumber(0, 1995);
+                xkcd_link = `https://xkcd.com/${number}/info.0.json`;
+
 
             }
             else {
-                // Get today's number instead.
+                xkcd_link = "http://xkcd.com/info.0.json"
             }
-            xkcd_link = `https://xkcd.com/${number}/info.0.json`;
 
             fetch(xkcd_link)
                 .then(res => res.json())
                 .then((out) => {
                     var xkcd_info = out;
+                    console.log(xkcd_info)
                     var image = xkcd_info.img;
                     msg.channel.send(image)
                     var name = xkcd_info.title;
-                    msg.channel.send(`Comic #${randomNumber} entitled ${name} from XKCD.`)
-
+                    var number = xkcd_info.num;
+                    msg.channel.send(`Comic #${number} entitled ${name} from XKCD.`)
                 })
                 .catch(err => { throw err });
-
         }
     }
 
@@ -590,14 +611,15 @@ client.on('message', msg => {
                 msg.channel.send(question)
                 var answer = trivia_info.results[0].answer;
 
-                client.on('message', ans => {
-                    console.log(ans)
-                    if (ans === answer) {
-                        msg.reply("Wow, you were right!")
-                    }
-                });
             })
             .catch(err => { throw err });
+            
+            client.on('message', ans => {
+                console.log(ans)
+                if (ans === "hi") {
+                    msg.reply("Wow, you were right!")
+                }
+            });
 
     }
 
