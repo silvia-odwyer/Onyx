@@ -22,7 +22,7 @@ var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂"
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
 var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
-var loop_dict = require('loop_dict.json') 
+var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 
@@ -70,27 +70,28 @@ function getAsset(msg, nasa_id) {
         .catch(err => { throw err });
 }
 
-function getConfigVars(){
+function getConfigVars() {
 
 }
 
-function playSound(msg, file){
+function playSound(msg, file) {
     var voiceChannel = msg.member.voiceChannel;
     console.log(voiceChannel)
 
-    if (voiceChannel === undefined){
+    if (voiceChannel === undefined) {
         msg.reply("You need to join a Voice Channel first. Then type your command again.")
     }
-    else{
-        voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
-        var link = loop_dict[file]
-        console.log(link)
-        msg.channel.send("Futurebass sample free here:" + link)
-        msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
-    
-}).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+    else {
+        voiceChannel.join().then(connection => {
+            const dispatcher = connection.playFile(file);
+            var link = loop_dict[file]
+            console.log(link)
+            msg.channel.send("Futurebass sample free here:" + link)
+            msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
 
-}
+        }).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+
+    }
 }
 
 client.on('ready', () => {
@@ -267,8 +268,8 @@ client.on('message', msg => {
         var randomCompliment = avatar_compliments[randomNumber];
 
         // User Wants Their Avatar
-        if (msg_content.length === 1){
-              msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
+        if (msg_content.length === 1) {
+            msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
             for (var i = 0; i < 10; i += 1) {
                 var randomNumber = getRandomNumber(0, emoji_list.length - 1);
                 var randomEmoji = emoji_list[randomNumber];
@@ -276,15 +277,15 @@ client.on('message', msg => {
             }
         }
         // User Wants Someone Else's Avatar
-        else if (msg_content.length === 2){
+        else if (msg_content.length === 2) {
             var avatar_to_get = msg_array[1]
-            
+
 
         }
-        else{
+        else {
             msg.reply("I can only send one avatar per command.")
         }
-      
+
     }
     else if (msg.content === "pls react") {
         for (var i = 0; i < 10; i += 1) {
@@ -388,10 +389,6 @@ client.on('message', msg => {
             .catch(err => { throw err });
     }
 
-
-    
-
-
     // The Movie DB API Caller
     else if (cmd === "movie") {
         msg.reply("Pinging the Movie DB for film info . . .")
@@ -428,12 +425,23 @@ client.on('message', msg => {
 
     }
 
-
     // Behind The Name API
 
     //Meme Generator, thanks to the imgflip API
     else if (cmd === "!meme") {
         // !meme !waitingskeleton !hithere !hello
+        //  !meme !waitingskeleton hithere-hello
+        // Split based on spaces, ["!meme", "!waitingskeleton", "hithere-hello"] -- msg_array might already have this.
+        console.log(msg_array)
+        var template = msg_array[1]
+        // get last element of that list, then split based on a hyphen.
+        var meme_text = msg_array[msg_array.length - 1].split("-")
+        var top_text = meme_text[0]
+        var bottom_text = meme_text[1]
+
+
+        //
+        //
         console.log(msg_content)
         var new_msg_array = msg_content.split("-");
         console.log(new_msg_array);
@@ -538,39 +546,39 @@ client.on('message', msg => {
 
     // XKCD Comics
     else if (cmd === "xkcd") {
-        var randomNumber = getRandomNumber(0, 670)
-        // var xkcd_link = "https://xkcd.com/info.0.json"
-        //     console.log("Random comic called.")
-        //     fetch(xkcd_link)
-        //     .then(res => res.json())
-        //     .then((out) => {
-        //     var xkcd_info = out;
-        //     var last_num = xkcd_info.num;
-        //     var randomNumber = getRandomNumber(1, last_num - 1)
-        //     console.log(randomNumber)
-        //     var xkcd_link = `https://xkcd.com/${randomNumber}/info.0.json`
+        var xkcd_link;
+        var number;
+        // Only execute the fetch code if the cmd "xkcd" is entered, or if the msg content is equal to "xkcd today"
+        // Otherwise, I'd have the fetch code twice.
+        if (msg_array.length === 1 || msg_content === "xkcd today") {
+            // User wants a random comic.
+            if (msg_array.length === 1) {
+                number = getRandomNumber(0, 670);
 
-        //     })
-        //     .catch(err => { throw err });
+            }
+            else {
+                // Get today's number instead.
+            }
+            xkcd_link = `https://xkcd.com/${number}/info.0.json`;
 
+            fetch(xkcd_link)
+                .then(res => res.json())
+                .then((out) => {
+                    var xkcd_info = out;
+                    var image = xkcd_info.img;
+                    msg.channel.send(image)
+                    var name = xkcd_info.title;
+                    msg.channel.send(`Comic #${randomNumber} entitled ${name} from XKCD.`)
 
-        var xkcd_link = `https://xkcd.com/${randomNumber}/info.0.json`
-        fetch(xkcd_link)
-            .then(res => res.json())
-            .then((out) => {
-                var xkcd_info = out;
-                var image = xkcd_info.img;
-                msg.channel.send(image)
-                var name = xkcd_info.title;
-                msg.channel.send(`Comic #${randomNumber} entitled ${name} from XKCD.`)
+                })
+                .catch(err => { throw err });
 
-            })
-            .catch(err => { throw err });
-
+        }
     }
 
     // Computer Scienc-y/SysAdmin Trivia
     else if (cmd === "trivia") {
+        // Create a category mapping between categories and numbers.
 
 
         var trivia_link = "https://opentdb.com/api.php?amount=1&category=18&difficulty=easy"
@@ -595,6 +603,7 @@ client.on('message', msg => {
     }
 
     else if (cmd === "iss") {
+        // Need to get general location of a lat/longitude pair.
         var iss_link = "http://api.open-notify.org/iss-now.json"
         fetch(iss_link)
             .then(res => res.json())
@@ -608,11 +617,8 @@ client.on('message', msg => {
                 console.log(longitude)
 
                 var iss_output = "```ml" + "\n" +
-                    "Location of the International Space Station 🌌🌠🌃" + "\n" + `Latitude: ${longitude} \n Latitude: ${latitude}` +
+                    "Location of the International Space Station 🌌🌠🌃" + "\n" + `Latitude: ${latitude} \n Longitude: ${longitude}` +
                     "```"
-                // var iss_location = `Latitude: ${longitude} \n Latitude: ${latitude}`
-                // var output = iss_header + iss_location; 
-
                 msg.channel.send(iss_output);
             })
             .catch(err => { throw err });
@@ -638,6 +644,8 @@ client.on('message', msg => {
     }
 
     else if (cmd === "iss_passes") {
+
+        // Find out whether the latitude/longitude is in a certain country.
         // Getting the ISS Pass-by Dates for a certain location, given latitude and longitude co-ordinates.
         var latitude = msg_array[1];
         var longitude = msg_array[2];
@@ -806,117 +814,117 @@ client.on('message', msg => {
     // Match words to Emoji. English supported only.
     else if (cmd === "emojify") {
 
-        if (msg_array.length > 1){
-        var keys = Object.keys(emoji);
-        // console.log(keywords)
+        if (msg_array.length > 1) {
+            var keys = Object.keys(emoji);
+            // console.log(keywords)
 
-        var msg_array_length = msg_array.length;
+            var msg_array_length = msg_array.length;
 
-        msg_array = msg_array.slice(1, msg_array_length);
-        console.log(msg_array.length);
+            msg_array = msg_array.slice(1, msg_array_length);
+            console.log(msg_array.length);
 
-        var emojip = "";
-        var matched_emojis = [];
-
-
-        for (var i = 0; i < msg_array.length; i += 1) {
-            var sub_matched_emojis = [];
-            var word = msg_array[i];
-            console.log("Checking" + word)
+            var emojip = "";
+            var matched_emojis = [];
 
 
-            //     console.log(emojip)
-            //     msg.channel.send(emojip)
-            for (var k = 0; k < keys.length; k += 1) {
-                var keywords = emoji[keys[k]]["keywords"];
-                if (keys[k] === word) {
-                    console.log(keys[k] + " matched " + word);
-                    console.log(keywords)
-                    sub_matched_emojis.push(keys[k])
-                }
-                else {
-                    for (var j = 0; j < keywords.length; j += 1) {
+            for (var i = 0; i < msg_array.length; i += 1) {
+                var sub_matched_emojis = [];
+                var word = msg_array[i];
+                console.log("Checking" + word)
 
-                        if (keywords[j] === word) {
-                            console.log(keys[k] + " matched " + word);
-                            console.log(keywords)
-                            sub_matched_emojis.push(keys[k])
+
+                //     console.log(emojip)
+                //     msg.channel.send(emojip)
+                for (var k = 0; k < keys.length; k += 1) {
+                    var keywords = emoji[keys[k]]["keywords"];
+                    if (keys[k] === word) {
+                        console.log(keys[k] + " matched " + word);
+                        console.log(keywords)
+                        sub_matched_emojis.push(keys[k])
+                    }
+                    else {
+                        for (var j = 0; j < keywords.length; j += 1) {
+
+                            if (keywords[j] === word) {
+                                console.log(keys[k] + " matched " + word);
+                                console.log(keywords)
+                                sub_matched_emojis.push(keys[k])
+                            }
                         }
                     }
-                }
 
+                }
+                if (sub_matched_emojis.length > 0) {
+                    // Get random matched emojis
+                    var randomNumber = getRandomNumber(0, sub_matched_emojis.length - 1);
+                    var randomEmoji = sub_matched_emojis[randomNumber]
+                    var emoji_md = `:${randomEmoji}:`
+                    emojip += ` ${word} ${emoji_md}`
+                }
+                else {
+                    emojip += ` ${word}`
+                }
             }
-            if (sub_matched_emojis.length > 0) {
-                // Get random matched emojis
-                var randomNumber = getRandomNumber(0, sub_matched_emojis.length - 1);
-                var randomEmoji = sub_matched_emojis[randomNumber]
-                var emoji_md = `:${randomEmoji}:`
-                emojip += ` ${word} ${emoji_md}`
-            }
-            else {
-                emojip += ` ${word}`
-            }
+            console.log("completed for loop")
+            console.log(matched_emojis)
+            console.log(emojip)
+            msg.channel.send(emojip)
         }
-        console.log("completed for loop")
-        console.log(matched_emojis)
-        console.log(emojip)
-        msg.channel.send(emojip)
-    }
-    else{
-        msg.reply("You must specify at least another word along with your command.")
-    }
+        else {
+            msg.reply("You must specify at least another word along with your command.")
+        }
 
     }
 
     // Word Pyramid
     else if (cmd === "pyramid") {
-        
-        if (msg_array.length > 3){
-        var msg_array_length = msg_array.length;
-        msg_array = msg_array.slice(1, msg_array_length);
-        console.log(msg_array);
-        var word_pyramid = "";
-        var pyramid2 = " "
-        for (var i = 0; i < msg_array.length; i += 1) {
-            var word = msg_array[i];
-            word_pyramid += ` ${word}`;
-            console.log(word_pyramid);
-            pyramid2 += `\n${word_pyramid}`
+
+        if (msg_array.length > 3) {
+            var msg_array_length = msg_array.length;
+            msg_array = msg_array.slice(1, msg_array_length);
+            console.log(msg_array);
+            var word_pyramid = "";
+            var pyramid2 = " ";
+            for (var i = 0; i < msg_array.length; i += 1) {
+                var word = msg_array[i];
+                word_pyramid += ` ${word}`;
+                console.log(word_pyramid);
+                pyramid2 += `\n${word_pyramid}`;
+            }
+
+            if (msg_array.length < 4 && msg_array.length > 2) {
+                pyramid2 += "\nTry adding more words to your pyramid to make it more impressive :eyes:"
+            }
+            msg.channel.send(pyramid2);
         }
 
-        if (msg_array.length < 4 && msg_array.length > 2){
-            pyramid2 += "\nTry adding more words to your pyramid to make it more impressive :eyes:"
+        else if (msg_array.length === 1) {
+            msg.reply("You must include a piece of text along with your command, eg: \n `pyramid Hello there`")
+
         }
-        msg.channel.send(pyramid2);
-    }
-
-    else if (msg_array.length === 1){
-        msg.reply("You must include a piece of text along with your command, eg: \n `pyramid Hello there`")
-
-    }
-    else if (msg_array.length === 2){
-        msg.reply("Try adding at least another word to your sentence, cos I can't make a pyramid with one word. I'll be waiting . . . :D")
-    }
+        else if (msg_array.length === 2) {
+            msg.reply("Try adding at least another word to your sentence. I'll be ready to make your pyramid then . . . :D")
+        }
 
     }
     else if (cmd === "reverse") {
-        if (msg_array.length > 1){
+        if (msg_array.length > 1) {
             var msg_array_length = msg_array.length;
             msg_array = msg_array.slice(1, msg_array_length);
-            msg_string = msg_content.slice(8, msg_content.length)
-    
+            msg_string = msg_content.slice(8, msg_content.length);
+
             var reverse_string = "";
             var word;
             var split_word;
             for (var i = msg_string.length - 1; i >= 0; i -= 1) {
-    
-                console.log(msg_string[i])
+
+                console.log(msg_string[i]);
                 reverse_string += msg_string[i];
             }
             msg.channel.send(reverse_string);
         }
 
-        else{
+        else {
             msg.reply("You must include a piece of text along with your command, eg: \n `reverse Hello there`")
 
         }
@@ -927,7 +935,7 @@ client.on('message', msg => {
         if (msg_array.length === 1) {
             msg.reply("Tee hee, you never told me who to poke :) Did you actually want to poke me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
         }
-        else{
+        else {
             var poker = msg.author.username;
             var pokee = msg_array[1];
             console.log(poker)
@@ -953,11 +961,11 @@ client.on('message', msg => {
         if (msg_array.length === 1) {
             msg.reply("Tee hee, you never told me who you wanted to wave at :) Did you actually want to wave at me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
         }
-        else{
-        var sender = msg.author.username;
-        var receiver = msg_array[1];
+        else {
+            var sender = msg.author.username;
+            var receiver = msg_array[1];
 
-        msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
+            msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
         }
     }
 
@@ -1269,60 +1277,60 @@ client.on('message', msg => {
 
     // Starting Point
 
-    else if (cmd === "music_cmds"){
+    else if (cmd === "music_cmds") {
         msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just join a Voice Channel, and type its name. \n eg: Type ` + "`futurebass`")
-        
+
     }
 
-    else if (cmd === "fx"){
+    else if (cmd === "fx") {
         var sample1 = msg_array[0];
         var sample2 = msg_array[1];
 
-        if ( msg_array.length < 3){
+        if (msg_array.length < 3) {
             msg.reply("You need to add two sound effects along with your command, eg: \n `fx futurebass build` \n Both `futurebass` and `build` are samples.`")
         }
 
-        else if (msg_array.length === 3){
+        else if (msg_array.length === 3) {
 
-            if (music_cmds.includes(sample1) && music_cmds.includes(sample2)){
-   
+            if (music_cmds.includes(sample1) && music_cmds.includes(sample2)) {
+
                 var ffmpeg = require('fluent-ffmpeg');
                 var command = ffmpeg();
                 ffmpeg()
-                .input(`${sample1}.wav`)
-                .input(`${sample2}.wav`)
-                .complexFilter([
-                    {
-                        filter: "amix",
-                        inputs: 2,
-                        duration: "shortest",
-                        dropout_transition: 3
-                    }
-                ])
-          .output('output7.wav')
-          .run()
-        
+                    .input(`${sample1}.wav`)
+                    .input(`${sample2}.wav`)
+                    .complexFilter([
+                        {
+                            filter: "amix",
+                            inputs: 2,
+                            duration: "shortest",
+                            dropout_transition: 3
+                        }
+                    ])
+                    .output('output7.wav')
+                    .run()
+
                 playSound(msg, "output7.wav") // Defined below.
             }
 
-            else{
+            else {
                 msg.reply("Sorry, I don't recognise those samples. Probably a typo :stuck_out_tongue_winking_eye:")
             }
-        
+
         }
 
-        else{
+        else {
             msg.reply("You can only combine two samples/loops at a time for now, eg: \n `fx build futurebass`")
         }
-        
+
     }
 
-    else if (cmd === "merge"){
+    else if (cmd === "merge") {
         var ffmpeg = require('fluent-ffmpeg');
         var command = ffmpeg();
         ffmpeg('build.wav')
-  .input('trapdrums.wav')
-  .mergeToFile('output.wav')
+            .input('trapdrums.wav')
+            .mergeToFile('output.wav')
     }
 
     // Playback samples.
@@ -1349,8 +1357,8 @@ client.on('message', msg => {
         // }
     }
 
-    
- 
+
+
     // Typing Contest
     // CoinBin 
 
