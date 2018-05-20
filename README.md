@@ -1,14 +1,21 @@
 # NodeJS Discord Bot (Onyx/AzuraBot)
 Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot coded using Discord.JS and Node.JS.
 
-Onyx has over thirty commands, including those for meme generation, image editing, music production, fetching info/live imagery from NASA, crypto support, interacting with IBM's Watson API, providing definitions/synonyms for words, and more.
+Onyx has over thirty commands, including those for:
+- meme generation
+- image editing
+- music production
+- fetching info/live imagery from NASA
+- crypto support
+- interacting with IBM's Watson API 
+- getting information on any topic
 
 A complete list of currently working commands can be found below.
 
 ## Invite To Your Server
 [Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
 
-![Ask Onyx for Acronym Meanings]( "Ask Onyx for Acronym Meanings")
+![Ask Onyx for Acronym Meanings](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/acronym_example.gif "Ask Onyx for Acronym Meanings")
 
 ## Test Onyx Out In This Support Server
 If you want to test Onyx out before adding her to your server, just join this server, and leave when you want.
@@ -22,8 +29,16 @@ Onyx comes with a series of built-in, royalty-free samples, which you can play t
 
 Firstly, go through some of the samples available by typing `music_cmds`.
 Before playing any samples, make sure you're connected to a Voice Channel beforehand, because Onyx will join your Voice Channel then.
-Then, combine a drum beat with a melody to create a single audio file, which Onyx will then play for you.
-Each of the links to the samples are provided when you play each one, so you can go and download it at LooperMan.com.
+
+Each of the links to the samples are provided when you play each one, so you can go and download the samples at LooperMan.com.
+
+### Music Production Commands
+
+| Command       | Description   | Examples  |
+| ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
+| music_cmds         | Get a list of all samples available to play. (Make sure you've joined a voice channel first.)      |     |
+| futurebass           | Futurebass sample. To play this sample, just type the command.                 |      |
+| fx    | The `fx` command overlays two samples over one another. In the example to the right, fx combines the two samples `futurebass` and `build` together, overlaying their audio upon one another.                       |  fx future bass build    |
 
 ### Space/Astronomy/NASA Commands
 

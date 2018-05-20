@@ -117,7 +117,7 @@ client.on('message', msg => {
     });
 
     if (cmd === "acronym") {
-        console.log("msgarraylength: " + msg_array.length)
+
         if (msg_array.length > 1) {
             var acronym = msg_array[1];
             console.log(msg_array)
@@ -251,8 +251,6 @@ client.on('message', msg => {
         else {
             msg.reply("You must specifiy a word to get synonyms for, eg: `search dancing`");
         }
-
-
     }
 
     else if (msg.content === "hi") {
@@ -263,13 +261,14 @@ client.on('message', msg => {
     }
 
     else if (cmd === "avatar") {
+        console.log(msg_array.length)
         var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${msg.author}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
         var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
         var randomCompliment = avatar_compliments[randomNumber];
 
         // User Wants Their Avatar
-        if (msg_content.length === 1) {
-            msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
+        if (msg_array.length === 1) {
+            msg.channel.send(randomCompliment + "\n" + msg.author.avatarURL);
             for (var i = 0; i < 10; i += 1) {
                 var randomNumber = getRandomNumber(0, emoji_list.length - 1);
                 var randomEmoji = emoji_list[randomNumber];
@@ -277,10 +276,10 @@ client.on('message', msg => {
             }
         }
         // User Wants Someone Else's Avatar
-        else if (msg_content.length === 2) {
-            var avatar_to_get = msg_array[1]
-
-
+        else if (msg_array.length === 2) {
+            var avatar_link = msg.mentions.users.map(u => u.avatarURL)
+            
+            msg.channel.send(avatar_link);
         }
         else {
             msg.reply("I can only send one avatar per command.")
@@ -970,12 +969,10 @@ client.on('message', msg => {
     }
 
     else if (cmd === "imgedit") {
-
-        var randomNumber = getRandomNumber(0, 250)
-
-        var randomQuality = getRandomNumber(5, 100)
+        var randomNumber = getRandomNumber(0, 250);
+        var randomQuality = getRandomNumber(5, 100);
         var width = getRandomNumber(100, 350);
-        var height = getRandomNumber(100, 350)
+        var height = getRandomNumber(100, 350);
 
         Jimp.read("test.jpg", function (err, test) {
             if (err) throw err;
@@ -983,8 +980,6 @@ client.on('message', msg => {
                 .quality(randomQuality)                 // set JPEG quality
                 .greyscale()                 // set greyscale
                 .write(new_image_name); // save
-
-
         });
 
         sendImage(msg, new_image_name)
