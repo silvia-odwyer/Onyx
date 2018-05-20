@@ -1,4 +1,4 @@
-// 20+ Commands, Multi-lingual, 24/7, Fun Commands, Meme and Image Generator, Crypto, Economy/Currency, Fun commands
+// 30+ Commands, Multi-lingual, 24/7, Fun Commands, Meme and Image Generator, Crypto, Economy/Currency, Fun commands
 // Multi-lingual support, get acronym and word meanings, receive live footage from NASA,
 // Generate QR codes, get XKCD comics, 
 // get trending YouTube videos, breaking news, bitcoin prices, 
@@ -9,62 +9,101 @@ let token_obj = require(`token.json`);
 var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
 var imgflip_pass = imgflip_pass_obj["pass"];
-let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-var ffmpeg = require('ffmpeg');
 let translate_creds_obj = require(`translate-creds.json`);
 
 const client = new Discord.Client();
 
+// TO DO
+// DMming function for synonym searching
+
+
 // RESOURCES
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-
+var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
 var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
 var loop_dict = require('loop_dict.json') 
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
+let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 
 // NPM PACKAGES
-
-const fetch = require('node-fetch'); // Simulates the window.fetch() method for Node.JS
 const request = require('request'); // NodeJS request sending.
 const formData = require('form-data'); // Needed for sending POST requests to servers.
 var fs = require('fs'); // Core Node.JS package required for writing to files.
-var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
+
 var Jimp = require("jimp"); // Image Manipulation with JS.
+var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
 
 // Global Variables
 var new_image_name = "test56.jpg"
 
+// Functions
 
+function sendImage(msg, image) {
+
+    // Send an embed with a local image inside
+    msg.channel.send('This is an embed', {
+        embed: {
+            thumbnail: {
+                url: 'attachment://file.jpg'
+            }
+        },
+        files: [{
+            attachment: image,
+            name: image
+        }]
+    })
+        .then(console.log)
+        .catch(console.error);
+}
+
+function getAsset(msg, nasa_id) {
+    var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
+    fetch(asset_link)
+        .then(res => res.json())
+        .then((out) => {
+            var image = out.collection.items[4].href;
+            console.log(image)
+            msg.channel.send(image)
+            console.log(out.collection.items)
+        })
+        .catch(err => { throw err });
+}
+
+function getConfigVars(){
+
+}
+
+function playSound(msg, file){
+    var voiceChannel = msg.member.voiceChannel;
+    console.log(voiceChannel)
+
+    if (voiceChannel === undefined){
+        msg.reply("You need to join a Voice Channel first. Then type your command again.")
+    }
+    else{
+        voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
+        var link = loop_dict[file]
+        console.log(link)
+        msg.channel.send("Futurebass sample free here:" + link)
+        msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
+    
+}).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+
+}
+}
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity(`Running on ${client.guilds.size} servers`);
 });
 
-client.on('userUpdate', newUser => {
-    console.log(`${newUser} just changed her username from ${newUser.oldUser}!`)
-});
 
-client.on("guildCreate", guild => {
-    var message = `Joined a new server called: ${guild.name} (id: ${guild.id}). This server has ${guild.memberCount} members! :D`;
-    console.log(message);
-
-    client.user.setActivity(`Running on ${client.guilds.size} servers`);
-
-});
-
-client.on("guildDelete", guild => {
-    console.log(`Bot has been removed from the following server: ${guild.name} (id: ${guild.id})`);
-    client.user.setActivity(`Serving ${client.guilds.size} servers`);
-});
 
 client.on('message', msg => {
-    var define = "define";
     var msg_content = msg.content;
     var msg_array = msg_content.split(" ");
     var cmd = msg_array[0];
-    console.log(cmd)
 
     var slice = msg_content.slice(0, 6);
     var write_to_file = ""
@@ -76,8 +115,149 @@ client.on('message', msg => {
         if (err) throw err;
     });
 
-    if (msg.content === "hi") {
-        msg.reply("It's so lovely to see you, " + msg.author);
+    if (cmd === "acronym") {
+        console.log("msgarraylength: " + msg_array.length)
+        if (msg_array.length > 1) {
+            var acronym = msg_array[1];
+            console.log(msg_array)
+            msg.reply("Pinging Acronym Database for some cool acronym meanings . . .")
+            var acronym_uri = `http://acronyms.silmaril.ie/cgi-bin/xaa?${acronym}`;
+
+            request(acronym_uri, { json: true }, (err, res, body) => {
+                if (err) { return console.log(err); }
+                //console.log(body);
+                var split_body = body.split("\n");
+                //console.log(split_body)
+                var num_acronyms = split_body[4];
+                if (num_acronyms.includes("0")) {
+                    msg.reply("No acronyms exist with this abbreviation.")
+                }
+                else {
+                    var header = "```ml" + "\n" +
+                        "Acronym Meanings for " + acronym + "👀 \n" +
+                        "```"
+                    msg.channel.send(header)
+                    for (var i = 6; i < split_body.length - 1; i += 4) {
+                        var line = split_body[i]
+                        line = line.trim()
+
+                        var split_acr_array = line.split(" ");
+
+                        console.log(split_acr_array)
+                        var first_item = split_acr_array[0]
+                        console.log("First item" + first_item)
+                        if (split_acr_array.length === 1) {
+                            first_item = first_item.slice(7, first_item.length - 8)
+                            split_acr_array[0] = first_item
+
+                        }
+                        else {
+
+                            var strpd_item = first_item.slice(7, first_item.length + 5);
+                            split_acr_array[0] = strpd_item;
+
+
+                            var last_item = split_acr_array[split_acr_array.length - 1];
+                            var strpd_last_item = last_item.slice(0, split_acr_array.length - 11);
+                            split_acr_array[split_acr_array.length - 1] = strpd_last_item;
+                        }
+
+                        console.log(split_acr_array)
+                        var final_acronym = split_acr_array.toString()
+                        final_acronym = final_acronym.split(",").join(" ")
+                        msg.channel.send(final_acronym)
+
+                    }
+                }
+            });
+
+        }
+
+        else {
+            msg.channel.send("You must specify an acronym to search for, eg: `acronym rofl`")
+        }
+
+    }
+
+    // Live Earth Footage
+    else if (cmd === "earth") {
+        msg.reply("Pinging the Nasa Database for live earth footage . . .")
+        var earth_link = "https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY"
+
+        fetch(earth_link)
+            .then(res => res.json())
+            .then((out) => {
+                var earth_output = out;
+                console.log(earth_output)
+                var randomNumber = getRandomNumber(0, earth_output.length - 1)
+                var image_name = earth_output[randomNumber].image
+
+                var date = earth_output[randomNumber].date;
+                var date_split = date.split("-")
+                console.log(date_split)
+                var year = date_split[0];
+                console.log(year)
+                var month = date_split[1];
+                console.log(month)
+                var day_and_time = date_split[2];
+                var sliced_date = day_and_time.slice(0, 2);
+                console.log(sliced_date)
+
+                var image_link = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${sliced_date}/png/` + image_name + ".png"
+                msg.reply(image_link)
+                msg.reply("This image was taken on " + date)
+                msg.reply(earth_output[randomNumber].caption)
+
+            })
+            .catch(err => { throw err });
+
+    }
+
+    else if (cmd === "search") {
+        var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
+
+        if (msg_array.length > 1) {
+            msg.reply("Query successful.")
+            var word = msg.content.slice(7, msg_content.length)
+            var synonyms = moby.search(word);
+
+            if (synonyms.length === 0) {
+                msg.reply("Couldn't find any synonyms related to" + "`" + word + "` Try another maybe? :D")
+            }
+            else {
+                var synonyms_string = synonyms.join(" ,");
+                console.log(synonyms_string)
+                if (synonyms_string.length < 2000) {
+                    msg.reply(synonyms_string);
+                }
+                else if (synonyms_string.length > 2000 && synonyms_string.length < 4000) {
+                    var middle_index = synonyms.length / 2;
+                    var floored_middle_index = Math.floor(middle_index);
+                    var synonyms1 = synonyms.slice(0, floored_middle_index);
+                    console.log(synonyms1.length);
+                    var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
+                    console.log(synonyms2.length)
+                    msg.channel.send(synonyms1.join(", "))
+                    msg.channel.send(synonyms2.join(", "));
+
+                }
+                else {
+                    msg.channel.send("There are too many synonyms related to this word, and I don't want to spam this channel. xD Try DMMing me, and I'll send you all the results.")
+                }
+            }
+
+        }
+        else {
+            msg.reply("You must specifiy a word to get synonyms for, eg: `search dancing`");
+        }
+
+
+    }
+
+    else if (msg.content === "hi") {
+        var greetings = ["Hi there! :D", "Oh, wow, lovely to see you!", ":wave: Hey there!"]
+        var randomNumber = getRandomNumber(0, greetings.length - 1)
+        msg.channel.send(greetings[randomNumber] + msg.author);
         msg.react("😄")
     }
 
@@ -85,12 +265,26 @@ client.on('message', msg => {
         var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${msg.author}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
         var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
         var randomCompliment = avatar_compliments[randomNumber];
-        msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
-        for (var i = 0; i < 10; i += 1) {
-            var randomNumber = getRandomNumber(0, emoji_list.length - 1);
-            var randomEmoji = emoji_list[randomNumber];
-            msg.react(randomEmoji)
+
+        // User Wants Their Avatar
+        if (msg_content.length === 1){
+              msg.reply(randomCompliment + "\n" + msg.author.avatarURL);
+            for (var i = 0; i < 10; i += 1) {
+                var randomNumber = getRandomNumber(0, emoji_list.length - 1);
+                var randomEmoji = emoji_list[randomNumber];
+                msg.react(randomEmoji)
+            }
         }
+        // User Wants Someone Else's Avatar
+        else if (msg_content.length === 2){
+            var avatar_to_get = msg_array[1]
+            
+
+        }
+        else{
+            msg.reply("I can only send one avatar per command.")
+        }
+      
     }
     else if (msg.content === "pls react") {
         for (var i = 0; i < 10; i += 1) {
@@ -193,110 +387,9 @@ client.on('message', msg => {
             })
             .catch(err => { throw err });
     }
-    else if (cmd === "search") {
-        var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
-
-        if (msg_array.length > 1) {
-            msg.reply("Query successful.")
-            var word = msg.content.slice(7, msg_content.length)
-            var synonyms = moby.search(word);
-
-            if (synonyms.length === 0) {
-                msg.reply("Couldn't find any synonyms related to" + "`" + word + "` Try another maybe? :D")
-            }
-            else {
-                var synonyms_string = synonyms.join(" ,");
-                console.log(synonyms_string)
-                if (synonyms_string.length < 2000) {
-                    msg.reply(synonyms_string);
-                }
-                else if (synonyms_string.length > 2000 && synonyms_string.length < 4000) {
-                    var middle_index = synonyms.length / 2;
-                    var floored_middle_index = Math.floor(middle_index);
-                    var synonyms1 = synonyms.slice(0, floored_middle_index);
-                    console.log(synonyms1.length);
-                    var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
-                    console.log(synonyms2.length)
-                    msg.channel.send(synonyms1.join(", "))
-                    msg.channel.send(synonyms2.join(", "));
-
-                }
-                else {
-                    msg.channel.send("There are too many synonyms related to this word, and I don't want to spam this channel. xD Try DMMing me, and I'll send you all the results.")
-                }
-            }
-
-        }
-        else {
-            msg.reply("You must specifiy a word to get synonyms for, eg: `search dancing`");
-        }
 
 
-    }
-
-    else if (cmd === "acronym") {
-        console.log("msgarraylength: " + msg_array.length)
-        if (msg_array.length > 1) {
-            var acronym = msg_array[1];
-            console.log(msg_array)
-            msg.reply("Pinging Acronym Database for some cool acronym meanings . . .")
-            var acronym_uri = `http://acronyms.silmaril.ie/cgi-bin/xaa?${acronym}`;
-
-            request(acronym_uri, { json: true }, (err, res, body) => {
-                if (err) { return console.log(err); }
-                //console.log(body);
-                var split_body = body.split("\n");
-                //console.log(split_body)
-                var num_acronyms = split_body[4];
-                if (num_acronyms.includes("0")) {
-                    msg.reply("No acronyms exist with this abbreviation.")
-                }
-                else {
-                    var header = "```ml" + "\n" +
-                        "Acronym Meanings for " + acronym + "👀 \n" +
-                        "```"
-                    msg.channel.send(header)
-                    for (var i = 6; i < split_body.length - 1; i += 4) {
-                        var line = split_body[i]
-                        line = line.trim()
-
-                        var split_acr_array = line.split(" ");
-
-                        console.log(split_acr_array)
-                        var first_item = split_acr_array[0]
-                        console.log("First item" + first_item)
-                        if (split_acr_array.length === 1) {
-                            first_item = first_item.slice(7, first_item.length - 8)
-                            split_acr_array[0] = first_item
-
-                        }
-                        else {
-
-                            var strpd_item = first_item.slice(7, first_item.length + 5);
-                            split_acr_array[0] = strpd_item;
-
-
-                            var last_item = split_acr_array[split_acr_array.length - 1];
-                            var strpd_last_item = last_item.slice(0, split_acr_array.length - 11);
-                            split_acr_array[split_acr_array.length - 1] = strpd_last_item;
-                        }
-
-                        console.log(split_acr_array)
-                        var final_acronym = split_acr_array.toString()
-                        final_acronym = final_acronym.split(",").join(" ")
-                        msg.channel.send(final_acronym)
-
-                    }
-                }
-            });
-
-        }
-
-        else {
-            msg.channel.send("You must specify an acronym to search for, eg: `acronym rofl`")
-        }
-
-    }
+    
 
 
     // The Movie DB API Caller
@@ -334,39 +427,7 @@ client.on('message', msg => {
             .catch(err => { throw err });
 
     }
-    // Live Earth Footage
-    else if (cmd === "earth") {
-        msg.reply("Pinging the Nasa Database for live earth footage . . .")
-        var earth_link = "https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY"
 
-        fetch(earth_link)
-            .then(res => res.json())
-            .then((out) => {
-                var earth_output = out;
-                console.log(earth_output)
-                var randomNumber = getRandomNumber(0, earth_output.length - 1)
-                var image_name = earth_output[randomNumber].image
-
-                var date = earth_output[randomNumber].date;
-                var date_split = date.split("-")
-                console.log(date_split)
-                var year = date_split[0];
-                console.log(year)
-                var month = date_split[1];
-                console.log(month)
-                var day_and_time = date_split[2];
-                var sliced_date = day_and_time.slice(0, 2);
-                console.log(sliced_date)
-
-                var image_link = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${sliced_date}/png/` + image_name + ".png"
-                msg.reply(image_link)
-                msg.reply("This image was taken on " + date)
-                msg.reply(earth_output[randomNumber].caption)
-
-            })
-            .catch(err => { throw err });
-
-    }
 
     // Behind The Name API
 
@@ -1426,9 +1487,9 @@ function getNumberAstronauts() {
 
 function createLanguageTranslator() {
     var LanguageTranslatorV2 = require('watson-developer-cloud/language-translator/v2');
-    var watson_username = translate_creds_obj["username"];
-    var watson_pass = translate_creds_obj["password"];
-    var watson_url = translate_creds_obj["url"];
+    var watson_username = process.env.TRANSLATE_USERNAME;
+    var watson_pass = process.env.TRANSLATE_PASSWORD
+    var watson_url = process.env.TRANSLATE_URL
 
     var languageTranslator = new LanguageTranslatorV2({
         username: watson_username,
@@ -1463,55 +1524,23 @@ function searchMatchingEmojis(word) {
 }
 
 
-function sendImage(msg, image) {
 
-    // Send an embed with a local image inside
-    msg.channel.send('This is an embed', {
-        embed: {
-            thumbnail: {
-                url: 'attachment://file.jpg'
-            }
-        },
-        files: [{
-            attachment: image,
-            name: image
-        }]
-    })
-        .then(console.log)
-        .catch(console.error);
-}
+client.on('userUpdate', newUser => {
+    console.log(`${newUser} just changed her username from ${newUser.oldUser}!`)
+});
 
-function getAsset(msg, nasa_id) {
-    var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
-    fetch(asset_link)
-        .then(res => res.json())
-        .then((out) => {
-            var image = out.collection.items[4].href;
-            console.log(image)
-            msg.channel.send(image)
-            console.log(out.collection.items)
-        })
-        .catch(err => { throw err });
-}
+client.on("guildCreate", guild => {
+    var message = `Joined a new server called: ${guild.name} (id: ${guild.id}). This server has ${guild.memberCount} members! :D`;
+    console.log(message);
 
-function playSound(msg, file){
-    var voiceChannel = msg.member.voiceChannel;
-    console.log(voiceChannel)
+    client.user.setActivity(`Running on ${client.guilds.size} servers`);
 
-    if (voiceChannel === undefined){
-        msg.reply("You need to join a Voice Channel first. Then type your command again.")
-    }
-    else{
-        voiceChannel.join().then(connection =>{const dispatcher = connection.playFile(file);
-        var link = loop_dict[file]
-        console.log(link)
-        msg.channel.send("Futurebass sample free here:" + link)
-        msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
-    
-}).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+});
 
-}
-}
+client.on("guildDelete", guild => {
+    console.log(`Bot has been removed from the following server: ${guild.name} (id: ${guild.id})`);
+    client.user.setActivity(`Serving ${client.guilds.size} servers`);
+});
 
 client.login(token);
 
