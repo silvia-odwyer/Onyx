@@ -5,13 +5,14 @@
 // make memes, and more! 
 
 const Discord = require('discord.js');
+const client = new Discord.Client();
+
+
 let token_obj = require(`token.json`);
 var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
 var imgflip_pass = imgflip_pass_obj["pass"];
 let translate_creds_obj = require(`translate-creds.json`);
-
-const client = new Discord.Client();
 
 // TO DO
 // DMming function for synonym searching
@@ -19,19 +20,22 @@ const client = new Discord.Client();
 
 // RESOURCES
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
+var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝"]
+
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
 var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party":"5496396", "fwp":"61539", "oprah":"28251713", "great":"563423", "wonka":"61582", "bf":"112126428"}
+var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590" }
 
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
 const fetch = require('node-fetch')
 const formData = require('form-data'); // Needed for sending POST requests to servers.
 var fs = require('fs'); // Core Node.JS package required for writing to files.
+var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
 
 var Jimp = require("jimp"); // Image Manipulation with JS.
 var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
@@ -96,23 +100,34 @@ function playSound(msg, file) {
     }
 }
 
-function checkInServer(msg, username){
+function checkInServer(msg, username) {
     var guild = msg.guild.members;
 
     console.log(guild)
     var guild_members = msg.guild.members.map(u => u.id)
     console.log(guild_members)
-    if (guild_members.includes(username)){
+    if (guild_members.includes(username)) {
 
         console.log("Returning TRUE")
         return true;
     }
-    else{
+    else {
         console.log("Returning FALSE")
         return false;
     }
 
     console.log(guild_members);
+}
+
+function printCountry(latitude, longitude) {
+    var geonames_link = `http://api.geonames.org/countryCode?lat=${latitude}&lng=${longitude}&username=demo`
+    fetch(geonames_link)
+        .then((out) => {
+            console.log(out)
+
+        })
+        .catch(err => { throw err });
+
 }
 
 client.on('ready', () => {
@@ -122,10 +137,28 @@ client.on('ready', () => {
 
 
 
-client.on('message', msg => {
+client.on('message', async msg => {
+    if (msg.author.bot) return;
+
+    if (msg.content[0] != "-") {
+        return;
+    }
+    else {
+        console.log(`Message: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`);
+
+        try {
+            fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`, (err) => {
+                if (err) throw err;
+            });
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     var msg_content = msg.content;
     var msg_array = msg_content.split(" ");
-    var cmd = msg_array[0];
+    var cmd = msg_array[0].slice(1, msg_array[0].length);
 
     var slice = msg_content.slice(0, 6);
     var write_to_file = ""
@@ -133,9 +166,7 @@ client.on('message', msg => {
     var msg_author = msg.author.username;
     console.log(msg.guild.name)
 
-    fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`, (err) => {
-        if (err) throw err;
-    });
+
 
     if (cmd === "acronym") {
 
@@ -226,21 +257,18 @@ client.on('message', msg => {
                 console.log(sliced_date)
 
                 var image_link = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${sliced_date}/png/` + image_name + ".png"
-                msg.reply(image_link)
-                msg.reply("This image was taken on " + date)
-                msg.reply(earth_output[randomNumber].caption)
-
+                msg.channel.send(image_link)
+                msg.channel.send(`${earth_output[randomNumber].caption} on ${date}`)
             })
             .catch(err => { throw err });
 
     }
 
     else if (cmd === "search") {
-        var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
 
         if (msg_array.length > 1) {
             msg.reply("Query successful.")
-            var word = msg.content.slice(7, msg_content.length)
+            var word = msg.content.slice(8, msg_content.length)
             var synonyms = moby.search(word);
 
             if (synonyms.length === 0) {
@@ -248,7 +276,7 @@ client.on('message', msg => {
             }
             else {
                 var synonyms_string = synonyms.join(" ,");
-                console.log(synonyms_string)
+
                 if (synonyms_string.length < 2000) {
                     msg.reply(synonyms_string);
                 }
@@ -256,9 +284,9 @@ client.on('message', msg => {
                     var middle_index = synonyms.length / 2;
                     var floored_middle_index = Math.floor(middle_index);
                     var synonyms1 = synonyms.slice(0, floored_middle_index);
-                    console.log(synonyms1.length);
+
                     var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
-                    console.log(synonyms2.length)
+
                     msg.channel.send(synonyms1.join(", "))
                     msg.channel.send(synonyms2.join(", "));
 
@@ -274,8 +302,8 @@ client.on('message', msg => {
         }
     }
 
-    else if (msg.content === "hi") {
-        var greetings = ["Hi there! :D ", "Oh, wow, lovely to see you! ", ":wave: Hey there! "]
+    else if (cmd === "hi") {
+        var greetings = ["Hi there! :D ", "Oh, wow, lovely to see you! ", ":wave: Hey there! ", "o/ Hey there!"]
         var randomNumber = getRandomNumber(0, greetings.length - 1)
         msg.channel.send(greetings[randomNumber] + msg.author);
         msg.react("😄")
@@ -284,35 +312,33 @@ client.on('message', msg => {
     else if (cmd === "avatar") {
         console.log(msg_array.length)
         var user = ""
-    
+
         // User Wants Their Avatar
         if (msg_array.length === 1) {
             user = msg.author.username;
             console.log("User " + user)
-            var avatar_compliments = [`:eyes: I like your avatar A LOT :)`, `Hey everyone! Check out ${user}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love that profile pic."];
+            var avatar_compliments = [`:eyes: Nice avatar by the way :)`, `Hey everyone! Check out ${user}s neat profile pic :eyes:`, "Oooh, I like this profile pic of yours... :eyes:", "B) Love this profile pic :eyes:"];
             var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
             var randomCompliment = avatar_compliments[randomNumber];
-    
+
             msg.channel.send(randomCompliment + "\n" + msg.author.avatarURL);
             for (var i = 0; i < 10; i += 1) {
-                var randomNumber = getRandomNumber(0, emoji_list.length - 1);
-                var randomEmoji = emoji_list[randomNumber];
+                var randomNumber = getRandomNumber(0, happy_emoji.length - 1);
+                var randomEmoji = happy_emoji[randomNumber];
                 msg.react(randomEmoji)
             }
         }
         // User Wants Someone Else's Avatar
         else if (msg_array.length === 2) {
             // Need to check if the user is actually in the server
-            var inServer = checkInServer(msg, msg_array[1])
-            if (inServer){
+
+            try {
                 var avatar_link = msg.mentions.users.map(u => u.avatarURL)
-            
                 msg.channel.send(avatar_link);
             }
-            else{
+            catch (error) {
                 msg.channel.send("404: That User Doesn't Exist :(")
             }
-         
         }
         else {
             msg.reply("I can only send one avatar per command.")
@@ -321,8 +347,8 @@ client.on('message', msg => {
     }
     else if (msg.content === "pls react") {
         for (var i = 0; i < 10; i += 1) {
-            var randomNumber = getRandomNumber(0, emoji_list.length - 1);
-            var randomEmoji = emoji_list[randomNumber];
+            var randomNumber = getRandomNumber(0, happy_emoji.length - 1);
+            var randomEmoji = happy_emoji[randomNumber];
             msg.react(randomEmoji);
         }
     }
@@ -435,7 +461,6 @@ client.on('message', msg => {
 
             })
             .catch(err => { throw err });
-
     }
 
     // NASA Near-Earth-Object Checker
@@ -450,7 +475,7 @@ client.on('message', msg => {
                 var nasa_output = out;
                 console.log(nasa_output)
                 var total_nearearth_objects = out.element_count;
-                msg.reply("There are a total of " + total_nearearth_objects + " near-earth objects circulating around Earth right now.")
+                msg.channel.send("There are a total of " + total_nearearth_objects + " near-earth objects circulating around Earth right now.")
 
             })
             .catch(err => { throw err });
@@ -461,9 +486,7 @@ client.on('message', msg => {
 
     //Meme Generator, thanks to the imgflip API
     else if (cmd === "meme") {
-        // !meme !waitingskeleton !hithere !hello
-        //  !meme !waitingskeleton hithere-hello
-        //Remove first two elements in msg_array.
+
         console.log(msg_array)
         console.log(msg_content)
 
@@ -471,18 +494,16 @@ client.on('message', msg => {
         console.log(first_words_length)
         var text = msg_content.slice(first_words_length, msg_content.length);
         console.log(text)
-     
+
         var template = msg_array[1]
-      
+
         var meme_text = text.split("-")
 
         var top_text = meme_text[0]
         var bottom_text = meme_text[1]
-        
+
         var meme_type_id = meme_dict[template];
 
-        msg.reply("Generating a nice m3me for you. . .")
-        //var imgflip_password = 
         var formData = {
             // Pass a simple key-value pair
             template_id: meme_type_id,
@@ -499,7 +520,7 @@ client.on('message', msg => {
             var json_m3me_obj = JSON.parse(body);
             var m3me_url = json_m3me_obj.data.url;
             console.log(m3me_url)
-            msg.reply(m3me_url)
+            msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
         });
     }
 
@@ -528,8 +549,6 @@ client.on('message', msg => {
                 msg.channel.send(header)
                 msg.reply("USD --> 1 bitcoin equals: $" + bc_to_usd)
                 msg.reply("EUR --> 1 bitcoin equals: €" + bc_to_eur)
-
-
             })
             .catch(err => { throw err });
     }
@@ -574,8 +593,6 @@ client.on('message', msg => {
             if (msg_array.length === 1) {
                 number = getRandomNumber(0, 1995);
                 xkcd_link = `https://xkcd.com/${number}/info.0.json`;
-
-
             }
             else {
                 xkcd_link = "http://xkcd.com/info.0.json"
@@ -613,13 +630,13 @@ client.on('message', msg => {
 
             })
             .catch(err => { throw err });
-            
-            client.on('message', ans => {
-                console.log(ans)
-                if (ans === "hi") {
-                    msg.reply("Wow, you were right!")
-                }
-            });
+
+        client.on('message', ans => {
+            console.log(ans)
+            if (ans === "hi") {
+                msg.reply("Wow, you were right!")
+            }
+        });
 
     }
 
@@ -640,6 +657,7 @@ client.on('message', msg => {
                 var iss_output = "```ml" + "\n" +
                     "Location of the International Space Station 🌌🌠🌃" + "\n" + `Latitude: ${latitude} \n Longitude: ${longitude}` +
                     "```"
+                printCountry(latitude, longitude)
                 msg.channel.send(iss_output);
             })
             .catch(err => { throw err });
@@ -1088,9 +1106,7 @@ client.on('message', msg => {
         });
 
         sendImage(msg, new_image_name)
-
     }
-
 
     else if (cmd === "randomCase") {
 
@@ -1104,7 +1120,6 @@ client.on('message', msg => {
 
             for (var i = 0; i < msg_string.length; i += 1) {
                 console.log(msg_string[i]);
-
 
                 if (alphabet.indexOf(msg_string[i])) {
                     var randomNumber = getRandomNumber(0, 1);
