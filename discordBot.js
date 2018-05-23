@@ -19,17 +19,17 @@ let translate_creds_obj = require(`translate-creds.json`);
 
 
 // RESOURCES
-var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓"]
-var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝"]
+var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓", "👀"]
+var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "👀"]
 
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
-var music_cmds = ["futurebass", "trapdrums", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
+var music_cmds = ["futurebass", "-trapdrums", "-riser", "build", "-deepbass", "-trapdrums", "-edmbuild", "-trapbass", "-edmbeat", "-snare", "-skybuild"];
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590" }
-
+var meme_templates = Object.keys(meme_dict).join(", ")
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
 const fetch = require('node-fetch')
@@ -42,13 +42,14 @@ var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
 
 // Global Variables
 var new_image_name = "test56.jpg"
+var bot_prefix = "-"
 
 // Functions
 
 function sendImage(msg, image) {
 
     // Send an embed with a local image inside
-    msg.channel.send('This is an embed', {
+    msg.channel.send('Here is your edited image!', {
         embed: {
             thumbnail: {
                 url: 'attachment://file.jpg'
@@ -63,6 +64,7 @@ function sendImage(msg, image) {
         .catch(console.error);
 }
 
+// Gets Image and Video Assets From NASA
 function getAsset(msg, nasa_id) {
     var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
     fetch(asset_link)
@@ -76,11 +78,7 @@ function getAsset(msg, nasa_id) {
         .catch(err => { throw err });
 }
 
-function getConfigVars() {
-
-}
-
-function playSound(msg, file) {
+function playSound(msg, file, cmd) {
     var voiceChannel = msg.member.voiceChannel;
     console.log(voiceChannel)
 
@@ -95,7 +93,7 @@ function playSound(msg, file) {
             msg.channel.send("Futurebass sample free here:" + link)
             msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
 
-        }).catch(err => msg.channel.send("No one to join."), err => console.log(err));
+        }).catch(err => console.log(err));
 
     }
 }
@@ -132,22 +130,20 @@ function printCountry(latitude, longitude) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity(`Running on ${client.guilds.size} servers`);
+    client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 });
-
-
 
 client.on('message', async msg => {
     if (msg.author.bot) return;
 
-    if (msg.content[0] != "-") {
+    if (msg.content[0] != bot_prefix) {
         return;
     }
     else {
-        console.log(`Message: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`);
+        console.log(`Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`);
 
         try {
-            fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Reg: ${msg.guild.region}`, (err) => {
+            fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
                 if (err) throw err;
             });
         }
@@ -160,20 +156,19 @@ client.on('message', async msg => {
     var msg_array = msg_content.split(" ");
     var cmd = msg_array[0].slice(1, msg_array[0].length);
 
+
     var slice = msg_content.slice(0, 6);
     var write_to_file = ""
 
     var msg_author = msg.author.username;
     console.log(msg.guild.name)
 
-
-
     if (cmd === "acronym") {
 
         if (msg_array.length > 1) {
             var acronym = msg_array[1];
             console.log(msg_array)
-            msg.reply("Pinging Acronym Database for some cool acronym meanings . . .")
+            msg.reply(`Pinging Acronym Database for the meaning(s) of ${acronym}. . .`)
             var acronym_uri = `http://acronyms.silmaril.ie/cgi-bin/xaa?${acronym}`;
 
             request(acronym_uri, { json: true }, (err, res, body) => {
@@ -223,11 +218,10 @@ client.on('message', async msg => {
                     }
                 }
             });
-
         }
 
         else {
-            msg.channel.send("You must specify an acronym to search for, eg: `acronym rofl`")
+            msg.channel.send("You must specify an acronym to search for, eg:`" + `${bot_prefix}` + "acronym rofl`")
         }
 
     }
@@ -241,22 +235,22 @@ client.on('message', async msg => {
             .then(res => res.json())
             .then((out) => {
                 var earth_output = out;
-                console.log(earth_output)
+
                 var randomNumber = getRandomNumber(0, earth_output.length - 1)
                 var image_name = earth_output[randomNumber].image
 
                 var date = earth_output[randomNumber].date;
                 var date_split = date.split("-")
-                console.log(date_split)
+
                 var year = date_split[0];
-                console.log(year)
+
                 var month = date_split[1];
-                console.log(month)
+
                 var day_and_time = date_split[2];
                 var sliced_date = day_and_time.slice(0, 2);
-                console.log(sliced_date)
 
                 var image_link = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${sliced_date}/png/` + image_name + ".png"
+                console.log(image_link)
                 msg.channel.send(image_link)
                 msg.channel.send(`${earth_output[randomNumber].caption} on ${date}`)
             })
@@ -272,10 +266,10 @@ client.on('message', async msg => {
             var synonyms = moby.search(word);
 
             if (synonyms.length === 0) {
-                msg.reply("Couldn't find any synonyms related to" + "`" + word + "` Try another maybe? :D")
+                msg.reply("Couldn't find any synonyms related to " + "`" + word + "` Try another maybe? :D")
             }
             else {
-                var synonyms_string = synonyms.join(" ,");
+                var synonyms_string = synonyms.join(", ");
 
                 if (synonyms_string.length < 2000) {
                     msg.reply(synonyms_string);
@@ -288,7 +282,7 @@ client.on('message', async msg => {
                     var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
 
                     msg.channel.send(synonyms1.join(", "))
-                    msg.channel.send(synonyms2.join(", "));
+                    msg.channel.send("I have more synonyms to send, but I don't wanna spam this channel xD")
 
                 }
                 else {
@@ -298,7 +292,7 @@ client.on('message', async msg => {
 
         }
         else {
-            msg.reply("You must specifiy a word to get synonyms for, eg: `search dancing`");
+            msg.reply("You must specifiy a word to get synonyms for, eg: `" + `${bot_prefix}` + "search dancing`");
         }
     }
 
@@ -355,11 +349,10 @@ client.on('message', async msg => {
 
     else if (cmd === "define") {
         if (msg_array.length < 2) {
-            msg.reply("You must specifiy a word to define, eg: `define dancing`");
+            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "search dancing`");
         }
         else {
-
-            var word = msg.content.slice(7, msg_content.length)
+            var word = msg.content.slice(8, msg_content.length)
             word = word.toUpperCase();
             var definition = json1[word];
             if (definition != undefined) {
@@ -388,9 +381,9 @@ client.on('message', async msg => {
             .catch(err => { throw err })
             .catch(err => { msg.channel.send("I couldn't seem to get the population for you :/") });
     }
-    else if (cmd === "reddit") {
-        msg.reply("Getting you some nice Reddit posts . . .")
-        let reddit_url = 'https://www.reddit.com/r/ProgrammerHumour/.json';
+    else if (cmd === "cs_jokes") {
+        msg.reply("Getting you some CS jokes . . . \n ~~Bogosort~~");
+        var reddit_url = 'https://www.reddit.com/r/ProgrammerHumour/.json';
 
         fetch(reddit_url)
             .then(res => res.json())
@@ -486,42 +479,51 @@ client.on('message', async msg => {
 
     //Meme Generator, thanks to the imgflip API
     else if (cmd === "meme") {
+        try {
+            console.log(msg_array)
+            console.log(msg_content)
 
-        console.log(msg_array)
-        console.log(msg_content)
+            var first_words_length = msg_array[0].length + msg_array[1].length + 2;
+            console.log(first_words_length)
+            var text = msg_content.slice(first_words_length, msg_content.length);
+            console.log(text)
 
-        var first_words_length = msg_array[0].length + msg_array[1].length + 2;
-        console.log(first_words_length)
-        var text = msg_content.slice(first_words_length, msg_content.length);
-        console.log(text)
+            var template = msg_array[1]
 
-        var template = msg_array[1]
+            var meme_text = text.split("-")
 
-        var meme_text = text.split("-")
+            var top_text = meme_text[0]
+            var bottom_text = meme_text[1]
 
-        var top_text = meme_text[0]
-        var bottom_text = meme_text[1]
+            var meme_type_id = meme_dict[template];
 
-        var meme_type_id = meme_dict[template];
+            var formData = {
+                // Pass a simple key-value pair
+                template_id: meme_type_id,
+                username: 'silvod9',
+                password: imgflip_pass,
+                text0: top_text,
+                text1: bottom_text
+            };
+            request.post({ url: 'https://api.imgflip.com/caption_image', formData: formData }, function optionalCallback(err, httpResponse, body) {
+                if (err) {
+                    return console.error('upload failed:', err);
+                }
+                console.log('M3me request successful!  Server responded with:', body);
+                var json_m3me_obj = JSON.parse(body);
+                var m3me_url = json_m3me_obj.data.url;
+                console.log(m3me_url)
+                msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
+            });
+        }
+        catch (error) {
+            msg.reply("There was an error; if your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
+        }
+    }
 
-        var formData = {
-            // Pass a simple key-value pair
-            template_id: meme_type_id,
-            username: 'silvod9',
-            password: imgflip_pass,
-            text0: top_text,
-            text1: bottom_text
-        };
-        request.post({ url: 'https://api.imgflip.com/caption_image', formData: formData }, function optionalCallback(err, httpResponse, body) {
-            if (err) {
-                return console.error('upload failed:', err);
-            }
-            console.log('M3me request successful!  Server responded with:', body);
-            var json_m3me_obj = JSON.parse(body);
-            var m3me_url = json_m3me_obj.data.url;
-            console.log(m3me_url)
-            msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
-        });
+    else if (cmd === "meme_templates") {
+        msg.reply("Meme templates include: \n" + `${meme_templates}`)
+        msg.channel.send("To create a meme, type -meme [template] top text-bottom text \n \n eg: `-meme bf Top text-bottom text`")
     }
 
     else if (cmd === "bitcoin") {
@@ -553,31 +555,53 @@ client.on('message', async msg => {
             .catch(err => { throw err });
     }
 
-
     // QR CODE Generator
+    else if (cmd === "qr+") {
+        try {
+            if (msg_array.length === 1) {
+                msg.channel.send("You must specify a message to be encoded in the QR code, eg: `") + `${bot_prefix}` + "qr 000 fff Hey there!`"
+            }
+            else {
+
+                var user_text = msg.content.slice(4, msg.content.length)
+                console.log(user_text)
+                var user_text_array = user_text.split(" ")
+                console.log(user_text_array)
+
+                var fg_color = user_text_array[0]
+                console.log(fg_color)
+                var bg_color = user_text_array[1]
+                console.log(user_text)
+                console.log(bg_color)
+                var amt_slice = fg_color.length + bg_color.length + 2
+                user_text = user_text.slice(amt_slice, msg_content.length);
+
+                user_text = user_text.split(" ").join("%20");
+                console.log(user_text)
+
+                var qr_generator = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=${fg_color}&bgcolor=${bg_color}&data=${user_text}`;
+                msg.reply(qr_generator)
+            }
+        }
+        catch (error) {
+            msg.reply("There was an error; if your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
+
+        }
+    }
+
     else if (cmd === "qr") {
         if (msg_array.length === 1) {
-            msg.channel.send("You must specify a message to be encoded in the QR code, eg: \n `qr 000 fff Hey there!`")
+            msg.channel.send("You must specify a message to be encoded in the QR code, eg: `") + `${bot_prefix}` + "qr 000 fff Hey there!`"
         }
         else {
-
-            var user_text = msg.content.slice(3, msg.content.length)
-            console.log(user_text)
-            var user_text_array = user_text.split(" ")
-            console.log(user_text_array)
-
-            var fg_color = user_text_array[0]
-            console.log(fg_color)
-            var bg_color = user_text_array[1]
-            console.log(user_text)
-            console.log(bg_color)
-            var amt_slice = fg_color.length + bg_color.length + 2
-            user_text = user_text.slice(amt_slice, msg_content.length);
-
-            user_text = user_text.split(" ").join("%20");
+            var user_text = msg_array.slice(1, msg_array.length);
             console.log(user_text)
 
-            var qr_generator = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=${fg_color}&bgcolor=${bg_color}&data=${user_text}`;
+
+            user_text = user_text.join("%20");
+            console.log(user_text)
+
+            var qr_generator = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${user_text}`;
             msg.reply(qr_generator)
         }
     }
@@ -588,28 +612,35 @@ client.on('message', async msg => {
         var number;
         // Only execute the fetch code if the cmd "xkcd" is entered, or if the msg content is equal to "xkcd today"
         // Otherwise, I'd have the fetch code twice.
-        if (msg_array.length === 1 || msg_content === "xkcd today") {
-            // User wants a random comic.
-            if (msg_array.length === 1) {
-                number = getRandomNumber(0, 1995);
-                xkcd_link = `https://xkcd.com/${number}/info.0.json`;
-            }
-            else {
-                xkcd_link = "http://xkcd.com/info.0.json"
-            }
 
-            fetch(xkcd_link)
-                .then(res => res.json())
-                .then((out) => {
-                    var xkcd_info = out;
-                    console.log(xkcd_info)
-                    var image = xkcd_info.img;
-                    msg.channel.send(image)
-                    var name = xkcd_info.title;
-                    var number = xkcd_info.num;
-                    msg.channel.send(`Comic #${number} entitled ${name} from XKCD.`)
-                })
-                .catch(err => { throw err });
+        try {
+            if (msg_array.length === 1 || msg_content === "-xkcd today") {
+                // User wants a random comic.
+                if (msg_array.length === 1) {
+                    number = getRandomNumber(0, 1995);
+                    xkcd_link = `https://xkcd.com/${number}/info.0.json`;
+                }
+                else {
+                    xkcd_link = "http://xkcd.com/info.0.json"
+                }
+
+                fetch(xkcd_link)
+                    .then(res => res.json())
+                    .then((out) => {
+                        var xkcd_info = out;
+                        console.log(xkcd_info)
+                        var image = xkcd_info.img;
+                        msg.channel.send(image)
+                        var name = xkcd_info.title;
+                        var number = xkcd_info.num;
+                        msg.channel.send(`Comic #${number} entitled ${name} from XKCD.`)
+                    })
+                    .catch(err => { throw err });
+            }
+        }
+        catch (error) {
+            msg.reply("There was an error; if your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
+
         }
     }
 
@@ -711,7 +742,7 @@ client.on('message', async msg => {
         }
         else {
             var languages_array = ["en", "es", "it", "de", "fr"]
-            var to_language = msg_content.slice(10, 12)
+            var to_language = msg_content.slice(11, 13)
             var text = msg_content.slice(13, msg_content.length)
             console.log(to_language);
 
@@ -742,22 +773,19 @@ client.on('message', async msg => {
 
                     }
                 );
-
             }
 
             else {
                 msg.reply(`Sorry, your desired language is not available at this time. 
             Supported languages include en, fr, de, it, and es`)
             }
-
-
         }
     }
 
     else if (cmd === "identify") {
 
         if (msg_array.length > 1) {
-            var text = msg_content.slice(9, msg_content.length);
+            var text = msg_content.slice(11, msg_content.length);
 
             var languageTranslator = createLanguageTranslator();
 
@@ -781,7 +809,7 @@ client.on('message', async msg => {
         }
 
         else {
-            msg.reply("You must include a piece of text with your command, eg: `identify Bonjour, la vie est belle!` ")
+            msg.reply("You must include a piece of text with your command, eg:`" + `${bot_prefix}` + "identify Bonjour, la vie est belle!` ")
         }
 
     }
@@ -860,7 +888,6 @@ client.on('message', async msg => {
             var msg_array_length = msg_array.length;
 
             msg_array = msg_array.slice(1, msg_array_length);
-            console.log(msg_array.length);
 
             var emojip = "";
             var matched_emojis = [];
@@ -869,7 +896,6 @@ client.on('message', async msg => {
             for (var i = 0; i < msg_array.length; i += 1) {
                 var sub_matched_emojis = [];
                 var word = msg_array[i];
-                console.log("Checking" + word)
 
 
                 //     console.log(emojip)
@@ -885,8 +911,6 @@ client.on('message', async msg => {
                         for (var j = 0; j < keywords.length; j += 1) {
 
                             if (keywords[j] === word) {
-                                console.log(keys[k] + " matched " + word);
-                                console.log(keywords)
                                 sub_matched_emojis.push(keys[k])
                             }
                         }
@@ -904,7 +928,6 @@ client.on('message', async msg => {
                     emojip += ` ${word}`
                 }
             }
-            console.log("completed for loop")
             console.log(matched_emojis)
             console.log(emojip)
             msg.channel.send(emojip)
@@ -921,13 +944,13 @@ client.on('message', async msg => {
         if (msg_array.length > 3) {
             var msg_array_length = msg_array.length;
             msg_array = msg_array.slice(1, msg_array_length);
-            console.log(msg_array);
+
             var word_pyramid = "";
             var pyramid2 = " ";
             for (var i = 0; i < msg_array.length; i += 1) {
                 var word = msg_array[i];
                 word_pyramid += ` ${word}`;
-                console.log(word_pyramid);
+
                 pyramid2 += `\n${word_pyramid}`;
             }
 
@@ -938,7 +961,7 @@ client.on('message', async msg => {
         }
 
         else if (msg_array.length === 1) {
-            msg.reply("You must include a piece of text along with your command, eg: \n `pyramid Hello there`")
+            msg.reply("You must include a piece of text along with your command, eg: `" + `${bot_prefix}` + "pyramid Hello there`")
 
         }
         else if (msg_array.length === 2) {
@@ -950,21 +973,20 @@ client.on('message', async msg => {
         if (msg_array.length > 1) {
             var msg_array_length = msg_array.length;
             msg_array = msg_array.slice(1, msg_array_length);
-            msg_string = msg_content.slice(8, msg_content.length);
+            msg_string = msg_content.slice(9, msg_content.length);
 
             var reverse_string = "";
             var word;
             var split_word;
             for (var i = msg_string.length - 1; i >= 0; i -= 1) {
 
-                console.log(msg_string[i]);
                 reverse_string += msg_string[i];
             }
             msg.channel.send(reverse_string);
         }
 
         else {
-            msg.reply("You must include a piece of text along with your command, eg: \n `reverse Hello there`")
+            msg.reply("You must include a piece of text along with your command, eg:`" + `${bot_prefix}` + "reverse Hello there`")
 
         }
 
@@ -975,10 +997,9 @@ client.on('message', async msg => {
             msg.reply("Tee hee, you never told me who to poke :) Did you actually want to poke me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
         }
         else {
-            var poker = msg.author.username;
+            var poker = msg.author;
             var pokee = msg_array[1];
-            console.log(poker)
-            msg.channel.send(`${poker} just poked ${pokee} :eyes:`)
+            msg.channel.send(`${poker} just poked :point_right: ${pokee} :eyes:`)
         }
     }
     else if (cmd === "gift") {
@@ -987,7 +1008,7 @@ client.on('message', async msg => {
             msg.reply("Tee hee, you never told me who to send the gift to :) Did you actually want to send it to me? ^^ \n Try mentioning someone along with your command :eyes:.")
         }
         else {
-            var sender = msg.author.username;
+            var sender = msg.author;
             var receiver = msg_array[1];
 
             var giftMessages = [`${sender} just sent a gift to ${receiver} :gift:`, `${receiver} just received a gift :gift: from ${sender}`]
@@ -1001,7 +1022,7 @@ client.on('message', async msg => {
             msg.reply("Tee hee, you never told me who you wanted to wave at :) Did you actually want to wave at me instead? ^^ \n Try mentioning someone along with your command :eyes:.")
         }
         else {
-            var sender = msg.author.username;
+            var sender = msg.author;
             var receiver = msg_array[1];
 
             msg.channel.send(`${sender} just waved at ${receiver} :wave:`)
@@ -1027,8 +1048,10 @@ client.on('message', async msg => {
     }
 
     else if (cmd === "sepia") {
+        msg.channel.send("Above image is before the sepia filter is applied.")
+        var img_link = msg_array[1];
 
-        Jimp.read("https://apod.nasa.gov/apod/image/1805/M101_3Days_New_APOD.jpg", function (err, test) {
+        Jimp.read(img_link, function (err, test) {
             if (err) throw err;
             test.sepia()
                 .write(new_image_name);
@@ -1111,15 +1134,14 @@ client.on('message', async msg => {
     else if (cmd === "randomCase") {
 
         if (msg_array.length > 1) {
-            msg_string = msg_content.slice(11, msg_content.length)
+            msg_string = msg_content.slice(12, msg_content.length)
             msg_string = msg_string.toLowerCase();
-            console.log("msg " + msg_string)
+
             var randomCaseString = "";
 
             var word, letter;
 
             for (var i = 0; i < msg_string.length; i += 1) {
-                console.log(msg_string[i]);
 
                 if (alphabet.indexOf(msg_string[i])) {
                     var randomNumber = getRandomNumber(0, 1);
@@ -1128,12 +1150,9 @@ client.on('message', async msg => {
 
                         case 0:
                             letter = msg_string[i].toLowerCase();
-                            console.log(randomNumber + letter + "Lowercase")
                             break;
                         case 1:
                             letter = msg_string[i].toUpperCase();
-                            console.log(randomNumber + letter + "Uppercase")
-
                     }
                 }
                 else {
@@ -1157,7 +1176,6 @@ client.on('message', async msg => {
         else {
             msg.channel.startTyping(1)
             var search_term = msg_array[1];
-            console.log("Search term" + search_term)
 
             var keys = Object.keys(emoji);
 
@@ -1167,16 +1185,12 @@ client.on('message', async msg => {
             for (var k = 0; k < keys.length; k += 1) {
                 var keywords = emoji[keys[k]]["keywords"];
                 if (keys[k] === search_term) {
-                    console.log(keys[k] + " matched " + word);
-                    console.log(keywords)
                     matched_emojis.push(keys[k])
                 }
                 else {
                     for (var j = 0; j < keywords.length; j += 1) {
 
                         if (keywords[j] === search_term) {
-                            console.log(keys[k] + " matched " + search_term);
-                            console.log(keywords)
                             matched_emojis.push(keys[k])
                         }
                     }
@@ -1185,7 +1199,7 @@ client.on('message', async msg => {
             }
             if (matched_emojis.length > 0) {
                 var emoji_item;
-                reply = `Here are emojis related to: ${search_term}`
+                reply = "Here are emojis related to: " + "`" + `${search_term}` + "`"
                 for (var j = 0; j < matched_emojis.length; j += 1) {
                     emoji_item = matched_emojis[j];
                     emoji_md = `:${emoji_item}:`
@@ -1219,9 +1233,9 @@ client.on('message', async msg => {
             var numbers = { "1": "one", "2": "two", "3": "three", "4": "four", "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine" };
             var number_keys = Object.keys(numbers);
 
-            var string = msg_content.slice(9, msg_content.length);
+            var string = msg_content.slice(10, msg_content.length);
             string = string.toLowerCase();
-            console.log("Msg : " + string)
+
             var letter;
             emoji_string = ""
             for (var i = 0; i < string.length; i += 1) {
@@ -1237,7 +1251,6 @@ client.on('message', async msg => {
                 }
                 else {
                     emoji_string += letter;
-                    console.log("Found a symbol or space!");
                 }
 
             }
@@ -1252,7 +1265,7 @@ client.on('message', async msg => {
     else if (cmd === "replaceB") {
 
         if (msg_array.length > 1) {
-            var string = msg_content.slice(9, msg_content.length);
+            var string = msg_content.slice(10, msg_content.length);
 
             var letter;
             emoji_string = ""
@@ -1264,7 +1277,6 @@ client.on('message', async msg => {
                 }
                 else {
                     emoji_string += letter;
-                    console.log("Found a symbol or space!");
                 }
 
             }
@@ -1272,7 +1284,7 @@ client.on('message', async msg => {
         }
 
         else {
-            msg.reply("You need to include a message along with the command, eg: \n `replaceB `")
+            msg.reply("You need to include a message along with the command, eg: `" + `${bot_prefix}` + "replaceB`")
         }
 
     }
@@ -1342,7 +1354,7 @@ client.on('message', async msg => {
                     .output('output7.wav')
                     .run()
 
-                playSound(msg, "output7.wav") // Defined below.
+                playSound(msg, "output7.wav", cmd) // Defined below.
             }
 
             else {
@@ -1367,7 +1379,8 @@ client.on('message', async msg => {
 
     // Playback samples.
     else if (music_cmds.includes(cmd)) {
-        playSound(msg, `${cmd}.wav`);
+        console.log("playing")
+        playSound(msg, `${cmd}.wav`, cmd);
 
     }
 
@@ -1415,15 +1428,40 @@ client.on('message', async msg => {
 
     // HELP COMMAND
     else if (cmd === 'help') {
-        if (msg_array.length > 1) {
+        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
 
+        var randomNumber = getRandomNumber(0, colour_array.length - 1);
+        var randomColour = colour_array[randomNumber];
+        if (msg_array.length > 1) {
             var cmd = msg_array[1];
+
             var cmd_example = cmd + "_examples";
             var cmd_info = cmd_info_obj.commands[0][cmd];
             console.log("Definition: " + cmd_info)
-            msg.channel.send("`" + cmd + "`" + " " + cmd_info)
 
-            var examples = cmd_info_obj.examples[0][cmd_example];
+            var examples = `${bot_prefix}${cmd_info_obj.examples[0][cmd_example]}`;
+
+
+            msg.channel.send({
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.avatarURL
+                    },
+                    title: `How-to: ${cmd}`,
+                    description: `${cmd_info}`,
+                    fields: [{
+                        name: "Examples",
+                        value: "`" + `${examples}` + "`"
+                    }
+                    ],
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "Coded by Silvia923#9909 <3"
+                    }
+                }
+            });
 
             if (examples != "") {
                 console.log(examples)
@@ -1431,45 +1469,102 @@ client.on('message', async msg => {
                     "Example Commands 👀" + "\n" +
                     "\n" +
                     "```" + "`" + examples + "`"
-                msg.channel.send(examples_template)
             }
         }
         else {
-            var help_output = ""
+            // var help_output = ""
             var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `!meme` `identify` `fmt` `emojify`"
+            var fun_cmds = "`xkcd` `qr` `meme` `identify` `fmt` `emojify` `cs_jokes`"
+            var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB`"
+            var social_cmds = "`wave` `poke`"
+            var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type -music_cmds for samples]"
+            var example_cmds = "`-earth` \n `-meme yodawg Meme's top text-Meme's bottom text`"
+            // var search_header = "```ml" + "\n" +
+            //     "Info Commands 🔍" + "\n" +
+            //     "```"
+            // help_output += search_header
+            // help_output += search_cmds
 
-            var search_header = "```ml" + "\n" +
-                "Info Commands 🔍" + "\n" +
-                "```"
-            help_output += search_header
-            help_output += search_cmds
+            // var space_header = "\n```ml" + "\n" +
+            //     "Space Commands 🌌🌠🌃" + "\n" +
+            //     "```"
+            // help_output += space_header
+            // help_output += space_cmds
 
+            // var fun_header = "\n```ml" + "\n" +
+            //     "Fun Commands 🎲 ✨🌈" + "\n" +
+            //     "```"
+            // help_output += fun_header
+            // help_output += fun_cmds
 
-            var space_header = "```ml" + "\n" +
-                "Space Commands 🌌🌠🌃" + "\n" +
-                "```"
-            help_output += space_header
-            help_output += space_cmds
+            // var fmt_header = "\n```ml" + "\n" +
+            //     "Fun Message Commands ✨🌈" + "\n" +
+            //     "```"
+            // help_output += fmt_header
+            // help_output += fmt_cmds
 
-            var fun_header = "```ml" + "\n" +
-                "Fun Commands 🎲 ✨🌈" + "\n" +
-                "```"
-            help_output += fun_header
-            help_output += fun_cmds
-            var help_message = "```ml" + "\n" +
-                "To get more info. on a certain command, plus examples, type `help command` where command is one of those above." + "\n" +
-                "```" + "eg: `help qr`"
-            help_output += help_message
+            // var social_header = "\n```ml" + "\n" +
+            //     "Social Commands ✨🌈" + "\n" +
+            //     "```"
+            // help_output += social_header
+            // help_output += social_cmds
+            // var help_message = "\n```ml" + "\n" +
+            //     "Just prepend a hyphen before any of the above commands. \n To get more info. on a certain command, plus examples, type " + "`" + `${bot_prefix}` + "help [command]`" + "\n" +
+            //     "``` eg:`" + `${bot_prefix}` + "help qr`"
+            // help_output += help_message
 
-            msg.channel.send(help_output)
-            console.log(help_output)
-            var examples = "```ml" + "\n" +
-                "Example Commands 👀" + "\n" +
-                "define dancing" + "\n" +
-                "```"
+            // msg.channel.send(help_output)
 
+            // var examples = "```ml" + "\n" +
+            //     "Example Commands 👀" + "\n" +
+            //     "define dancing" + "\n" +
+            //     "```"
+
+            msg.channel.send({
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.avatarURL
+                    },
+                    title: `Onyx Commands`,
+                    description: `Just add a hyphen before any of the following commands:`,
+                    fields: [{
+                        name: "Search Commands",
+                        value: search_cmds
+                    },
+                    {
+                        name: "Social Commands",
+                        value: social_cmds
+                    },
+                    {
+                        name: "Fun Commands",
+                        value: fun_cmds
+                    },
+                    {
+                        name: "Music Production Commands",
+                        value: music_production_cmds
+                    },
+                    {
+                        name: "Space Commands",
+                        value: space_cmds
+                    },
+                    {
+                        name: "Examples",
+                        value: example_cmds
+                    },
+                    {
+                        name: "Get More Info. On A Command",
+                        value: "To get more info. on a command, type -help [command] \n eg: `-help bitcoin`"
+                    }
+                    ],
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "Coded by Silvia923#9909 <3"
+                    }
+                }
+            });
         }
 
 
@@ -1573,13 +1668,13 @@ client.on("guildCreate", guild => {
     var message = `Joined a new server called: ${guild.name} (id: ${guild.id}). This server has ${guild.memberCount} members! :D`;
     console.log(message);
 
-    client.user.setActivity(`Running on ${client.guilds.size} servers`);
+    client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 
 });
 
 client.on("guildDelete", guild => {
     console.log(`Bot has been removed from the following server: ${guild.name} (id: ${guild.id})`);
-    client.user.setActivity(`Serving ${client.guilds.size} servers`);
+    client.user.setActivity(`${bot_prefix}help |Running on ${client.guilds.size} servers`);
 });
 
 client.login(token);
