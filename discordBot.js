@@ -161,15 +161,21 @@ client.on('message', async msg => {
     var write_to_file = ""
 
     var msg_author = msg.author.username;
-    console.log(msg.guild.name)
+    console.log(msg.guild.name);
+
+    var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+
+    var randomNumber = getRandomNumber(0, colour_array.length - 1);
+    var randomColour = colour_array[randomNumber];
 
     if (cmd === "acronym") {
 
         if (msg_array.length > 1) {
             var acronym = msg_array[1];
             console.log(msg_array)
-            msg.reply(`Pinging Acronym Database for the meaning(s) of ${acronym}. . .`)
+            msg.reply("Pinging Acronym Database for the meaning(s) of `" + `${acronym}` + "`")
             var acronym_uri = `http://acronyms.silmaril.ie/cgi-bin/xaa?${acronym}`;
+            var acronym_meanings = [];
 
             request(acronym_uri, { json: true }, (err, res, body) => {
                 if (err) { return console.log(err); }
@@ -184,38 +190,41 @@ client.on('message', async msg => {
                     var header = "```ml" + "\n" +
                         "Acronym Meanings for " + acronym + "👀 \n" +
                         "```"
-                    msg.channel.send(header)
                     for (var i = 6; i < split_body.length - 1; i += 4) {
                         var line = split_body[i]
                         line = line.trim()
 
                         var split_acr_array = line.split(" ");
 
-                        console.log(split_acr_array)
                         var first_item = split_acr_array[0]
-                        console.log("First item" + first_item)
+
                         if (split_acr_array.length === 1) {
                             first_item = first_item.slice(7, first_item.length - 8)
                             split_acr_array[0] = first_item
-
                         }
                         else {
-
                             var strpd_item = first_item.slice(7, first_item.length + 5);
                             split_acr_array[0] = strpd_item;
-
 
                             var last_item = split_acr_array[split_acr_array.length - 1];
                             var strpd_last_item = last_item.slice(0, split_acr_array.length - 11);
                             split_acr_array[split_acr_array.length - 1] = strpd_last_item;
                         }
 
-                        console.log(split_acr_array)
                         var final_acronym = split_acr_array.toString()
                         final_acronym = final_acronym.split(",").join(" ")
-                        msg.channel.send(final_acronym)
+                        acronym_meanings.push(final_acronym)
 
+                        
                     }
+
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            title: `Acronym Meaning(s) for ${acronym}`,
+                            description: acronym_meanings.join("\n")
+                        }
+                    });
                 }
             });
         }
@@ -223,7 +232,6 @@ client.on('message', async msg => {
         else {
             msg.channel.send("You must specify an acronym to search for, eg:`" + `${bot_prefix}` + "acronym rofl`")
         }
-
     }
 
     // Live Earth Footage
@@ -273,6 +281,15 @@ client.on('message', async msg => {
 
                 if (synonyms_string.length < 2000) {
                     msg.reply(synonyms_string);
+
+                    
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            title: `Synonyms for ${word}`,
+                            description: synonyms_string
+                        }
+                    });
                 }
                 else if (synonyms_string.length > 2000 && synonyms_string.length < 4000) {
                     var middle_index = synonyms.length / 2;
@@ -282,7 +299,18 @@ client.on('message', async msg => {
                     var synonyms2 = synonyms.slice(floored_middle_index + 1, synonyms.length - 1);
 
                     msg.channel.send(synonyms1.join(", "))
-                    msg.channel.send("I have more synonyms to send, but I don't wanna spam this channel xD")
+
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            title: `Synonyms for ${word}`,
+                            description: synonyms1,
+                            fields:[{
+                                name: "Even More Synonyms",
+                                value: "I have more synonyms to send, but I don't wanna spam this channel xD"
+                            }]
+                        }
+                    });
 
                 }
                 else {
@@ -359,10 +387,20 @@ client.on('message', async msg => {
                 msg.reply("Found a definition")
                 msg.channel.send(word);
                 msg.channel.send(definition);
+
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "Ancient Definition for`" + `${word.toLowerCase}` + "`",
+                        description: definition,
+                    }
+                });
             }
             else {
                 msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
             }
+
+            
 
         }
     }
@@ -375,8 +413,13 @@ client.on('message', async msg => {
             .then(res => res.json())
             .then((out) => {
                 var total_population = out.total_population[1].population;
-                console.log(total_population)
-                msg.reply(`There are ${total_population} humans living on Earth right now.`);
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "World Population Stats :earth_africa:",
+                        description: `There are ${total_population} humans living on Earth right now.`
+                    }
+                });
             })
             .catch(err => { throw err })
             .catch(err => { msg.channel.send("I couldn't seem to get the population for you :/") });
@@ -412,15 +455,15 @@ client.on('message', async msg => {
                 var article_url = reddit_data.url;
                 var author = reddit_data.author;
                 console.log(reddit_data)
-                msg.reply("Posted by: " + author)
-                msg.reply(title);
-                msg.reply(article_url);
+                msg.channel.send(title);
+                msg.channel.send("Posted by: " + author)
+                msg.channel.send(article_url);
 
             })
             .catch(err => { throw err });
     }
     else if (cmd === "news") {
-        msg.reply("Pinging Reddit for some world headlines: :earth_africa:")
+        msg.channel.send("Pinging Reddit for some world headlines: :earth_africa:")
         let til_url = "https://www.reddit.com/r/worldnews.json";
 
         fetch(til_url)
@@ -431,10 +474,9 @@ client.on('message', async msg => {
                 var title = reddit_data.title;
                 var article_url = reddit_data.url;
                 var author = reddit_data.author;
-                console.log(reddit_data)
-                msg.reply("Posted by: " + author)
-                msg.reply(title);
-                msg.reply(article_url);
+                msg.channel.send("Posted by: " + author)
+                msg.channel.send(title);
+                msg.channel.send(article_url);
 
             })
             .catch(err => { throw err });
@@ -466,9 +508,16 @@ client.on('message', async msg => {
             .then((out) => {
                 var randomNumber = getRandomNumber(0, 26)
                 var nasa_output = out;
-                console.log(nasa_output)
                 var total_nearearth_objects = out.element_count;
-                msg.channel.send("There are a total of " + total_nearearth_objects + " near-earth objects circulating around Earth right now.")
+                var neo_message = "There are a total of " + total_nearearth_objects + " near-earth objects circulating around Earth right now."
+
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "Near Earth Objects",
+                        description: neo_message
+                    }
+                });
 
             })
             .catch(err => { throw err });
@@ -548,9 +597,17 @@ client.on('message', async msg => {
                 var header = "```ml" + "\n" +
                     "BITCOIN DATA FROM BITCOINCHARTS.COM 👀" + "\n" +
                     "```"
-                msg.channel.send(header)
-                msg.reply("USD --> 1 bitcoin equals: $" + bc_to_usd)
-                msg.reply("EUR --> 1 bitcoin equals: €" + bc_to_eur)
+
+                var usd_message = "USD --> 1 bitcoin equals: $" + bc_to_usd
+                var eur_message = "EUR --> 1 bitcoin equals: €" + bc_to_eur
+
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: `Bitcoin Data From BitcoinCharts.com`,
+                        description: `${usd_message}\n${eur_message}`
+                    }
+                });
             })
             .catch(err => { throw err });
     }
@@ -679,17 +736,20 @@ client.on('message', async msg => {
             .then((out) => {
                 var iss_info = out;
                 var position = iss_info["iss_position"];
-                console.log(position)
                 var latitude = position["latitude"];
                 var longitude = position["longitude"];
-                console.log(latitude)
-                console.log(longitude)
 
-                var iss_output = "```ml" + "\n" +
-                    "Location of the International Space Station 🌌🌠🌃" + "\n" + `Latitude: ${latitude} \n Longitude: ${longitude}` +
-                    "```"
+                var iss_output = `Latitude: ${latitude}\nLongitude: ${longitude}`
+
                 printCountry(latitude, longitude)
-                msg.channel.send(iss_output);
+
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "Location of the International Space Station 🌌🌠🌃",
+                        description: iss_output
+                    }
+                });
             })
             .catch(err => { throw err });
     }
@@ -703,12 +763,17 @@ client.on('message', async msg => {
                 var astro_list = out;
                 var number_astronauts = astro_list["number"];
 
-                console.log(number_astronauts);
-                var astro_output = "```ml" + "\n" +
-                    "Number of Astronauts In Space Right Now 🌌🌠🌃" + "\n" + `There are ${number_astronauts} astronauts aboard the International Space Station right now.` +
-                    "```"
-                console.log(astro_output);
-                msg.channel.send(astro_output);
+                var astro_output = `There are ${number_astronauts} astronauts aboard the International Space Station right now.`
+
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "Number of Astronauts In Space Right Now",
+                        description: astro_output
+                    }
+                });
+
+                
             })
             .catch(err => { throw err });
     }
@@ -1428,10 +1493,7 @@ client.on('message', async msg => {
 
     // HELP COMMAND
     else if (cmd === 'help') {
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
 
-        var randomNumber = getRandomNumber(0, colour_array.length - 1);
-        var randomColour = colour_array[randomNumber];
         if (msg_array.length > 1) {
             var cmd = msg_array[1];
 
@@ -1475,10 +1537,10 @@ client.on('message', async msg => {
             // var help_output = ""
             var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `meme` `identify` `fmt` `emojify` `cs_jokes`"
-            var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB`"
+            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `fmt` `emojify` `cs_jokes`"
+            var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
-            var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type -music_cmds for samples]"
+            var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
             var example_cmds = "`-earth` \n `-meme yodawg Meme's top text-Meme's bottom text`"
             // var search_header = "```ml" + "\n" +
             //     "Info Commands 🔍" + "\n" +
@@ -1529,26 +1591,33 @@ client.on('message', async msg => {
                         icon_url: client.user.avatarURL
                     },
                     title: `Onyx Commands`,
+                    thumbnail: { 
+                        url: client.user.avatarURL
+                    },
                     description: `Just add a hyphen before any of the following commands:`,
                     fields: [{
-                        name: "Search Commands",
+                        name: "Search Commands :information_source:",
                         value: search_cmds
                     },
                     {
-                        name: "Social Commands",
+                        name: "Social Commands :wave: :grinning: ",
                         value: social_cmds
                     },
                     {
-                        name: "Fun Commands",
+                        name: "Fun Commands ✨",
                         value: fun_cmds
                     },
                     {
-                        name: "Music Production Commands",
+                        name: "Music Production Commands :loud_sound:",
                         value: music_production_cmds
                     },
                     {
-                        name: "Space Commands",
+                        name: "Space Commands 🌌🌃",
                         value: space_cmds
+                    },
+                    {
+                        name: "Message Formatting Commands :incoming_envelope: :speech_balloon:",
+                        value: fmt_cmds
                     },
                     {
                         name: "Examples",
