@@ -16,8 +16,8 @@ A complete list of currently working commands can be found below.
 [Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
 
 ## Test Onyx Out In This Support Server
-[If you want to test Onyx out before adding her to your server, just join this server, and leave when you want.
-Onyx runs 24/7, so she'll always be online. :D](https://discord.gg/cSWHaEK)
+If you want to test Onyx out before adding her to your server, [just join this server](https://discord.gg/cSWHaEK), and leave when you want.
+Onyx runs 24/7, so she'll always be online. :D
 
 ## Commands
 NB: Prepend a hyphen before any of the commands below.
@@ -44,6 +44,8 @@ Right now, you can play samples, and overlay/combine samples together.
 | neo           | Find out how many Near-Earth objects are near Earth right now.                              |    `-neo`  |
 | astronauts    | Find out how many astronauts are aboard the International Space Station.                         |    `-astronauts`  |
 | iss           | Get the location of the International Space Station. Updates every second.                    |    `-iss`  |
+
+![Get Live Earth Footage](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/earth_example.gif "Get live footage of Earth from NASA!")
 
 ### Search Commands
 | Command       | Description   | Examples  |
@@ -113,5 +115,4 @@ I am applying for API keys for the following APIs, so that's why their developme
 - Basic moderation commands, including kicking users, detecting spam, etc.,
 
 ## Onyx In Action!
-![Get Live Earth Footage](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/earth_example.gif "Get live footage of Earth from NASA!")
 ![Ask Onyx for Acronym Meanings](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/acronym_example2.gif "Ask Onyx for Acronym Meanings")
