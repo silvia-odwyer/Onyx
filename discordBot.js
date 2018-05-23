@@ -367,7 +367,7 @@ client.on('message', async msg => {
         }
 
     }
-    else if (msg.content === "pls react") {
+    else if (msg.content === "-pls react") {
         for (var i = 0; i < 10; i += 1) {
             var randomNumber = getRandomNumber(0, happy_emoji.length - 1);
             var randomEmoji = happy_emoji[randomNumber];
@@ -1537,11 +1537,11 @@ client.on('message', async msg => {
             // var help_output = ""
             var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `fmt` `emojify` `cs_jokes`"
+            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
-            var example_cmds = "`-earth` \n `-meme yodawg Meme's top text-Meme's bottom text`"
+            var example_cmds = "`-earth` \n `-meme onedoesnotsimply Meme's top text-Meme's bottom text`"
             // var search_header = "```ml" + "\n" +
             //     "Info Commands 🔍" + "\n" +
             //     "```"
