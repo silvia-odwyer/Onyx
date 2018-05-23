@@ -49,11 +49,11 @@ Right now, you can play samples, and overlay/combine samples together.
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | search        | Get all the synonyms for a word.                                                                 |  `-search azure `   |
-| bitcoin       | Retrieve today's bitcoin rates.                                                                  |    ``-bitcoin`  |
+| bitcoin       | Retrieve today's bitcoin rates.                                                                  |    `-bitcoin`  |
 | acronym       | Get the meaning of an acronym. --> acronym lol                                                   | `-acronym rofl` |
 | define        | Get an old-style definition of a word like it's 1859.                                            |  `-define dancing`  |
 | translate     | Translate text to a variety of languages, including French (fr), Italian (it), German (de), and more! | `-translate fr How are you?`|
-| identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |` identify Hello there, how are you?` |
+| identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |`-identify Hello there, how are you?` |
 | getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-getem hearts `  |
 | population    | Get the total number of humans on Earth right now.                                               |   `-population`   |
 
@@ -73,11 +73,11 @@ Right now, you can play samples, and overlay/combine samples together.
 ### Fun Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
-| qr            | Generate a QR code in black & white. Create a multi-coloured QR code with the `qr+` command.              |  `qr This is a qr-encoded message`|
-| qr+            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `qr fff 000 This is a qr-encoded message`|
+| qr            | Generate a QR code in black & white. Create a multi-coloured QR code with the `qr+` command.              |  `-qr This is a qr-encoded message`|
+| qr+            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `-qr fff 000 This is a qr-encoded message`|
 | xkcd          | (Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.                            |  `-xkcd` or `-xkcd today`    |
 |pls react      | Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉                                |  `-pls react`   |
-| emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `emojify I loooove emojis`     |
+| emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `-emojify I loooove emojis`     |
 |cs_jokes     | Get a coding/computer science-related joke.                         |  `-cs_jokes`   |
 
 
@@ -87,15 +87,14 @@ Right now, you can play samples, and overlay/combine samples together.
 | randomCase    |Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.| `randomCase this is a sample sentence`   |
 | letterEm      | Convert all the letters in a message to emoji letters. |`-letterEm These letters look like emojis.`  |
 | replaceB      | Replace all the b's in a message with the 🅱️ emoji. | `-replaceB Bye bye letter B's!`  |
-<!-- | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      | -->
 | pyramid       | Convert a sentence into a word pyramid. Try it out! |   `-pyramid This text looks like a pyramid.`   |
 | reverse       | Reverse your message. | `reverse Hello There`|
-
+<!-- | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      | -->
 
 ### Social Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
-| avatar        | See your, or someone else's avatar.                              |  `-avatar @Silvia923` or `-avatar`    |
+| avatar        | See your, or someone else's avatar.        |  `-avatar @Silvia923` or `-avatar`    |
 | wave          | Wave at another user! |   `wave @Silvia923`   |
 | poke          | Poke another user! | `poke @somebody`     |
 <!-- | gift          | Send a gift to another user! |      |
