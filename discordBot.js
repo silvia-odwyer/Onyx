@@ -13,7 +13,8 @@ var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
 var imgflip_pass = imgflip_pass_obj["pass"];
 let translate_creds_obj = require(`translate-creds.json`);
-
+let wolfram_alpha_creds = require(`wolfram_alpha.json`)
+var wolfram_alpha_id = wolfram_alpha_creds["app_id"]
 // TO DO
 // DMming function for synonym searching
 
@@ -24,7 +25,7 @@ var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂
 
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
-var music_cmds = ["futurebass", "-trapdrums", "-riser", "build", "-deepbass", "-trapdrums", "-edmbuild", "-trapbass", "-edmbeat", "-snare", "-skybuild"];
+var music_cmds = ["futurebass", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
@@ -80,19 +81,14 @@ function getAsset(msg, nasa_id) {
 
 function playSound(msg, file, cmd) {
     var voiceChannel = msg.member.voiceChannel;
-    console.log(voiceChannel)
-
+    console.log(cmd)
     if (voiceChannel === undefined) {
         msg.reply("You need to join a Voice Channel first. Then type your command again.")
     }
-    else {
+    else{
         voiceChannel.join().then(connection => {
             const dispatcher = connection.playFile(file);
-            var link = loop_dict[file]
-            console.log(link)
-            msg.channel.send("Futurebass sample free here:" + link)
-            msg.reply("Now try combing the sample with another sample by typing `fx build" + ` ${cmd}`)
-
+        
         }).catch(err => console.log(err));
 
     }
@@ -168,7 +164,42 @@ client.on('message', async msg => {
     var randomNumber = getRandomNumber(0, colour_array.length - 1);
     var randomColour = colour_array[randomNumber];
 
-    if (cmd === "acronym") {
+    if (cmd === "ask") {
+        var question = msg.content.slice(5, msg.content.length);
+        console.log(question)
+        var url_encoded_question = question.split(" ").join("%20");
+        console.log(url_encoded_question)
+
+        var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_question}&output=json`
+
+        fetch(ask_link)
+            .then(res => res.json())
+            .then((out) => {
+                var num_pods = out.queryresult.numpods;
+                if (num_pods === 0) {
+                    msg.reply("Sorry, Wolfram|Alpha doesn't have an answer for that question. Try again maybe? :D")
+                }
+                else {
+                    console.log(out.queryresult)
+                    var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
+                    console.log(interpretation)
+
+                    var answer = out.queryresult.pods[1].subpods[0].plaintext;
+                    console.log(answer)
+
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            title: `${interpretation}`,
+                            description: answer
+                        }
+                    });
+                }
+                })
+            .catch(err => { throw err });
+    }
+
+    else if (cmd === "acronym") {
 
         if (msg_array.length > 1) {
             var acronym = msg_array[1];
@@ -215,7 +246,7 @@ client.on('message', async msg => {
                         final_acronym = final_acronym.split(",").join(" ")
                         acronym_meanings.push(final_acronym)
 
-                        
+
                     }
 
                     msg.channel.send({
@@ -280,9 +311,6 @@ client.on('message', async msg => {
                 var synonyms_string = synonyms.join(", ");
 
                 if (synonyms_string.length < 2000) {
-                    msg.reply(synonyms_string);
-
-                    
                     msg.channel.send({
                         embed: {
                             color: randomColour,
@@ -305,7 +333,7 @@ client.on('message', async msg => {
                             color: randomColour,
                             title: `Synonyms for ${word}`,
                             description: synonyms1,
-                            fields:[{
+                            fields: [{
                                 name: "Even More Synonyms",
                                 value: "I have more synonyms to send, but I don't wanna spam this channel xD"
                             }]
@@ -382,6 +410,7 @@ client.on('message', async msg => {
         else {
             var word = msg.content.slice(8, msg_content.length)
             word = word.toUpperCase();
+            var lowercase_word = word.toLowerCase();
             var definition = json1[word];
             if (definition != undefined) {
                 msg.reply("Found a definition")
@@ -391,7 +420,7 @@ client.on('message', async msg => {
                 msg.channel.send({
                     embed: {
                         color: randomColour,
-                        title: "Ancient Definition for`" + `${word.toLowerCase}` + "`",
+                        title: "Ancient Definition for`" + `${lowercase_word}` + "`",
                         description: definition,
                     }
                 });
@@ -400,7 +429,7 @@ client.on('message', async msg => {
                 msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
             }
 
-            
+
 
         }
     }
@@ -773,7 +802,7 @@ client.on('message', async msg => {
                     }
                 });
 
-                
+
             })
             .catch(err => { throw err });
     }
@@ -1388,12 +1417,39 @@ client.on('message', async msg => {
 
     else if (cmd === "music_cmds") {
         msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just join a Voice Channel, and type its name. \n eg: Type ` + "`futurebass`")
+        var drum_samples = ["trapdrums", "deepbass", "edmbuild" ]
+        var build_samples = ["build", "riser", "snare", "skybuild", "edmbeat", "trapbass"]
+        var drop_samples = ["futurebass"]
 
+        msg.channel.send({
+            embed: {
+                color: randomColour,
+                title: `Music Samples`,
+                description: " To listen to one of these samples, prepend a hyphen before their name.",
+                fields: [{
+                    name: "Drum Beat/Bass",
+                    value: drum_samples.join(", ")
+                },
+                {
+                    name: "Builds",
+                    value: build_samples.join(", ")
+                },
+                {
+                    name: "Drops",
+                    value: drop_samples.join(", ")
+                },
+                {
+                    name: "Examples",
+                    value: "`-build\n-skybuild`"
+                },
+                ]
+            }
+        });
     }
 
     else if (cmd === "fx") {
-        var sample1 = msg_array[0];
-        var sample2 = msg_array[1];
+        var sample1 = msg_array[1];
+        var sample2 = msg_array[2];
 
         if (msg_array.length < 3) {
             msg.reply("You need to add two sound effects along with your command, eg: \n `fx futurebass build` \n Both `futurebass` and `build` are samples.`")
@@ -1420,18 +1476,20 @@ client.on('message', async msg => {
                     .run()
 
                 playSound(msg, "output7.wav", cmd) // Defined below.
+                var link1 = loop_dict[`${sample1}.wav`]
+                var link2 = loop_dict[`${sample2}.wav`]
+                msg.channel.send(`${sample1} sample free here: ${link1}`)
+                msg.channel.send(`${sample2} sample free here: ${link2}`)
             }
 
             else {
                 msg.reply("Sorry, I don't recognise those samples. Probably a typo :stuck_out_tongue_winking_eye:")
             }
-
         }
 
         else {
             msg.reply("You can only combine two samples/loops at a time for now, eg: \n `fx build futurebass`")
         }
-
     }
 
     else if (cmd === "merge") {
@@ -1446,6 +1504,10 @@ client.on('message', async msg => {
     else if (music_cmds.includes(cmd)) {
         console.log("playing")
         playSound(msg, `${cmd}.wav`, cmd);
+        msg.channel.send(`${cmd} sample free here: ${link}`)
+        msg.reply("Now try combining the sample with another sample by typing `-fx build" + ` ${cmd}` + "`");
+
+
 
     }
 
@@ -1537,7 +1599,7 @@ client.on('message', async msg => {
             // var help_output = ""
             var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes`"
+            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
@@ -1591,7 +1653,7 @@ client.on('message', async msg => {
                         icon_url: client.user.avatarURL
                     },
                     title: `Onyx Commands`,
-                    thumbnail: { 
+                    thumbnail: {
                         url: client.user.avatarURL
                     },
                     description: `Just add a hyphen before any of the following commands:`,
@@ -1743,7 +1805,7 @@ client.on("guildCreate", guild => {
 
 client.on("guildDelete", guild => {
     console.log(`Bot has been removed from the following server: ${guild.name} (id: ${guild.id})`);
-    client.user.setActivity(`${bot_prefix}help |Running on ${client.guilds.size} servers`);
+    client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 });
 
 client.login(token);
