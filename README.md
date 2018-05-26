@@ -12,6 +12,12 @@ Onyx has over thirty commands, including those for:
 
 A complete list of currently working commands can be found below.
 
+## UPDATES
+- Captcha generation now possible! `-captcha Only humans can read this.`
+- Get rhyming words. `-rhyme red`
+- Overlaying of audio fully fixed.
+- Check how popular your name is with `-name [your name]`
+
 ## Invite To Your Server
 [Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
 
@@ -58,6 +64,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |`-identify Hello there, how are you?` |
 | getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-getem hearts `  |
 | population    | Get the total number of humans on Earth right now.                                               |   `-population`   |
+| rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
 
 ### Image Commands
 | Command       | Description   | Examples  |
@@ -86,19 +93,19 @@ Right now, you can play samples, and overlay/combine samples together.
 ### Message Formatting Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
-| randomCase    |Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.| `randomCase this is a sample sentence`   |
+| randomCase    |Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.| `-randomCase this is a sample sentence`   |
 | letterEm      | Convert all the letters in a message to emoji letters. |`-letterEm These letters look like emojis.`  |
 | replaceB      | Replace all the b's in a message with the 🅱️ emoji. | `-replaceB Bye bye letter B's!`  |
 | pyramid       | Convert a sentence into a word pyramid. Try it out! |   `-pyramid This text looks like a pyramid.`   |
-| reverse       | Reverse your message. | `reverse Hello There`|
+| reverse       | Reverse your message. | `-reverse Hello There`|
 <!-- | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      | -->
 
 ### Social Commands
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| ---------: |
 | avatar        | See your, or someone else's avatar.        |  `-avatar @Silvia923` or `-avatar`    |
-| wave          | Wave at another user! |   `wave @Silvia923`   |
-| poke          | Poke another user! | `poke @somebody`     |
+| wave          | Wave at another user! |   `-wave @Silvia923`   |
+| poke          | Poke another user! | `-poke @somebody`     |
 <!-- | gift          | Send a gift to another user! |      |
 | setPresence   | Change the bot's playing/presence message to another random message (not user-defined).|     | -->
 
