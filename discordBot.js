@@ -29,7 +29,7 @@ var music_cmds = ["futurebass", "riser", "build", "deepbass", "trapdrums", "edmb
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590" }
+var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical":"61520", "allthethings":"61533", "whatif":"100947", "grandma":"61556", "thenisaid":"922147" }
 var meme_templates = Object.keys(meme_dict).join(", ")
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
@@ -66,14 +66,28 @@ function sendImage(msg, image) {
 }
 
 // Gets Image and Video Assets From NASA
-function getAsset(msg, nasa_id) {
+function getAsset(msg, nasa_id, randomColour) {
     var asset_link = `https://images-api.nasa.gov/asset/${nasa_id}`;
     fetch(asset_link)
         .then(res => res.json())
         .then((out) => {
-            var image = out.collection.items[4].href;
+            console.log(out.collection)
+            var image = out.collection.items[2].href;
             console.log(image)
-            msg.channel.send(image)
+
+            msg.channel.send({
+                embed: {
+                    image: {
+                        url: image
+                    },
+                    thumbnail: {
+                        url: image
+                    },
+                    color: randomColour,
+                    title: `Image Result`
+                }
+            });
+
             console.log(out.collection.items)
         })
         .catch(err => { throw err });
@@ -85,10 +99,10 @@ function playSound(msg, file, cmd) {
     if (voiceChannel === undefined) {
         msg.reply("You need to join a Voice Channel first. Then type your command again.")
     }
-    else{
+    else {
         voiceChannel.join().then(connection => {
             const dispatcher = connection.playFile(file);
-        
+
         }).catch(err => console.log(err));
 
     }
@@ -101,7 +115,6 @@ function checkInServer(msg, username) {
     var guild_members = msg.guild.members.map(u => u.id)
     console.log(guild_members)
     if (guild_members.includes(username)) {
-
         console.log("Returning TRUE")
         return true;
     }
@@ -168,7 +181,7 @@ client.on('message', async msg => {
         var question = msg.content.slice(5, msg.content.length);
         console.log(question)
         var url_encoded_question = question.split(" ").join("%20");
-        console.log(url_encoded_question)
+        console.log(url_encoded_question);
 
         var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_question}&output=json`
 
@@ -195,8 +208,173 @@ client.on('message', async msg => {
                         }
                     });
                 }
-                })
+            })
             .catch(err => { throw err });
+    }
+
+    else if (cmd === "name") {
+        var name = msg_array[1];
+        if (msg_array.length < 2) {
+            msg.reply("You must add your name along with the command, eg: \n `-name Josie`")
+        }
+        else if (msg_array.length > 2) {
+            msg.reply("I can only check one name at a time. ")
+        }
+        else {
+            var name_query = msg.content.slice(1, msg.content.length);
+            var name_query_encoded = name_query.split(" ").join("%20");
+            console.log(name_query_encoded);
+
+            var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${name_query}&output=json`
+
+            fetch(ask_link)
+                .then(res => res.json())
+                .then((out) => {
+                    var num_pods = out.queryresult.numpods;
+                    if (num_pods === 0) {
+                        msg.reply("Sorry, Wolfram|Alpha doesn't have data on your name :(")
+                    }
+                    else {
+
+                        var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
+                        console.log(interpretation)
+                        console.log("NAME IS HERE >>>>>")
+                        var basic_details = out.queryresult.pods[1].subpods[0].plaintext;
+                        var graph = out.queryresult.pods[0].subpods[0].img.src;
+
+                        var historical_details = out.queryresult.pods[2].subpods[0];
+                        console.log(historical_details)
+
+                        var estimates = out.queryresult.pods[3].subpods[0];
+                        console.log(estimates)
+                        var age_dist = out.queryresult.pods[4].subpods[0];
+                        console.log(age_dist)
+
+                        var alternate_names = out.queryresult.pods[5].subpods[0].plaintext;
+                        if (alternate_names === ""){
+                            alternate_names = "No alternate names."
+                        }
+                        console.log(alternate_names);
+
+                        var notable_ppl = out.queryresult.pods[6].subpods[0].plaintext;
+                        console.log(notable_ppl);
+
+                        msg.channel.send({
+                            embed: {
+                                color: randomColour,
+                                title: `${interpretation}`,
+                                description: basic_details,
+                                image: {
+                                    url: graph
+                                },
+                                fields: [{
+                                    name: "Alternate Names",
+                                    value: alternate_names
+                                },
+                                {
+                                    name: `Famous People`,
+                                    value: notable_ppl
+                                }]
+                            }
+                        });
+                    }
+                })
+                .catch(err => { throw err });
+        }
+    }
+
+    else if (cmd === "captcha") {
+
+        if (msg_array.length === 1) {
+            msg.reply("Add some text along with your command, so that I can convert it into a CAPTCHA.")
+        }
+        else {
+            var captcha_encoded = msg.content.slice(1, msg.content.length).split(" ").join("%20")
+            var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${captcha_encoded}&output=json`
+            fetch(ask_link)
+                .then(res => res.json())
+                .then((out) => {
+                    var img_link = out.queryresult.pods[1].subpods[0].img.src;
+
+                    msg.channel.send({
+                        embed: {
+                            image: {
+                                url: img_link
+                            },
+                            color: randomColour,
+                            title: `Captcha`,
+                            description: "Text -> Captcha"
+                        }
+                    });
+
+                })
+                .catch(err => { throw err });
+        }
+    }
+
+    else if (cmd === "chat"){
+        var naturalLanguageSentences = require(`naturalLanguage.json`)
+
+        var question = msg.content.slice(6, msg.content.length)
+        var natural = require('natural');
+        var classifier = new natural.BayesClassifier();
+
+        classifier.addDocument("Do you like me", "relationships");
+        classifier.addDocument("Who are you", "about");
+        classifier.addDocument("Do we have a future", "future");
+        classifier.addDocument("What do you think", "opinion");
+        classifier.addDocument("Which is better", "versus");
+        classifier.addDocument("Do you like", "like");
+
+        classifier.train();
+
+        var result = classifier.classify(question);
+        console.log("Result" + result)
+        var answer = naturalLanguageSentences.result;
+        console.log(answer)
+        var randomNumber = getRandomNumber(0, answer.length - 1)
+        var randomAnswer = answer[randomNumber]
+        console.log(randomAnswer);
+        var classifications = classifier.getClassifications(question)
+        msg.reply(randomAnswer)
+    }
+
+    else if (cmd === "rhyme") {
+
+        // Query is "rhymes with [word]"
+        // Check if you can rhyme with more than one word, ie: multi word phrases.
+
+        if (msg_array.length === 1) {
+            msg.reply("Add another word with your command, so I can see what rhymes with it.")
+        }
+        else if (msg_array.length > 2){
+            msg.reply("It's recommended you add only one word with your command.")
+        }
+        else {
+            var search_term = msg_array[1];
+            var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=rhymes%20with%20${search_term}&output=json`
+            fetch(ask_link)
+                .then(res => res.json())
+                .then((out) => {
+
+                    if (out.queryresult.success === false){
+                        msg.reply("Couldn't find any rhyming words :( ")
+                    }
+                    else{
+
+                        var rhyming_words = out.queryresult.pods[1].subpods[0].plaintext
+    
+                        msg.channel.send({
+                            embed: {
+                                color: randomColour,
+                                title: `Rhymes With`,
+                                description: rhyming_words
+                            }
+                        });    
+                    }
+                })
+                .catch(err => { throw err });
+        }
     }
 
     else if (cmd === "acronym") {
@@ -428,9 +606,6 @@ client.on('message', async msg => {
             else {
                 msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
             }
-
-
-
         }
     }
 
@@ -600,8 +775,14 @@ client.on('message', async msg => {
     }
 
     else if (cmd === "meme_templates") {
-        msg.reply("Meme templates include: \n" + `${meme_templates}`)
-        msg.channel.send("To create a meme, type -meme [template] top text-bottom text \n \n eg: `-meme bf Top text-bottom text`")
+        msg.channel.send({
+            embed: {
+                color: randomColour,
+                title: "Meme Templates",
+                description: meme_templates
+            }
+        });
+        msg.channel.send("To create a meme, type -meme [template] top text-bottom text \n \n eg: `-meme office Top text-bottom text`")
     }
 
     else if (cmd === "bitcoin") {
@@ -1335,13 +1516,22 @@ client.on('message', async msg => {
             for (var i = 0; i < string.length; i += 1) {
                 letter = string[i];
                 if (alphabet.includes(letter) === true) {
-                    emoji_letter = `:regional_indicator_${letter}:      `;
+                    if (letter != "b") {
+                        emoji_letter = `:regional_indicator_${letter}:   `;
+
+                    }
+                    else {
+                        emoji_letter = ":b:   "
+                    }
                     emoji_string += emoji_letter;
                 }
                 else if (number_keys.includes(letter) === true) {
                     var num_string = numbers[letter];
                     emoji_letter = `:${num_string}: `
                     emoji_string += emoji_letter
+                }
+                else if (letter === " ") {
+                    emoji_string += "      ";
                 }
                 else {
                     emoji_string += letter;
@@ -1382,8 +1572,9 @@ client.on('message', async msg => {
         }
 
     }
-    if (cmd === "nasapic") {
-        var apod_link = `https://images-api.nasa.gov/search?q=Orion&media_type=image`;
+    else if (cmd === "nasapic") {
+        var search_term = msg_array.slice(1, msg_array.length)
+        var apod_link = `https://images-api.nasa.gov/search?q=${search_term}&media_type=image`;
         fetch(apod_link)
             .then(res => res.json())
             .then((out) => {
@@ -1391,11 +1582,9 @@ client.on('message', async msg => {
                 var link_result = out.collection.items[0].links[0].href
                 var nasa_id = out.collection.items[0].data[0].nasa_id
 
-                getAsset(msg, nasa_id)
+                getAsset(msg, nasa_id, randomColour)
             })
             .catch(err => { throw err });
-
-
     }
     else if (cmd === "airQuality") {
         var openaq_link = "https://api.openaq.org/v1/measurements?country=Sweden"
@@ -1417,7 +1606,7 @@ client.on('message', async msg => {
 
     else if (cmd === "music_cmds") {
         msg.reply(`Samples include: ${music_cmds.join(", ")} \n To listen to one of them, just join a Voice Channel, and type its name. \n eg: Type ` + "`futurebass`")
-        var drum_samples = ["trapdrums", "deepbass", "edmbuild" ]
+        var drum_samples = ["trapdrums", "deepbass", "edmbuild"]
         var build_samples = ["build", "riser", "snare", "skybuild", "edmbeat", "trapbass"]
         var drop_samples = ["futurebass"]
 
@@ -1596,10 +1785,9 @@ client.on('message', async msg => {
             }
         }
         else {
-            // var help_output = ""
-            var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem`"
+            var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
+            var fun_cmds = "`captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
