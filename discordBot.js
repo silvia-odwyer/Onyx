@@ -15,6 +15,8 @@ var imgflip_pass = imgflip_pass_obj["pass"];
 let translate_creds_obj = require(`translate-creds.json`);
 let wolfram_alpha_creds = require(`wolfram_alpha.json`)
 var wolfram_alpha_id = wolfram_alpha_creds["app_id"]
+var cloudinary_creds = require("cloudinary.json")
+var unsplash_creds = require("unsplash_creds.json")
 // TO DO
 // DMming function for synonym searching
 
@@ -29,7 +31,7 @@ var music_cmds = ["futurebass", "riser", "build", "deepbass", "trapdrums", "edmb
 var loop_dict = require('loop_dict.json')
 let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary, with ancient definitions from the 19th and 20th Century.
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical":"61520", "allthethings":"61533", "whatif":"100947", "grandma":"61556", "thenisaid":"922147" }
+var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical": "61520", "allthethings": "61533", "whatif": "100947", "grandma": "61556", "thenisaid": "922147" }
 var meme_templates = Object.keys(meme_dict).join(", ")
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
@@ -40,11 +42,24 @@ var moby = require('moby') // This is an NPM package which allows for communicat
 
 var Jimp = require("jimp"); // Image Manipulation with JS.
 var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
-
+var cloudinary = require('cloudinary')
 // Global Variables
 var new_image_name = "test56.jpg"
 var bot_prefix = "-"
 
+
+// Machine Learning
+// const brain = require('brain.js');
+
+// const trainingData = [
+//     'I am here to talk :eyes:',
+//     'I am pretty great actually',
+//     'I am doing well really',
+//     'I love talking to you ahaha.'
+// ];
+
+// const lstm = new brain.recurrent.LSTM();
+// const result = lstm.train(trainingData, { iterations: 1500 });
 // Functions
 
 function sendImage(msg, image) {
@@ -138,6 +153,7 @@ function printCountry(latitude, longitude) {
 }
 
 client.on('ready', () => {
+
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 });
@@ -251,7 +267,7 @@ client.on('message', async msg => {
                         console.log(age_dist)
 
                         var alternate_names = out.queryresult.pods[5].subpods[0].plaintext;
-                        if (alternate_names === ""){
+                        if (alternate_names === "") {
                             alternate_names = "No alternate names."
                         }
                         console.log(alternate_names);
@@ -312,31 +328,63 @@ client.on('message', async msg => {
         }
     }
 
-    else if (cmd === "chat"){
+    else if (cmd === "chat") {
+        var randomNumber = getRandomNumber(0, happy_emoji.length - 1)
+        msg.react(happy_emoji[randomNumber])
         var naturalLanguageSentences = require(`naturalLanguage.json`)
-
+        var resser2 = naturalLanguageSentences["about"];
+        msg.reply(resser2)
         var question = msg.content.slice(6, msg.content.length)
         var natural = require('natural');
         var classifier = new natural.BayesClassifier();
 
-        classifier.addDocument("Do you like me", "relationships");
-        classifier.addDocument("Who are you", "about");
-        classifier.addDocument("Do we have a future", "future");
-        classifier.addDocument("What do you think", "opinion");
-        classifier.addDocument("Which is better", "versus");
-        classifier.addDocument("Do you like", "like");
-
+        classifier.addDocument("you your", "about");
+        classifier.addDocument("think", "opinion");
+        classifier.addDocument("Which better versus", "versus");
+        classifier.addDocument("Do like", "like");
+        classifier.addDocument("Can you help me", "help")
+        classifier.addDocument("created coder silvia silv made", "created")
+        classifier.addDocument("I", "user")
         classifier.train();
 
-        var result = classifier.classify(question);
-        console.log("Result" + result)
-        var answer = naturalLanguageSentences.result;
+        var result = String(classifier.classify(question));
+
+        var answer = naturalLanguageSentences[result];
         console.log(answer)
         var randomNumber = getRandomNumber(0, answer.length - 1)
         var randomAnswer = answer[randomNumber]
         console.log(randomAnswer);
         var classifications = classifier.getClassifications(question)
+        console.log(classifications)
+        var user_pronouns = ["I", "me", "you"];
+        var bot_pronouns = ["you", "you", "I"]
+        var chat_array = question.split(" ");
+        for (var i; i < chat_array.length; i += 1) {
+            if (user_pronouns.includes(chat_array[i])) {
+                console.log("Found user pronoun")
+                console.log(chat_array[i])
+                console.log(bot_pronouns[i])
+                // get the index of where the word is.
+                var index_bot_pronouns = user_pronouns.indexOf(chat_array[i])
+                console.log(index_bot_pronouns)
+                // remove the element at that position
+                chat_array.pop(chat_array[i])
+                console.log(chat_array)
+                // insert the new element 
+                chat_array.splice(i, 0, bot_pronouns[index_bot_pronouns])
+
+            }
+        }
+        console.log(chat_array)
+
         msg.reply(randomAnswer)
+    }
+    else if (cmd === "neural") {
+
+
+        const run1 = lstm.run('I');
+        console.log('run 1: I' + run1);
+
     }
 
     else if (cmd === "rhyme") {
@@ -347,7 +395,7 @@ client.on('message', async msg => {
         if (msg_array.length === 1) {
             msg.reply("Add another word with your command, so I can see what rhymes with it.")
         }
-        else if (msg_array.length > 2){
+        else if (msg_array.length > 2) {
             msg.reply("It's recommended you add only one word with your command.")
         }
         else {
@@ -357,20 +405,20 @@ client.on('message', async msg => {
                 .then(res => res.json())
                 .then((out) => {
 
-                    if (out.queryresult.success === false){
+                    if (out.queryresult.success === false) {
                         msg.reply("Couldn't find any rhyming words :( ")
                     }
-                    else{
+                    else {
 
                         var rhyming_words = out.queryresult.pods[1].subpods[0].plaintext
-    
+
                         msg.channel.send({
                             embed: {
                                 color: randomColour,
                                 title: `Rhymes With`,
                                 description: rhyming_words
                             }
-                        });    
+                        });
                     }
                 })
                 .catch(err => { throw err });
@@ -1600,6 +1648,92 @@ client.on('message', async msg => {
 
     }
 
+    else if (cmd === "photo"){
+        var search_query = msg.content.slice(6, msg.content.length)
+
+        var unsplash_client_id = unsplash_creds["client_id"]
+        var photo_link = `https://api.unsplash.com/search/photos/?client_id=${unsplash_client_id}&query=${search_query}`
+        fetch(photo_link)
+        .then(res => res.json())
+        .then((out) => {
+            console.log(out)
+            if (out.total == 0){
+                msg.reply(`I couldn't find any Unsplash images related to ${search_query}`)
+            }
+            else{
+                var randomImageIndex = getRandomNumber(0, out.results.length - 1)
+                var first_img_link = out.results[0].urls.raw
+                var first_img_user = out.results[0].user.username
+                var random_img_link = out.results[randomImageIndex].urls.raw 
+                var random_img_user = out.results[randomImageIndex].user.username
+    
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        description:`[${random_img_user}](https://unsplash.com/@${random_img_user}) on [Unsplash](https://unsplash.com)`,
+                        title: `Images From Unsplash Related To ${search_query}`,
+                        image: {
+                            url: random_img_link
+                        },
+                        fields :[
+                    {
+                        name: "Original Image",
+                        value: "[Original image found here](https://unsplash.com)"
+                    }]
+                    }
+                });
+            }
+            
+        })
+        .catch(err => { throw err });
+    }
+
+    // CLOUDINARY INTEGRATION
+    else if (cmd === "filter") {
+
+        cloudinary.config({
+            cloud_name: cloudinary_creds.cloud_name,
+            api_key: cloudinary_creds.api_key,
+            api_secret: cloudinary_creds.api_secret
+        });
+
+        var img_url = msg_array[1];
+        console.log(img_url);
+
+        cloudinary.uploader.upload(img_url,
+            function(result) { console.log(result.eager); msg.channel.send({
+                embed: {
+                    color: randomColour,
+                    title: `Your Edited Image`,
+                    image: {
+                        url: result.eager[0].secure_url
+                    },
+                    fields: [{
+                        name: "Applied Filter Effects",
+                        value: "Added filters include sepia."
+                    }
+                    ]
+                }
+            });},
+            {
+              public_id: 'sample_id', 
+              crop: 'limit',
+              width: 2000,
+              height: 2000,
+              eager: [
+                { width: 200, height: 200,
+                  radius: 20, effect: 'sepia' },
+                { width: 100, height: 150, crop: 'fit', format: 'png' }
+              ],                                     
+                tags: ['astronomy']
+
+            }      
+          )
+    }
+
+    // This code outputs the following URL:
+    // https://res.cloudinary.com/demo/image/upload/w_150,h_150,c_thumb,g_face,r_20,e_sepia/l_cloudinary_icon,g_south_east,x_5,y_5,w_50,o_60,e_brightness:200/a_10/front_face.png
+
     // ELECTRONIC MUSIC MANIPULATION
 
     // Starting Point
@@ -1785,7 +1919,7 @@ client.on('message', async msg => {
             }
         }
         else {
-            var search_cmds = "`news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
+            var search_cmds = " `photo` `news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = "`captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
@@ -1911,8 +2045,6 @@ client.on('message', async msg => {
 
 });
 
-
-
 function displayAcronym(request) {
     console.log("Display Result called.")
     if (request.readyState === 4) {
@@ -2016,12 +2148,9 @@ client.login(token);
 // Allow for stats to be made and published to a dashboard system of some sort.
 // Add an XP system, so that every time a user posts two or more commands, they get further XP.
 // EmojiPasta --> improve
-// Unsplash Integration --> need to apply for an API Key.
-// allow the user to get the avatar of another use.
 // Oxford Dictionaries API
 // HALO APIS https://developer.haloapi.com/docs/services/58acdc2e21091812784ce8c2/operations/5969689a2109180f287972a8/console
 // https://api.igdb.com/
 // https://exchangeratesapi.io/
 // https://www.cryptocompare.com/api#-api-data-price-
-// Add numerical support for letterEm
 // https://www.npmjs.com/package/base64-img

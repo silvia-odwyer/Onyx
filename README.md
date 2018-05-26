@@ -13,6 +13,7 @@ Onyx has over thirty commands, including those for:
 A complete list of currently working commands can be found below.
 
 ## UPDATES
+- Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
 - Get rhyming words. `-rhyme red`
 - Overlaying of audio fully fixed.
