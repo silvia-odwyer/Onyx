@@ -28,6 +28,19 @@ A complete list of currently working commands can be found below.
 If you want to test Onyx out before adding her to your server, [just join this server](https://discord.gg/cSWHaEK), and leave when you want.
 Onyx runs 24/7, so she'll always be online. :D
 
+## Onyx In Action
+### Ask Onyx Anything You Like!
+![Ask Onyx Anything You Like!](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/ask_example.gif "Ask Onyx Anything You Like!")
+
+![Ask Onyx Anything You Like! (Yes, even questions like this!)](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/ask2_example.gif "Ask Onyx Anything You Like!  (Yes, even questions like this!)")
+
+
+### Get Public Domain Photos From Unsplash
+![Get Public Domain Photos From Unsplash](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/unsplash_example.gif "Get Public Domain Photos From Unsplash")
+
+### Generate QR Codes
+![Generate QR Codes](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/qr_example.gif "Generate QR Codes")
+
 ## Commands
 NB: Prepend a hyphen before any of the commands below.
 
@@ -50,7 +63,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | meme          | Make a meme, using a variety of templates. Separate the meme's top and bottom text using a hyphen.  | `-meme waitingskeleton This is top text-This is bottom text`    |
-| meme_templates      | Get a list of all meme types you can make. |  `-meme_templates`   |
+| meme_templates      | Get a list of all meme templates available.|  `-meme_templates`   |
 | yt      | Search YouTube for your favourite videos. Returns the first search result video.|  `-yt Swedish House Mafia greyhound`   |
 | xkcd          | (Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.                            |  `-xkcd` or `-xkcd today`    |
 | photo          | Search Unsplash for public domain, stunning images of your choice.                      |  `-unsplash night sky`    |
@@ -79,7 +92,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | population    | Get the total number of humans on Earth right now.                                               |   `-population`   |
 | rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
 | name    |  Find out how popular your first name is, plus get stats on it.                                  |   `-name Markus`   |
-| ask    |   Ask Onyx anything, and she'll provide an answer from Wolfram|Alpha, an information engine.     |   `-name Markus`   |
+| ask    |   Ask Onyx anything, and she'll provide an answer from Wolfram Alpha, an information engine.     |   `-name Markus`   |
 
 
 <!-- | slowblur      | Add a gentler blur effect to an image. |    |
@@ -109,6 +122,10 @@ Right now, you can play samples, and overlay/combine samples together.
 | replaceB      | Replace all the b's in a message with the 🅱️ emoji. | `-replaceB Bye bye letter B's!`  |
 | pyramid       | Convert a sentence into a word pyramid. Try it out! |   `-pyramid This text looks like a pyramid.`   |
 | reverse       | Reverse your message. | `-reverse Hello There`|
+| binary       | Translate a message to binary. | `-binary Hello There`|
+| 1337       | Translate a message to 1337. | `-1337 Hello There`|
+| adv1337       | Translate a message to advanced 1337. | `-adv1337 Hello There`|
+
 <!-- | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      | -->
 
 ### Social Commands

@@ -952,7 +952,7 @@ client.on('message', async msg => {
             }
             else {
 
-                var user_text = msg.content.slice(4, msg.content.length)
+                var user_text = msg.content.slice(5, msg.content.length)
                 console.log(user_text)
                 var user_text_array = user_text.split(" ")
                 console.log(user_text_array)
@@ -1213,16 +1213,27 @@ client.on('message', async msg => {
 
     // Convert to Binary
     else if (cmd === "binary") {
-        console.log("BINARY")
         var fmt_array = msg_content.slice(8, msg_content.length).split("");
-        console.log(fmt_array)
-        var color_cmds_list = ["red", "yellow", "blue", "orange"]
-        var syntax_highlighting_list = ["bash", "md", "python", "java", "kotlin", "javascript"]
-        var font_cmds_list = ["old", "circular", "hex", "binary", "1337", "adv1337", "mono", "cursive", "currency"]
-
+    
         var binaryMessage = translateMessage(fmt_array, "binary", alphabet)
         console.log(binaryMessage)
+        msg.reply(binaryMessage)
 
+    }
+    else if (cmd === "1337") {
+        var fmt_array = msg_content.slice(6, msg_content.length).split("");
+        console.log(fmt_array)
+
+        var leetMessage = translateMessage(fmt_array, "1337", alphabet)
+        msg.reply(leetMessage)
+    }
+
+    else if (cmd === "adv1337") {
+        var fmt_array = msg_content.slice(9, msg_content.length).split("");
+        console.log(fmt_array)
+
+        var advLeetMessage = translateMessage(fmt_array, "adv1337", alphabet)
+        msg.reply(advLeetMessage)
     }
     else if (cmd === "fmt") {
         var fmt_array = msg_content.slice(4, msg_content.length);
@@ -1951,23 +1962,26 @@ client.on('message', async msg => {
             auth: youtube_api_key
         });
 
-        // Function is placed here, because I may require more function calls in the future.
+        // Function is placed here, because I may require calling this function in the future.
         async function searchYouTube(msg, search_term) {
             const res = await youtube.search.list({
                 part: 'id,snippet',
-                q: search_term
+                q: search_term,
+                type: 'video'
             });
-            console.log(res.data.items[0].id);
-            var video_id = res.data.items[0].id.videoId;
-            var video_url = `https://www.youtube.com/watch?v=${video_id}`
-            msg.reply(video_url)
-
+            // console.log(res.data);
+            if (res.data.pageInfo.totalResults === 0){
+                msg.reply("No results found :( Try another search maybe?")
+            }
+            else{
+                var video_id = res.data.items[0].id.videoId;
+                var video_url = `https://www.youtube.com/watch?v=${video_id}`
+                console.log(video_url)
+                msg.reply(video_url)
+            }
         }
         searchYouTube(msg, search_query);
     }
-
-
-
     // Typing Contest
     // CoinBin 
 
@@ -2267,3 +2281,5 @@ client.login(token);
 // https://exchangeratesapi.io/
 // https://www.cryptocompare.com/api#-api-data-price-
 // https://www.npmjs.com/package/base64-img
+// Convert text to an image
+// Overlay text onto GIFS, GIF editing
