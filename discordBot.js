@@ -39,6 +39,7 @@ let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary,
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical": "61520", "allthethings": "61533", "whatif": "100947", "grandma": "61556", "thenisaid": "922147" }
 var meme_templates = Object.keys(meme_dict).join(", ")
+
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
 const fetch = require('node-fetch')
@@ -66,7 +67,34 @@ var bot_prefix = "-"
 
 // const lstm = new brain.recurrent.LSTM();
 // const result = lstm.train(trainingData, { iterations: 1500 });
+
 // Functions
+function translateMessage(fmt_array, fontList, alphabet){
+    var convertedFontMessage = "";
+    var translatedLetter = "";
+
+    // EXTRACTING THE APPROPRIATE CHARACTER LIST.
+    var font_cmds_object = require('font_lists.json');
+    var characterList = font_cmds_object[fontList];
+    console.log(characterList);
+    console.log(fmt_array)
+
+    for (var i = 0; i < fmt_array.length; i += 1) {
+        console.log(i);
+        var letter = fmt_array[i];
+
+        if (alphabet.indexOf(letter) >= 0) {
+            translatedLetter = characterList[letter] // Need the list where the converted characters are.
+        }
+        else {
+            translatedLetter = letter
+        }
+        convertedFontMessage += translatedLetter;
+    }
+    console.log(convertedFontMessage);
+    return convertedFontMessage;
+
+}
 
 function sendImage(msg, image) {
 
@@ -1183,10 +1211,22 @@ client.on('message', async msg => {
 
     }
 
-    // Text Formatting Commands.
+    // Convert to Binary
+    else if (cmd === "binary") {
+        console.log("BINARY")
+        var fmt_array = msg_content.slice(8, msg_content.length).split("");
+        console.log(fmt_array)
+        var color_cmds_list = ["red", "yellow", "blue", "orange"]
+        var syntax_highlighting_list = ["bash", "md", "python", "java", "kotlin", "javascript"]
+        var font_cmds_list = ["old", "circular", "hex", "binary", "1337", "adv1337", "mono", "cursive", "currency"]
+
+        var binaryMessage = translateMessage(fmt_array, "binary", alphabet)
+        console.log(binaryMessage)
+
+    }
     else if (cmd === "fmt") {
         var fmt_array = msg_content.slice(4, msg_content.length);
-        fmt_array = fmt_array.split(" ")
+        fmt_array = fmt_array.split(" ");
         var fmt_cmd = fmt_array[0]
         var message = msg_content.slice(5 + fmt_cmd.length, msg_content.length)
         console.log(fmt_cmd)
@@ -1961,8 +2001,6 @@ client.on('message', async msg => {
             console.log("Definition: " + cmd_info)
 
             var examples = `${bot_prefix}${cmd_info_obj.examples[0][cmd_example]}`;
-
-
             msg.channel.send({
                 embed: {
                     color: randomColour,
