@@ -3,6 +3,7 @@ Make electronic music, memes, edit images, get answers to everything, and more, 
 
 Onyx has over thirty commands, including those for:
 - meme generation
+- searching YouTube
 - image editing
 - music production
 - fetching info/live imagery from NASA
@@ -13,6 +14,7 @@ Onyx has over thirty commands, including those for:
 A complete list of currently working commands can be found below.
 
 ## UPDATES
+- YouTube Integration Now Available! Search for your favourite videos, watch, and enjoy!
 - Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
 - Get rhyming words. `-rhyme red`
@@ -35,6 +37,7 @@ Onyx comes with a series of built-in, royalty-free samples, which you can play t
 
 Right now, you can play samples, and overlay/combine samples together.
 
+
 ### Music Production Commands
 
 | Command       | Description   | Examples  |
@@ -42,6 +45,15 @@ Right now, you can play samples, and overlay/combine samples together.
 | music_cmds         | Get a list of all samples available to play. (Make sure you've joined a voice channel first.)      |   `-music_cmds`  |
 | futurebass           | Futurebass sample. To play this sample, just type the command.                 |   `-futurebass`   |
 | fx    | The `fx` command overlays two samples over one another. In the example to the right, fx combines the two samples `futurebass` and `build` together, overlaying their audio upon one another.                       |  `-fx futurebass build`    |
+
+### Media Commands
+| Command       | Description   | Examples  |
+| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
+| meme          | Make a meme, using a variety of templates. Separate the meme's top and bottom text using a hyphen.  | `-meme waitingskeleton This is top text-This is bottom text`    |
+| meme_templates      | Get a list of all meme types you can make. |  `-meme_templates`   |
+| yt      | Search YouTube for your favourite videos. Returns the first search result video.|  `-yt Swedish House Mafia greyhound`   |
+| xkcd          | (Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.                            |  `-xkcd` or `-xkcd today`    |
+| photo          | Search Unsplash for public domain, stunning images of your choice.                      |  `-unsplash night sky`    |
 
 ### Space/Astronomy/NASA Commands
 
@@ -66,12 +78,10 @@ Right now, you can play samples, and overlay/combine samples together.
 | getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-getem hearts `  |
 | population    | Get the total number of humans on Earth right now.                                               |   `-population`   |
 | rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
+| name    |  Find out how popular your first name is, plus get stats on it.                                  |   `-name Markus`   |
+| ask    |   Ask Onyx anything, and she'll provide an answer from Wolfram|Alpha, an information engine.     |   `-name Markus`   |
 
-### Image Commands
-| Command       | Description   | Examples  |
-| ------------- |:----------------------------------------------------------------------------------------------:| --------- |
-| meme          | Make a meme, using a variety of templates. Separate the meme's top and bottom text using a hyphen.  | `-meme waitingskeleton This is top text-This is bottom text`    |
-| meme_templates      | Get a list of all meme types you can make. |  `-meme_templates`   |
+
 <!-- | slowblur      | Add a gentler blur effect to an image. |    |
 | extremeblur   | Add a stronger blur effect to an image.|     |
 | dotify        |Add this cool effect to an image.|      |
@@ -85,10 +95,10 @@ Right now, you can play samples, and overlay/combine samples together.
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | qr            | Generate a QR code in black & white. Create a multi-coloured QR code with the `qr+` command.              |  `-qr This is a qr-encoded message`|
 | qr+            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `-qr fff 000 This is a qr-encoded message`|
-| xkcd          | (Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.                            |  `-xkcd` or `-xkcd today`    |
 |pls react      | Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉                                |  `-pls react`   |
 | emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `-emojify I loooove emojis`     |
 |cs_jokes     | Get a coding/computer science-related joke.                         |  `-cs_jokes`   |
+|captcha     | Turn plaintext into a captcha.                        |  `-captcha Hello there`   |
 
 
 ### Message Formatting Commands
@@ -113,13 +123,9 @@ Right now, you can play samples, and overlay/combine samples together.
 
 ## Features On The Way
 I am applying for API keys for the following APIs, so that's why their development is slightly delayed.
-- YouTube integration, where users can search for videos, and the first one is sent to the channel.
-- Wolfram|Alpha communication, where Onyx can answer virtually any question, thanks to Wolfram Alpha's decades long research and innovation.
 - Movie DB search and retrieval for movies and their ratings, actors, etc.,
 - Spotify: Provides meta data on various songs.
 - Google Knowledge Graph integration
-- Oxford Dictionaries definitions and synonyms.
-- Unsplash Integration: Allow users to search for any images in the public domain.
 - Basic moderation commands, including kicking users, detecting spam, etc.,
 
 ## Onyx In Action!

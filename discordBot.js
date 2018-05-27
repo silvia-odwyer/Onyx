@@ -7,7 +7,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-
 let token_obj = require(`token.json`);
 var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
@@ -17,6 +16,13 @@ let wolfram_alpha_creds = require(`wolfram_alpha.json`)
 var wolfram_alpha_id = wolfram_alpha_creds["app_id"]
 var cloudinary_creds = require("cloudinary.json")
 var unsplash_creds = require("unsplash_creds.json")
+var unsplash_client_id = unsplash_creds["client_id"]
+var oxford_creds = require("oxford_creds.json")
+var oxford_app_key = oxford_creds["app_key"]
+var oxford_app_id = oxford_creds["app_id"]
+
+var youtube_creds = require("youtube-creds.json")
+var youtube_api_key = youtube_creds["api_key"]
 // TO DO
 // DMming function for synonym searching
 
@@ -629,9 +635,9 @@ client.on('message', async msg => {
         }
     }
 
-    else if (cmd === "define") {
+    else if (cmd === "old-define") {
         if (msg_array.length < 2) {
-            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "search dancing`");
+            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "old-define dancing`");
         }
         else {
             var word = msg.content.slice(8, msg_content.length)
@@ -656,6 +662,46 @@ client.on('message', async msg => {
             }
         }
     }
+
+    else if (cmd === "define") {
+        if (msg_array.length < 2) {
+            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "define dancing`");
+        }
+        else {
+            var word = msg.content.slice(8, msg_content.length);
+            var url_encoded_word = word.split(" ").join("_")
+            var oxford_link = `https://od-api.oxforddictionaries.com:443/api/v1/entries/en/${url_encoded_word}`
+            console.log(oxford_link)
+            console.log(oxford_app_id)
+            console.log(oxford_app_key)
+
+            var oxfordFormData = {
+                Accept: "application/json",
+                app_id: oxford_app_id,
+                app_key: oxford_app_key
+
+            };
+
+            request.post({ url: oxford_link, formData: oxfordFormData }, function optionalCallback(err, httpResponse, body) {
+                if (err) {
+                    return console.error('Could not retrieve definition from Oxford', err);
+                }
+                console.log('Definition request successful!  Server responded with:', body);
+                var json_definition_obj = JSON.parse(body);
+
+            });
+        }
+    }
+    // msg.channel.send({
+    //     embed: {
+    //         color: randomColour,
+    //         title: "Ancient Definition for`" + `${lowercase_word}` + "`",
+    //         description: definition,
+    //     }
+    // });
+
+
+
 
     else if (cmd === "population") {
         msg.reply("Getting you your population stats . . .")
@@ -1648,44 +1694,42 @@ client.on('message', async msg => {
 
     }
 
-    else if (cmd === "photo"){
+    else if (cmd === "photo") {
         var search_query = msg.content.slice(6, msg.content.length)
 
-        var unsplash_client_id = unsplash_creds["client_id"]
         var photo_link = `https://api.unsplash.com/search/photos/?client_id=${unsplash_client_id}&query=${search_query}`
         fetch(photo_link)
-        .then(res => res.json())
-        .then((out) => {
-            console.log(out)
-            if (out.total == 0){
-                msg.reply(`I couldn't find any Unsplash images related to ${search_query}`)
-            }
-            else{
-                var randomImageIndex = getRandomNumber(0, out.results.length - 1)
-                var first_img_link = out.results[0].urls.raw
-                var first_img_user = out.results[0].user.username
-                var random_img_link = out.results[randomImageIndex].urls.raw 
-                var random_img_user = out.results[randomImageIndex].user.username
-    
-                msg.channel.send({
-                    embed: {
-                        color: randomColour,
-                        description:`[${random_img_user}](https://unsplash.com/@${random_img_user}) on [Unsplash](https://unsplash.com)`,
-                        title: `Images From Unsplash Related To ${search_query}`,
-                        image: {
-                            url: random_img_link
-                        },
-                        fields :[
-                    {
-                        name: "Original Image",
-                        value: "[Original image found here](https://unsplash.com)"
-                    }]
-                    }
-                });
-            }
-            
-        })
-        .catch(err => { throw err });
+            .then(res => res.json())
+            .then((out) => {
+                if (out.total == 0) {
+                    msg.reply(`I couldn't find any Unsplash images related to ${search_query}`)
+                }
+                else {
+                    var randomImageIndex = getRandomNumber(0, out.results.length - 1)
+                    var first_img_link = out.results[0].urls.raw
+                    var first_img_user = out.results[0].user.username
+                    var random_img_link = out.results[randomImageIndex].urls.raw
+                    var random_img_user = out.results[randomImageIndex].user.username
+
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            description: `[${random_img_user}](https://unsplash.com/@${random_img_user}) on [Unsplash](https://unsplash.com)`,
+                            title: `Images From Unsplash Related To ${search_query}`,
+                            image: {
+                                url: random_img_link
+                            },
+                            fields: [
+                                {
+                                    name: "Original Image",
+                                    value: "[Original image found here](https://unsplash.com)"
+                                }]
+                        }
+                    });
+                }
+
+            })
+            .catch(err => { throw err });
     }
 
     // CLOUDINARY INTEGRATION
@@ -1701,34 +1745,38 @@ client.on('message', async msg => {
         console.log(img_url);
 
         cloudinary.uploader.upload(img_url,
-            function(result) { console.log(result.eager); msg.channel.send({
-                embed: {
-                    color: randomColour,
-                    title: `Your Edited Image`,
-                    image: {
-                        url: result.eager[0].secure_url
-                    },
-                    fields: [{
-                        name: "Applied Filter Effects",
-                        value: "Added filters include sepia."
+            function (result) {
+                console.log(result.eager); msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: `Your Edited Image`,
+                        image: {
+                            url: result.eager[0].secure_url
+                        },
+                        fields: [{
+                            name: "Applied Filter Effects",
+                            value: "Added filters include sepia."
+                        }
+                        ]
                     }
-                    ]
-                }
-            });},
+                });
+            },
             {
-              public_id: 'sample_id', 
-              crop: 'limit',
-              width: 2000,
-              height: 2000,
-              eager: [
-                { width: 200, height: 200,
-                  radius: 20, effect: 'sepia' },
-                { width: 100, height: 150, crop: 'fit', format: 'png' }
-              ],                                     
+                public_id: 'sample_id',
+                crop: 'limit',
+                width: 2000,
+                height: 2000,
+                eager: [
+                    {
+                        width: 200, height: 200,
+                        radius: 20, effect: 'sepia'
+                    },
+                    { width: 100, height: 150, crop: 'fit', format: 'png' }
+                ],
                 tags: ['astronomy']
 
-            }      
-          )
+            }
+        )
     }
 
     // This code outputs the following URL:
@@ -1852,6 +1900,32 @@ client.on('message', async msg => {
         // }
     }
 
+    // YouTube Integration
+    else if (cmd === "yt") {
+        var search_query = msg.content.slice(4, msg.content.length);
+
+        const { google } = require('googleapis');
+
+        const youtube = google.youtube({
+            version: 'v3',
+            auth: youtube_api_key
+        });
+
+        // Function is placed here, because I may require more function calls in the future.
+        async function searchYouTube(msg, search_term) {
+            const res = await youtube.search.list({
+                part: 'id,snippet',
+                q: search_term
+            });
+            console.log(res.data.items[0].id);
+            var video_id = res.data.items[0].id.videoId;
+            var video_url = `https://www.youtube.com/watch?v=${video_id}`
+            msg.reply(video_url)
+
+        }
+        searchYouTube(msg, search_query);
+    }
+
 
 
     // Typing Contest
@@ -1919,7 +1993,7 @@ client.on('message', async msg => {
             }
         }
         else {
-            var search_cmds = " `photo` `news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
+            var search_cmds = " `yt` `photo` `news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = "`captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
@@ -2065,6 +2139,7 @@ function displayAcronym(request) {
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 
 function getNumberAstronauts() {
 
