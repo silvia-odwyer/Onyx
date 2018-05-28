@@ -53,6 +53,7 @@ var Jimp = require("jimp"); // Image Manipulation with JS.
 var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
 var cloudinary = require('cloudinary')
 var asciiFaces = require("cool-ascii-faces")
+var cats = require("cat-ascii-faces");
 
 // Global Variables
 var new_image_name = "test56.jpg"
@@ -2018,13 +2019,30 @@ client.on('message', async msg => {
     else if (cmd === "asciiFaces"){
         var randomSet = getRandomNumber(0, asciiFaces.faces.length - 11)
         var faces = asciiFaces.faces.slice(randomSet, randomSet + 10).join("     ")
-        msg.reply("Here are some copy-and-paste :clipboard: Ascii faces :eyes:\n" + faces)
+        msg.reply("Here are some copy-and-paste :clipboard: ascii faces :eyes:\n" + faces)
+    }
+
+    else if (cmd === "cats"){
+        var randomSet = getRandomNumber(0, cats.cats.length - 11)
+        var cat_reply = cats.cats.slice(randomSet, randomSet + 10).join("     ");
+        msg.reply("Here are some copy-and-paste cat ascii faces\n") 
+        msg.channel.send(cat_reply)
     }
 
     // Ask Onyx to react in a certain way, for example to add happy reactions to a user's message.
     else if (cmd === "react"){
-        var search_term = msg.content.slice(6, msg.content.length);
-        msg.react(":rofl:")
+        var mentioned_user = msg_array[1];
+        //var guild_members = msg.guild.members.map(u => u.id)
+        var mentions = msg.mentions;
+        console.log(mentions)
+        // Check number of mentions also
+
+        var search_term = msg_array[2] // Only accept one search term at a time, because otherwhise ratelimiting could apply.
+        var matched_emoji = getEmoji(search_term, emoji, msg);
+        matched_emoji = matched_emoji.slice(0, Math.floor(matched_emoji.length / 2))
+        for (var z = 0; z < matched_emoji.length; z += 1){
+            msg.react(matched_emoji[z])
+        }
     }
     //9END
     // Typing Contest
@@ -2092,7 +2110,7 @@ client.on('message', async msg => {
         else {
             var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = " `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
+            var fun_cmds = " `cats` `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
