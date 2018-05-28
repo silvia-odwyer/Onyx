@@ -161,6 +161,32 @@ function playSound(msg, file, cmd) {
     }
 }
 
+function getEmoji(search_term, emoji, msg){
+    var keys = Object.keys(emoji);
+
+    var matched_emojis = [];
+    var char_matched_emojis = [];
+    for (var k = 0; k < keys.length; k += 1) {
+        var keywords = emoji[keys[k]]["keywords"];
+        if (keys[k] === search_term) {
+            matched_emojis.push(keys[k])
+            char_matched_emojis.push(emoji[keys[k]]["char"])
+        }
+        else {
+            for (var j = 0; j < keywords.length; j += 1) {
+
+                if (keywords[j] === search_term) {
+                    matched_emojis.push(keys[k])
+                    char_matched_emojis.push(emoji[keys[k]]["char"])
+
+                }
+            }
+        }
+
+    }
+    return char_matched_emojis;
+}
+
 function checkInServer(msg, username) {
     var guild = msg.guild.members;
 
@@ -1595,44 +1621,20 @@ client.on('message', async msg => {
             msg.reply("You must specify a search term along with your command, eg: \n `getem nature` \n `getem hearts`")
         }
         else {
-            msg.channel.startTyping(1)
-            var search_term = msg_array[1];
-
-            var keys = Object.keys(emoji);
-
-            var reply = "";
-
-            var matched_emojis = [];
-            for (var k = 0; k < keys.length; k += 1) {
-                var keywords = emoji[keys[k]]["keywords"];
-                if (keys[k] === search_term) {
-                    matched_emojis.push(keys[k])
+            var search_terms = msg.content.slice(7, msg.content.length).split(" ");
+            console.log(search_terms)
+            for (var j = 0; j < search_terms.length; j += 1){
+                var reply = "";
+                var search_term = search_terms[j]
+                var char_matched_emojis = getEmoji(search_term, emoji, msg)
+                
+                if (char_matched_emojis.length > 0) {
+                    msg.reply(`${search_term} emoji: ${char_matched_emojis.join(" ")}`)
                 }
                 else {
-                    for (var j = 0; j < keywords.length; j += 1) {
-
-                        if (keywords[j] === search_term) {
-                            matched_emojis.push(keys[k])
-                        }
-                    }
-                }
-
-            }
-            if (matched_emojis.length > 0) {
-                var emoji_item;
-                reply = "Here are emojis related to: " + "`" + `${search_term}` + "`"
-                for (var j = 0; j < matched_emojis.length; j += 1) {
-                    emoji_item = matched_emojis[j];
-                    emoji_md = `:${emoji_item}:`
-                    reply += ` ${emoji_md}`
+                    reply = `No emoji found for ${search_term}`
                 }
             }
-            else {
-                reply = "I couldn't find any matching emojis for your search term :( Try again maybe? :D"
-            }
-            console.log(matched_emojis)
-            msg.channel.stopTyping()
-            msg.channel.send(reply)
         }
     }
 
@@ -2041,8 +2043,14 @@ client.on('message', async msg => {
 
     else if (cmd === "asciiFaces"){
         var randomSet = getRandomNumber(0, asciiFaces.faces.length - 11)
-        var faces = asciiFaces.faces.slice(randomSet, randomSet + 10).join("   ")
+        var faces = asciiFaces.faces.slice(randomSet, randomSet + 10).join("     ")
         msg.reply("Here are some copy-and-paste :clipboard: Ascii faces :eyes:\n" + faces)
+    }
+
+    // Ask Onyx to react in a certain way, for example to add happy reactions to a user's message.
+    else if (cmd === "react"){
+        var search_term = msg.content.slice(6, msg.content.length);
+        msg.react(":rofl:")
     }
     //9END
     // Typing Contest
