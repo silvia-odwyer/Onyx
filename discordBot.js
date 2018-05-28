@@ -1330,53 +1330,30 @@ client.on('message', async msg => {
 
         if (msg_array.length > 1) {
             var keys = Object.keys(emoji);
-            // console.log(keywords)
 
             var msg_array_length = msg_array.length;
 
             msg_array = msg_array.slice(1, msg_array_length);
 
             var emojip = "";
-            var matched_emojis = [];
-
+            var char_matched_emojis = [];
 
             for (var i = 0; i < msg_array.length; i += 1) {
-                var sub_matched_emojis = [];
+                char_matched_emojis = [];
                 var word = msg_array[i];
 
+                char_matched_emojis = getEmoji(word, emoji, msg);
 
-                //     console.log(emojip)
-                //     msg.channel.send(emojip)
-                for (var k = 0; k < keys.length; k += 1) {
-                    var keywords = emoji[keys[k]]["keywords"];
-                    if (keys[k] === word) {
-                        console.log(keys[k] + " matched " + word);
-                        console.log(keywords)
-                        sub_matched_emojis.push(keys[k])
-                    }
-                    else {
-                        for (var j = 0; j < keywords.length; j += 1) {
-
-                            if (keywords[j] === word) {
-                                sub_matched_emojis.push(keys[k])
-                            }
-                        }
-                    }
-
-                }
-                if (sub_matched_emojis.length > 0) {
+                if (char_matched_emojis.length > 0) {
                     // Get random matched emojis
-                    var randomNumber = getRandomNumber(0, sub_matched_emojis.length - 1);
-                    var randomEmoji = sub_matched_emojis[randomNumber]
-                    var emoji_md = `:${randomEmoji}:`
-                    emojip += ` ${word} ${emoji_md}`
+                    var randomNumber = getRandomNumber(0, char_matched_emojis.length - 1);
+                    var randomEmoji = char_matched_emojis[randomNumber]
+                    emojip += ` ${word} ${randomEmoji}`
                 }
                 else {
                     emojip += ` ${word}`
                 }
             }
-            console.log(matched_emojis)
-            console.log(emojip)
             msg.channel.send(emojip)
         }
         else {
@@ -1637,9 +1614,6 @@ client.on('message', async msg => {
             }
         }
     }
-
-
-
 
     // Set Presence
     else if (cmd === "setPresence") {
