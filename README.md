@@ -4,12 +4,13 @@ Make electronic music, memes, edit images, get answers to everything, and more, 
 Onyx has over thirty commands, including those for:
 - meme generation
 - searching YouTube
-- image editing
 - music production
 - fetching info/live imagery from NASA
-- crypto support
 - interacting with IBM's Watson API 
 - getting information on any topic
+
+## Make Memes!
+![Make Memes With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/meme_example.gif "Yes, you can even make memes!")
 
 A complete list of currently working commands can be found below.
 

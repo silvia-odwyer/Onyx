@@ -69,7 +69,7 @@ var bot_prefix = "-"
 // const result = lstm.train(trainingData, { iterations: 1500 });
 
 // Functions
-function translateMessage(fmt_array, fontList, alphabet){
+function translateMessage(fmt_array, fontList, alphabet) {
     var convertedFontMessage = "";
     var translatedLetter = "";
 
@@ -693,44 +693,41 @@ client.on('message', async msg => {
 
     else if (cmd === "define") {
         if (msg_array.length < 2) {
-            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "define dancing`");
+            msg.reply("You must specify a word to define, eg: `" + `${bot_prefix}` + "define dancing`");
         }
         else {
-            var word = msg.content.slice(8, msg_content.length);
-            var url_encoded_word = word.split(" ").join("_")
-            var oxford_link = `https://od-api.oxforddictionaries.com:443/api/v1/entries/en/${url_encoded_word}`
-            console.log(oxford_link)
-            console.log(oxford_app_id)
-            console.log(oxford_app_key)
+            var search_term = msg.content.slice(1, msg.content.length)
+            var url_encoded_search_term = search_term.split(" ").join("%20")
+            var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_search_term}&output=json`
+            console.log(ask_link)
+            fetch(ask_link)
+                .then(res => res.json())
+                .then((out) => {
+                    var num_pods = out.queryresult.numpods;
+                    console.log(out)
+                    if (num_pods === 0) {
+                        msg.reply("Sorry, Wolfram|Alpha doesn't have a definition for that word. Try again maybe? :D")
+                    }
+                    else {
+                        console.log(out.queryresult)
+                        var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
+                        console.log(interpretation)
 
-            var oxfordFormData = {
-                Accept: "application/json",
-                app_id: oxford_app_id,
-                app_key: oxford_app_key
+                        var answer = out.queryresult.pods[1].subpods[0].plaintext;
+                        console.log(answer)
 
-            };
-
-            request.post({ url: oxford_link, formData: oxfordFormData }, function optionalCallback(err, httpResponse, body) {
-                if (err) {
-                    return console.error('Could not retrieve definition from Oxford', err);
-                }
-                console.log('Definition request successful!  Server responded with:', body);
-                var json_definition_obj = JSON.parse(body);
-
-            });
+                        msg.channel.send({
+                            embed: {
+                                color: randomColour,
+                                title: `${interpretation}`,
+                                description: answer
+                            }
+                        });
+                    }
+                })
+                .catch(err => { throw err });
         }
     }
-    // msg.channel.send({
-    //     embed: {
-    //         color: randomColour,
-    //         title: "Ancient Definition for`" + `${lowercase_word}` + "`",
-    //         description: definition,
-    //     }
-    // });
-
-
-
-
     else if (cmd === "population") {
         msg.reply("Getting you your population stats . . .")
         let url = 'http://api.population.io/1.0/population/World/today-and-tomorrow/?format=json';
@@ -1214,7 +1211,7 @@ client.on('message', async msg => {
     // Convert to Binary
     else if (cmd === "binary") {
         var fmt_array = msg_content.slice(8, msg_content.length).split("");
-    
+
         var binaryMessage = translateMessage(fmt_array, "binary", alphabet)
         console.log(binaryMessage)
         msg.reply(binaryMessage)
@@ -1970,10 +1967,10 @@ client.on('message', async msg => {
                 type: 'video'
             });
             // console.log(res.data);
-            if (res.data.pageInfo.totalResults === 0){
+            if (res.data.pageInfo.totalResults === 0) {
                 msg.reply("No results found :( Try another search maybe?")
             }
-            else{
+            else {
                 var video_id = res.data.items[0].id.videoId;
                 var video_url = `https://www.youtube.com/watch?v=${video_id}`
                 console.log(video_url)
@@ -1982,6 +1979,14 @@ client.on('message', async msg => {
         }
         searchYouTube(msg, search_query);
     }
+
+    // Allow users to send media/ascii art/wumboji, etc., to other users. 
+    else if (cmd === "send") {
+        var receiver = msg_array[1]
+        var gift = msg_array[2]
+        var message = `${receiver} - You just received a gift from ${msg.author}!`
+    }
+    //9END
     // Typing Contest
     // CoinBin 
 
@@ -2045,7 +2050,7 @@ client.on('message', async msg => {
             }
         }
         else {
-            var search_cmds = " `yt` `photo` `news` `population` `translate` `search` `define` `bitcoin` `acronym` `getem` `name` `rhyme`"
+            var search_cmds = " `yt` `ask` `photo` `news` `population` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = "`captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
