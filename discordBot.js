@@ -52,6 +52,8 @@ var moby = require('moby') // This is an NPM package which allows for communicat
 var Jimp = require("jimp"); // Image Manipulation with JS.
 var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
 var cloudinary = require('cloudinary')
+var asciiFaces = require("cool-ascii-faces")
+
 // Global Variables
 var new_image_name = "test56.jpg"
 var bot_prefix = "-"
@@ -2034,7 +2036,13 @@ client.on('message', async msg => {
     else if (cmd === "send") {
         var receiver = msg_array[1]
         var gift = msg_array[2]
-        var message = `${receiver} - You just received a gift from ${msg.author}!`
+        var message = `${receiver} - You just received a gift from ${msg.author}! \n If you'd like to open it, type -open gift`
+    }
+
+    else if (cmd === "asciiFaces"){
+        var randomSet = getRandomNumber(0, asciiFaces.faces.length - 11)
+        var faces = asciiFaces.faces.slice(randomSet, randomSet + 10).join("   ")
+        msg.reply("Here are some copy-and-paste :clipboard: Ascii faces :eyes:\n" + faces)
     }
     //9END
     // Typing Contest
@@ -2100,9 +2108,9 @@ client.on('message', async msg => {
             }
         }
         else {
-            var search_cmds = " `yt` `ask` `photo` `news` `population` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
+            var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = "`captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
+            var fun_cmds = " `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
@@ -2255,7 +2263,7 @@ function getNumberAstronauts() {
 
 function createLanguageTranslator() {
     var LanguageTranslatorV2 = require('watson-developer-cloud/language-translator/v2');
-    var watson_username = process.env.TRANSLATE_USERNAME;
+    var watson_username = process.env.TRANSLATE_USERNAME
     var watson_pass = process.env.TRANSLATE_PASSWORD
     var watson_url = process.env.TRANSLATE_URL
 

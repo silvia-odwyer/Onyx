@@ -16,6 +16,8 @@ A complete list of currently working commands can be found below.
 
 ## UPDATES
 - YouTube Integration Now Available! Search for your favourite videos, watch, and enjoy!
+- Search Pixabay for public domain photos.
+- Get random cute Ascii Faces!
 - Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
 - Get rhyming words. `-rhyme red`
