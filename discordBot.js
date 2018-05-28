@@ -23,6 +23,8 @@ var oxford_app_id = oxford_creds["app_id"]
 
 var youtube_creds = require("youtube-creds.json")
 var youtube_api_key = youtube_creds["api_key"]
+var pixabay_creds = require("pixabay_creds.json")
+var pixabay_api_key = pixabay_creds["api_key"]
 // TO DO
 // DMming function for synonym searching
 
@@ -1753,7 +1755,13 @@ client.on('message', async msg => {
                     msg.reply(`I couldn't find any Unsplash images related to ${search_query}`)
                 }
                 else {
-                    var randomImageIndex = getRandomNumber(0, out.results.length - 1)
+                    var randomImageIndex;
+                    if (out.total < 10){
+                        randomImageIndex = getRandomNumber(0, out.total - 1)
+                    }
+                    else{
+                        randomImageIndex = getRandomNumber(0, 9)
+                    }
                     var first_img_link = out.results[0].urls.raw
                     var first_img_user = out.results[0].user.username
                     var random_img_link = out.results[randomImageIndex].urls.raw
@@ -1978,6 +1986,48 @@ client.on('message', async msg => {
             }
         }
         searchYouTube(msg, search_query);
+    }
+
+    // Search Pixabay for free, public-domain images.
+    else if (cmd === "pixabay"){
+        var search_term = msg.content.slice(9, msg.content.length)
+        var url_encoded_search_query = search_term.split(" ").join("%20")
+        console.log(search_term)
+        var pixabay_link = `https://pixabay.com/api/?key=${pixabay_api_key}&q=${url_encoded_search_query}&image_type=photo`
+
+        fetch(pixabay_link)
+                .then(res => res.json())
+                .then((out) => {
+                    console.log(out)
+
+                    if (out.totalHits === 0){
+                        msg.reply("No matching results found :(")
+                    }
+                    else{
+                        // var half_results_length = Math.floor(out.hits.length / 2)
+                        var randomNumber;
+                        if (out.totalHits < 10){
+                            randomNumber = getRandomNumber(0, out.totalHits - 1)
+                        }
+                        else{
+                            randomNumber = getRandomNumber(0, 9)
+                        }
+                        console.log(randomNumber)
+                        var random_img_link = out.hits[randomNumber].largeImageURL;
+                        msg.channel.send({
+                            embed: {
+                                color: randomColour,
+                                description: `[Original image found here](${out.hits[randomNumber].pageURL}) on [Pixabay](https://pixabay.com)`,
+                                title: `Public Domain Image From Pixabay Related To ${search_term}`,
+                                image: {
+                                    url: random_img_link
+                                },
+                            }
+                        });
+                    }
+                })
+                .catch(err => { throw err });
+
     }
 
     // Allow users to send media/ascii art/wumboji, etc., to other users. 
