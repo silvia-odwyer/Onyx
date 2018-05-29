@@ -16,7 +16,7 @@ A complete list of currently working commands can be found below.
 
 ## UPDATES
 - YouTube Integration Now Available! Search for your favourite videos, watch, and enjoy!
-- Search Pixabay for public domain photos.
+- Search Pixabay for public domain photos. `-pixabay night sky`
 - Get random cute Ascii Faces!
 - Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
@@ -70,6 +70,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | yt      | Search YouTube for your favourite videos. Returns the first search result video.|  `-yt Swedish House Mafia greyhound`   |
 | xkcd          | (Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.                            |  `-xkcd` or `-xkcd today`    |
 | photo          | Search Unsplash for public domain, stunning images of your choice.                      |  `-unsplash night sky`    |
+| pixabay    |   Search Pixabay for public domain images.     |   `-pixabay night sky`   |
 
 ### Space/Astronomy/NASA Commands
 
@@ -96,6 +97,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
 | name    |  Find out how popular your first name is, plus get stats on it.                                  |   `-name Markus`   |
 | ask    |   Ask Onyx anything, and she'll provide an answer from Wolfram Alpha, an information engine.     |   `-name Markus`   |
+
 ![Get Emoji](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/getemoji_example.gif "Get emoji related to your search term!")
 
 <!-- | slowblur      | Add a gentler blur effect to an image. |    |
@@ -115,6 +117,8 @@ Right now, you can play samples, and overlay/combine samples together.
 | emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `-emojify I loooove emojis`     |
 |cs_jokes     | Get a coding/computer science-related joke.                         |  `-cs_jokes`   |
 |captcha     | Turn plaintext into a captcha.                        |  `-captcha Hello there`   |
+|cats     | Get a load of cuuuute cat ascii faces                        |  `-cats`   |
+|asciiFaces     | Get a load of cuuuute ascii faces ^^                     |  `-asciiFaces`   |
 
 
 ### Message Formatting Commands
@@ -143,6 +147,7 @@ Right now, you can play samples, and overlay/combine samples together.
 
 ## Features On The Way
 I am applying for API keys for the following APIs, so that's why their development is slightly delayed.
+- Checking if two users should go out together, using IBM Watson's analysis of the two users' messages, and thus deducing their personalities.
 - Movie DB search and retrieval for movies and their ratings, actors, etc.,
 - Spotify: Provides meta data on various songs.
 - Google Knowledge Graph integration
