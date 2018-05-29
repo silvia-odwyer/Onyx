@@ -10,7 +10,7 @@ Onyx has over thirty commands, including those for:
 - getting information on any topic
 
 ## Make Memes!
-![Make Memes With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/meme_example.gif "Yes, you can even make memes!")
+![Make Memes With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/meme_example.gif "Yes, you can even make memes!")
 
 A complete list of currently working commands can be found below.
 
@@ -35,14 +35,14 @@ Onyx runs 24/7, so she'll always be online. :D
 ### Ask Onyx Anything You Like!
 ![Ask Onyx Anything You Like!](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/ask_example.gif "Ask Onyx Anything You Like!")
 
-![Ask Onyx Anything You Like! (Yes, even questions like this!)](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/ask2_example.gif "Ask Onyx Anything You Like!  (Yes, even questions like this!)")
+![Ask Onyx Anything You Like! (Yes, even questions like this!)](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/ask2_example.gif "Ask Onyx Anything You Like!  (Yes, even questions like this!)")
 
 
 ### Get Public Domain Photos From Unsplash
-![Get Public Domain Photos From Unsplash](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/unsplash_example.gif "Get Public Domain Photos From Unsplash")
+![Get Public Domain Photos From Unsplash](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/unsplash_example.gif "Get Public Domain Photos From Unsplash")
 
 ### Generate QR Codes
-![Generate QR Codes](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/qr_example.gif "Generate QR Codes")
+![Generate QR Codes](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/qr_example.gif "Generate QR Codes")
 
 ## Commands
 NB: Prepend a hyphen before any of the commands below.
@@ -80,7 +80,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | astronauts    | Find out how many astronauts are aboard the International Space Station.                         |    `-astronauts`  |
 | iss           | Get the location of the International Space Station. Updates every second.                    |    `-iss`  |
 
-![Get Live Earth Footage](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/earth_example.gif "Get live footage of Earth from NASA!")
+![Get Live Earth Footage](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/earth_example.gif "Get live footage of Earth from NASA!")
 
 ### Search Commands
 | Command       | Description   | Examples  |
@@ -96,7 +96,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
 | name    |  Find out how popular your first name is, plus get stats on it.                                  |   `-name Markus`   |
 | ask    |   Ask Onyx anything, and she'll provide an answer from Wolfram Alpha, an information engine.     |   `-name Markus`   |
-
+![Get Emoji](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/getemoji_example.gif "Get emoji related to your search term!")
 
 <!-- | slowblur      | Add a gentler blur effect to an image. |    |
 | extremeblur   | Add a stronger blur effect to an image.|     |
@@ -149,4 +149,4 @@ I am applying for API keys for the following APIs, so that's why their developme
 - Basic moderation commands, including kicking users, detecting spam, etc.,
 
 ## Onyx In Action!
-![Ask Onyx for Acronym Meanings](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/acronym_example2.gif "Ask Onyx for Acronym Meanings")
+![Ask Onyx for Acronym Meanings](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/acronym_example2.gif "Ask Onyx for Acronym Meanings")
