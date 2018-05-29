@@ -7,6 +7,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+
+// API KEYS
 let token_obj = require(`token.json`);
 var token = token_obj["token"];
 let imgflip_pass_obj = require(`imgflip_pass.json`);
@@ -20,19 +22,14 @@ var unsplash_client_id = unsplash_creds["client_id"]
 var oxford_creds = require("oxford_creds.json")
 var oxford_app_key = oxford_creds["app_key"]
 var oxford_app_id = oxford_creds["app_id"]
-
 var youtube_creds = require("youtube-creds.json")
 var youtube_api_key = youtube_creds["api_key"]
 var pixabay_creds = require("pixabay_creds.json")
 var pixabay_api_key = pixabay_creds["api_key"]
-// TO DO
-// DMming function for synonym searching
-
 
 // RESOURCES
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓", "👀"]
 var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "👀"]
-
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
 var music_cmds = ["futurebass", "riser", "build", "deepbass", "trapdrums", "edmbuild", "trapbass", "edmbeat", "snare", "skybuild"];
@@ -48,7 +45,6 @@ const fetch = require('node-fetch')
 const formData = require('form-data'); // Needed for sending POST requests to servers.
 var fs = require('fs'); // Core Node.JS package required for writing to files.
 var moby = require('moby') // This is an NPM package which allows for communication with The Moby Project's database of words.
-
 var Jimp = require("jimp"); // Image Manipulation with JS.
 var ffmpeg = require('ffmpeg'); // Required for playing sound via Discord.
 var cloudinary = require('cloudinary')
@@ -74,6 +70,8 @@ var bot_prefix = "-"
 // const result = lstm.train(trainingData, { iterations: 1500 });
 
 // Functions
+
+// Translates a message into another format, by swapping its characters for others.
 function translateMessage(fmt_array, fontList, alphabet) {
     var convertedFontMessage = "";
     var translatedLetter = "";
@@ -101,6 +99,7 @@ function translateMessage(fmt_array, fontList, alphabet) {
 
 }
 
+// Sends an embedded image to a text channel.
 function sendImage(msg, image) {
 
     // Send an embed with a local image inside
@@ -147,6 +146,7 @@ function getAsset(msg, nasa_id, randomColour) {
         .catch(err => { throw err });
 }
 
+// Checks if a user is in a Voice Channel, and then plays the sound file.
 function playSound(msg, file, cmd) {
     var voiceChannel = msg.member.voiceChannel;
     console.log(cmd)
@@ -162,6 +162,8 @@ function playSound(msg, file, cmd) {
     }
 }
 
+// Searches emojilib/emojis.json for matching emojis.
+// Takes both the emoji's keywords and its title into account.
 function getEmoji(search_term, emoji, msg){
     var keys = Object.keys(emoji);
 
@@ -226,7 +228,7 @@ client.on('ready', () => {
 client.on('message', async msg => {
     if (msg.author.bot) return;
 
-    if (msg.content[0] != bot_prefix) {
+    if (msg.content[0] != bot_prefix && !(msg.content.split(" ").includes("@Onyx"))) {
         return;
     }
     else {
@@ -246,15 +248,14 @@ client.on('message', async msg => {
     var msg_array = msg_content.split(" ");
     var cmd = msg_array[0].slice(1, msg_array[0].length);
 
-
     var slice = msg_content.slice(0, 6);
     var write_to_file = ""
 
     var msg_author = msg.author.username;
     console.log(msg.guild.name);
 
+    // Necessary for choosing random colours for rich embeds
     var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
-
     var randomNumber = getRandomNumber(0, colour_array.length - 1);
     var randomColour = colour_array[randomNumber];
 
@@ -2044,28 +2045,13 @@ client.on('message', async msg => {
             msg.react(matched_emoji[z])
         }
     }
+
+    else if (msg.content.split(" ").includes("Onyx")){
+        msg.reply("👀")
+    }
     //9END
     // Typing Contest
     // CoinBin 
-
-
-    // if (cmd === "wiki"){
-    //     var search_term = msg_content.slice(5, msg_content.length);
-    //     console.log(search_term)
-    //     search_term = search_term.split(" ").join("%20");
-    //     console.log(search_term)
-    //     var wiki_link = `https://en.wikitionary.org/w/api.php?action=query&titles=${search_term}&prop=revisions&rvprop=content&format=json&formatversion=2`
-    //     fetch(wiki_link)
-    //     .then(res => res.json())
-    //     .then((out) => {
-    //     var wiki_info = out;
-    //     var wiki_content = wiki_info.query.pages[0].revisions[0].content;
-    //     console.log(wiki_content)
-    //     msg.reply(wiki_content)
-    //     })
-    //     .catch(err => { throw err });
-
-    // }
 
     // HELP COMMAND
     else if (cmd === 'help') {
@@ -2255,12 +2241,6 @@ function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
-function getNumberAstronauts() {
-
-
-}
-
 function createLanguageTranslator() {
     var LanguageTranslatorV2 = require('watson-developer-cloud/language-translator/v2');
     var watson_username = process.env.TRANSLATE_USERNAME
@@ -2278,28 +2258,6 @@ function createLanguageTranslator() {
 
     return languageTranslator;
 }
-
-function searchMatchingEmojis(word) {
-    var keywords;
-    var obj;
-    var word;
-    var emojimd;
-    var counter = 0;
-
-    // for (var key in obj){
-
-    // var keyword;
-    // counter = counter + 1
-    // for (var j = 0; j < keywords.length; j += 1){
-    //     keyword = keywords[j];
-    //     if (keyword === word){
-    //         emoji_md = ":" + key + ":"
-    //         matched_emojis.push(emoji_md);
-    //     }
-    // }        
-}
-
-
 
 client.on('userUpdate', newUser => {
     console.log(`${newUser} just changed her username from ${newUser.oldUser}!`)
@@ -2338,7 +2296,7 @@ client.login(token);
 // Allow for stats to be made and published to a dashboard system of some sort.
 // Add an XP system, so that every time a user posts two or more commands, they get further XP.
 // EmojiPasta --> improve
-// Oxford Dictionaries API
+// Oxford Dictionaries API --> Doesn't allow JavaScript or CORS requests :pensive:
 // HALO APIS https://developer.haloapi.com/docs/services/58acdc2e21091812784ce8c2/operations/5969689a2109180f287972a8/console
 // https://api.igdb.com/
 // https://exchangeratesapi.io/
