@@ -1,4 +1,4 @@
-// 30+ Commands, Multi-lingual, 24/7, Fun Commands, Meme and Image Generator, Crypto, Economy/Currency, Fun commands
+// 40+ Commands, Multi-lingual, 24/7, Fun Commands, Meme and Image Generator, Crypto, Economy/Currency, Fun commands
 // Multi-lingual support, get acronym and word meanings, receive live footage from NASA,
 // Generate QR codes, get XKCD comics, 
 // get trending YouTube videos, breaking news, bitcoin prices, 
@@ -2007,7 +2007,6 @@ client.on('message', async msg => {
                     }
                 })
                 .catch(err => { throw err });
-
     }
 
     // Allow users to send media/ascii art/wumboji, etc., to other users. 
@@ -2048,6 +2047,35 @@ client.on('message', async msg => {
 
     else if (msg.content.split(" ").includes("Onyx")){
         msg.reply("👀")
+    }
+
+    else if (cmd === "poll"){
+        // Format for sending poll info: -poll do you want this
+        var poll_question = msg.content.slice(6, msg.content.length);
+        console.log(poll_question)  
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: msg_author,
+                        icon_url: msg.author.avatarURL
+                    },
+                    title: `Poll: ${poll_question}`,
+                    description: `React below!`
+                }
+            })
+            .then(function (poll_message) {
+              poll_message.react("👍")
+              poll_message.react("👎")
+            }).catch(function() {
+                console.log("ERROR: Couldn't make poll.")
+             });
+    }
+
+    else if (cmd === "multiPoll"){
+        // Allows multiple choice questions, with more than two options for example
+
     }
     //9END
     // Typing Contest
