@@ -38,6 +38,7 @@ let json1 = require(`dictionary.json`); // This is an old-style JSON dictionary,
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical": "61520", "allthethings": "61533", "whatif": "100947", "grandma": "61556", "thenisaid": "922147" }
 var meme_templates = Object.keys(meme_dict).join(", ")
+var soundboard_fx = ["clapping"]
 
 // NPM PACKAGES
 const request = require('request'); // NodeJS request sending.
@@ -79,8 +80,6 @@ function translateMessage(fmt_array, fontList, alphabet) {
     // EXTRACTING THE APPROPRIATE CHARACTER LIST.
     var font_cmds_object = require('font_lists.json');
     var characterList = font_cmds_object[fontList];
-    console.log(characterList);
-    console.log(fmt_array)
 
     for (var i = 0; i < fmt_array.length; i += 1) {
         console.log(i);
@@ -94,7 +93,7 @@ function translateMessage(fmt_array, fontList, alphabet) {
         }
         convertedFontMessage += translatedLetter;
     }
-    console.log(convertedFontMessage);
+    console.log(`Before: ${fmt_array} After: ${convertedFontMessage}`);
     return convertedFontMessage;
 
 }
@@ -164,7 +163,7 @@ function playSound(msg, file, cmd) {
 
 // Searches emojilib/emojis.json for matching emojis.
 // Takes both the emoji's keywords and its title into account.
-function getEmoji(search_term, emoji, msg){
+function getEmoji(search_term, emoji, msg) {
     var keys = Object.keys(emoji);
 
     var matched_emojis = [];
@@ -263,7 +262,6 @@ client.on('message', async msg => {
         var question = msg.content.slice(5, msg.content.length);
         console.log(question)
         var url_encoded_question = question.split(" ").join("%20");
-        console.log(url_encoded_question);
 
         var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_question}&output=json`
 
@@ -1602,11 +1600,11 @@ client.on('message', async msg => {
         else {
             var search_terms = msg.content.slice(7, msg.content.length).split(" ");
             console.log(search_terms)
-            for (var j = 0; j < search_terms.length; j += 1){
+            for (var j = 0; j < search_terms.length; j += 1) {
                 var reply = "";
                 var search_term = search_terms[j]
                 var char_matched_emojis = getEmoji(search_term, emoji, msg)
-                
+
                 if (char_matched_emojis.length > 0) {
                     msg.reply(`${search_term} emoji: ${char_matched_emojis.join(" ")}`)
                 }
@@ -1736,10 +1734,10 @@ client.on('message', async msg => {
                 }
                 else {
                     var randomImageIndex;
-                    if (out.total < 10){
+                    if (out.total < 10) {
                         randomImageIndex = getRandomNumber(0, out.total - 1)
                     }
-                    else{
+                    else {
                         randomImageIndex = getRandomNumber(0, 9)
                     }
                     var first_img_link = out.results[0].urls.raw
@@ -1969,44 +1967,43 @@ client.on('message', async msg => {
     }
 
     // Search Pixabay for free, public-domain images.
-    else if (cmd === "pixabay"){
+    else if (cmd === "pixabay") {
         var search_term = msg.content.slice(9, msg.content.length)
         var url_encoded_search_query = search_term.split(" ").join("%20")
         console.log(search_term)
         var pixabay_link = `https://pixabay.com/api/?key=${pixabay_api_key}&q=${url_encoded_search_query}&image_type=photo`
 
         fetch(pixabay_link)
-                .then(res => res.json())
-                .then((out) => {
-                    console.log(out)
+            .then(res => res.json())
+            .then((out) => {
 
-                    if (out.totalHits === 0){
-                        msg.reply("No matching results found :(")
+                if (out.totalHits === 0) {
+                    msg.reply("No matching results found :(")
+                }
+                else {
+                    // var half_results_length = Math.floor(out.hits.length / 2)
+                    var randomNumber;
+                    if (out.totalHits < 10) {
+                        randomNumber = getRandomNumber(0, out.totalHits - 1)
                     }
-                    else{
-                        // var half_results_length = Math.floor(out.hits.length / 2)
-                        var randomNumber;
-                        if (out.totalHits < 10){
-                            randomNumber = getRandomNumber(0, out.totalHits - 1)
-                        }
-                        else{
-                            randomNumber = getRandomNumber(0, 9)
-                        }
-                        console.log(randomNumber)
-                        var random_img_link = out.hits[randomNumber].largeImageURL;
-                        msg.channel.send({
-                            embed: {
-                                color: randomColour,
-                                description: `[Original image found here](${out.hits[randomNumber].pageURL}) on [Pixabay](https://pixabay.com)`,
-                                title: `Public Domain Image From Pixabay Related To ${search_term}`,
-                                image: {
-                                    url: random_img_link
-                                },
-                            }
-                        });
+                    else {
+                        randomNumber = getRandomNumber(0, 9)
                     }
-                })
-                .catch(err => { throw err });
+                    console.log(randomNumber)
+                    var random_img_link = out.hits[randomNumber].largeImageURL;
+                    msg.channel.send({
+                        embed: {
+                            color: randomColour,
+                            description: `[Original image found here](${out.hits[randomNumber].pageURL}) on [Pixabay](https://pixabay.com)`,
+                            title: `Public Domain Image From Pixabay Related To ${search_term}`,
+                            image: {
+                                url: random_img_link
+                            },
+                        }
+                    });
+                }
+            })
+            .catch(err => { throw err });
     }
 
     // Allow users to send media/ascii art/wumboji, etc., to other users. 
@@ -2016,21 +2013,21 @@ client.on('message', async msg => {
         var message = `${receiver} - You just received a gift from ${msg.author}! \n If you'd like to open it, type -open gift`
     }
 
-    else if (cmd === "asciiFaces"){
+    else if (cmd === "asciiFaces") {
         var randomSet = getRandomNumber(0, asciiFaces.faces.length - 11)
         var faces = asciiFaces.faces.slice(randomSet, randomSet + 10).join("     ")
         msg.reply("Here are some copy-and-paste :clipboard: ascii faces :eyes:\n" + faces)
     }
 
-    else if (cmd === "cats"){
+    else if (cmd === "cats") {
         var randomSet = getRandomNumber(0, cats.cats.length - 11)
         var cat_reply = cats.cats.slice(randomSet, randomSet + 10).join("     ");
-        msg.reply("Here are some copy-and-paste cat ascii faces\n") 
+        msg.reply("Here are some copy-and-paste cat ascii faces\n")
         msg.channel.send(cat_reply)
     }
 
     // Ask Onyx to react in a certain way, for example to add happy reactions to a user's message.
-    else if (cmd === "react"){
+    else if (cmd === "react") {
         var mentioned_user = msg_array[1];
         //var guild_members = msg.guild.members.map(u => u.id)
         var mentions = msg.mentions;
@@ -2040,19 +2037,19 @@ client.on('message', async msg => {
         var search_term = msg_array[2] // Only accept one search term at a time, because otherwhise ratelimiting could apply.
         var matched_emoji = getEmoji(search_term, emoji, msg);
         matched_emoji = matched_emoji.slice(0, Math.floor(matched_emoji.length / 2))
-        for (var z = 0; z < matched_emoji.length; z += 1){
+        for (var z = 0; z < matched_emoji.length; z += 1) {
             msg.react(matched_emoji[z])
         }
     }
 
-    else if (msg.content.split(" ").includes("Onyx")){
+    else if (msg.content.split(" ").includes("Onyx")) {
         msg.reply("👀")
     }
 
-    else if (cmd === "poll"){
+    else if (cmd === "poll") {
         // Format for sending poll info: -poll do you want this
         var poll_question = msg.content.slice(6, msg.content.length);
-        console.log(poll_question)  
+        console.log(poll_question)
         msg.channel.send(
             {
                 embed: {
@@ -2066,17 +2063,135 @@ client.on('message', async msg => {
                 }
             })
             .then(function (poll_message) {
-              poll_message.react("👍")
-              poll_message.react("👎")
-            }).catch(function() {
+                poll_message.react("👍")
+                poll_message.react("👎")
+            }).catch(function () {
                 console.log("ERROR: Couldn't make poll.")
-             });
+            });
     }
 
-    else if (cmd === "multiPoll"){
+    else if (cmd === "ship") {
+        var user1 = msg_array[1];
+        var user2 = msg_array[2];
+        // It's staying random for now, until I get this thing hooked up to IBM's Watson API.
+        var randomNumber = getRandomNumber(0, 100);
+        var emoji;
+        if (randomNumber < 40) {
+            emoji = ":pensive:"
+        }
+        else if (randomNumber < 55) {
+            emoji = ":yellow_hearts"
+        }
+        else if (randomNumber < 70){
+            emoji = ":hearts:"
+        }
+        else if (randomNumber < 100){
+            emoji = ":hearts: :eyes: :hearts: :eyes: :hearts: :eyes:"
+        }
+        var answer = `${user1} and ${user2} have a ${randomNumber}% compatibility rating ${emoji}`
+        msg.channel.send(answer);
+        console.log(answer);
+        if (randomNumber > 70){
+            msg.channel.send(":eyes:") // Something to rally up the users.
+        }
+
+    }
+
+    else if (cmd === "multiPoll") {
         // Allows multiple choice questions, with more than two options for example
 
     }
+
+    // Soundboard
+    else if (cmd === "airhorn"){
+
+    }
+    
+    else if (soundboard_fx.includes(cmd)){
+        playSound(msg, `${cmd}.wav`, cmd);
+    }
+
+    // Bot Specific (Info/About Silvia/etc.,)
+    else if (cmd === "info"){
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.avatarURL
+                    },
+                    title: `About Onyx`,
+                    description: "Onyx is coded using Node.JS and the DiscordJS library.",
+                    fields: [{
+                        name: "Command Prefix",
+                        value: "Onyx's prefix is `-`    ie: the hyphen."
+                    },
+                        {
+                        name: "Get Started",
+                        value: "To get started, just type `-help`."
+                    },
+                        {
+                        name: "It's Open Source",
+                        value: "If you could star Onyx's GitHub repo, you'd make Silvia's day. :eyes: \n Or, Silvia would really appreciate if you could vote for this bot on discordbots.org, since it'll enable Onyx to be found on more servers, and to help Silvia keep working on it. "
+                    }
+                    ],
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "Coded by Silvia923#9909 <3"
+                    }
+                }
+            });
+    }
+
+    else if (cmd === "creator"){
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.avatarURL
+                    },
+                    title: `About Silvia`,
+                    description: "Onyx was coded by Silvia O'Dwyer, a first year Computer Science student. \n If you want to see more of her work, check out her GitHub at github.com/silvia-odwyer",
+                    fields: [{
+                        name: "How To Make Silvia's Day",
+                        value: "If you could star Onyx's GitHub repo, you'd make Silvia's day. :eyes: \n Or, Silvia would really appreciate if you could vote for this bot on discordbots.org, since it'll enable Onyx to be found on more servers, and to help Silvia keep working on it. "
+                    }
+                    ],
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "Coded by Silvia923#9909 <3"
+                    }
+                }
+            });
+        
+    }
+
+    // Perfect for when a user wants to submit an idea for a new feature
+    else if (cmd === "idea"){
+        if (msg_array.length < 2){
+            msg.reply("Want Onyx to have a new feature? Just add your idea after the -idea command, eg: \n `-idea Onyx should have image filters, preferably sepia or vintage filters :eyes:`")
+        }
+        console.log("FEATURE REQUEST:" + msg.content.slice(6, msg.content.length));
+
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: client.user.username,
+                        icon_url: client.user.avatarURL
+                    },
+                    title: `Thanks So Much!`,
+                    description: "Your feature request has been submitted successfully :eyes: \nSilvia will review it very soon, and you never know, it just might become a new feature. \n (Keep in mind that Silvia won't accept NSFW commands, however.)",
+                }
+            });
+    }
+    // Get server stats and make a dashboard graphic out of them.
+    // Ship users with a more AI-driven approach.
+
     //9END
     // Typing Contest
     // CoinBin 
@@ -2089,7 +2204,6 @@ client.on('message', async msg => {
 
             var cmd_example = cmd + "_examples";
             var cmd_info = cmd_info_obj.commands[0][cmd];
-            console.log("Definition: " + cmd_info)
 
             var examples = `${bot_prefix}${cmd_info_obj.examples[0][cmd_example]}`;
             msg.channel.send({
@@ -2114,7 +2228,6 @@ client.on('message', async msg => {
             });
 
             if (examples != "") {
-                console.log(examples)
                 var examples_template = "```ml" + "\n" +
                     "Example Commands 👀" + "\n" +
                     "\n" +
@@ -2125,9 +2238,10 @@ client.on('message', async msg => {
             var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = " `cats` `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
-            var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm`"
+            var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm` `1337` `adv1337` `binary`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
+            var meta_cmds = "`info` `creator` `idea`"
             var example_cmds = "`-earth` \n `-meme onedoesnotsimply Meme's top text-Meme's bottom text`"
             // var search_header = "```ml" + "\n" +
             //     "Info Commands 🔍" + "\n" +
@@ -2248,23 +2362,6 @@ client.on('message', async msg => {
 
 });
 
-function displayAcronym(request) {
-    console.log("Display Result called.")
-    if (request.readyState === 4) {
-        console.log("Ready state is 4");
-        if (request.status === 200) {
-            console.log("Ready state is 200.")
-            console.log("RESPONSE IS: " + request.responseText.trim())
-            var message_content = request.responseText.trim()
-            console.log(message_content)
-            if (message_content != "0") {
-            }
-        }
-        else {
-            console.log("ERROR IN RECEIVAL OF REQUEST.");
-        }
-    }
-}
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -2287,8 +2384,12 @@ function createLanguageTranslator() {
     return languageTranslator;
 }
 
-client.on('userUpdate', newUser => {
-    console.log(`${newUser} just changed her username from ${newUser.oldUser}!`)
+client.on('guildMemberUpdate', member => {
+    console.log(`${member} just changed their roles/nickname!`)
+    // console.log(member);
+    // console.log(member.lastMessage);
+    // var channel = member.lastMessage.channel;
+    // channel.send("Welcome to the channel!")
 });
 
 client.on("guildCreate", guild => {
@@ -2302,6 +2403,11 @@ client.on("guildCreate", guild => {
 client.on("guildDelete", guild => {
     console.log(`Bot has been removed from the following server: ${guild.name} (id: ${guild.id})`);
     client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
+});
+
+client.on("guildMemberAdd", member => {
+
+    // channel.send("WOW")
 });
 
 client.login(token);
