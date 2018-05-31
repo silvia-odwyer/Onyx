@@ -2006,6 +2006,18 @@ client.on('message', async msg => {
             })
             .catch(err => { throw err });
     }
+    else if (cmd === "upsidedown"){
+        if (msg_array.length < 2){
+            msg.reply("Please add some text so that I can convert it to upside-down text :eyes:")
+        }
+        else{
+            var text = msg.content.slice(11, msg.content.length);
+            console.log(text);
+            var converted_message = translateMessage(text, "upsidedown");
+            console.log(converted_message)
+            msg.reply(converted_message)
+        }
+    }
 
     // Allow users to send media/ascii art/wumboji, etc., to other users. 
     else if (cmd === "send") {
@@ -2290,7 +2302,7 @@ client.on('message', async msg => {
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm` `1337` `adv1337` `binary`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
-            var meta_cmds = "`info` `creator` `idea`"
+            var meta_cmds = "`info` `creator` `idea` `server`"
             var example_cmds = "`-earth` \n `-meme onedoesnotsimply Meme's top text-Meme's bottom text`"
             // var search_header = "```ml" + "\n" +
             //     "Info Commands 🔍" + "\n" +
