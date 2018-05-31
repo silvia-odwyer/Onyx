@@ -25,7 +25,8 @@ var oxford_app_id = oxford_creds["app_id"]
 var youtube_creds = require("youtube-creds.json")
 var youtube_api_key = youtube_creds["api_key"]
 var pixabay_creds = require("pixabay_creds.json")
-var pixabay_api_key = pixabay_creds["api_key"]
+var pixabay_api_key = pixabay_creds["api_key"];
+// var spotify_creds = require("spotify_creds.json");
 
 // RESOURCES
 var emoji_list = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒", "🤕", "😇", "🤠", "🤥", "🤫", "🤭", "🧐", "🤓", "👀"]
@@ -2082,16 +2083,16 @@ client.on('message', async msg => {
         else if (randomNumber < 55) {
             emoji = ":yellow_hearts"
         }
-        else if (randomNumber < 70){
+        else if (randomNumber < 70) {
             emoji = ":hearts:"
         }
-        else if (randomNumber < 100){
+        else if (randomNumber < 100) {
             emoji = ":hearts: :eyes: :hearts: :eyes: :hearts: :eyes:"
         }
         var answer = `${user1} and ${user2} have a ${randomNumber}% compatibility rating ${emoji}`
         msg.channel.send(answer);
         console.log(answer);
-        if (randomNumber > 70){
+        if (randomNumber > 70) {
             msg.channel.send(":eyes:") // Something to rally up the users.
         }
 
@@ -2103,16 +2104,16 @@ client.on('message', async msg => {
     }
 
     // Soundboard
-    else if (cmd === "airhorn"){
+    else if (cmd === "airhorn") {
 
     }
-    
-    else if (soundboard_fx.includes(cmd)){
+
+    else if (soundboard_fx.includes(cmd)) {
         playSound(msg, `${cmd}.wav`, cmd);
     }
 
     // Bot Specific (Info/About Silvia/etc.,)
-    else if (cmd === "info"){
+    else if (cmd === "info") {
         msg.channel.send(
             {
                 embed: {
@@ -2127,11 +2128,11 @@ client.on('message', async msg => {
                         name: "Command Prefix",
                         value: "Onyx's prefix is `-`    ie: the hyphen."
                     },
-                        {
+                    {
                         name: "Get Started",
                         value: "To get started, just type `-help`."
                     },
-                        {
+                    {
                         name: "It's Open Source",
                         value: "If you could star Onyx's GitHub repo, you'd make Silvia's day. :eyes: \n Or, Silvia would really appreciate if you could vote for this bot on discordbots.org, since it'll enable Onyx to be found on more servers, and to help Silvia keep working on it. "
                     }
@@ -2144,7 +2145,7 @@ client.on('message', async msg => {
             });
     }
 
-    else if (cmd === "creator"){
+    else if (cmd === "creator") {
         msg.channel.send(
             {
                 embed: {
@@ -2166,12 +2167,12 @@ client.on('message', async msg => {
                     }
                 }
             });
-        
+
     }
 
     // Perfect for when a user wants to submit an idea for a new feature
-    else if (cmd === "idea"){
-        if (msg_array.length < 2){
+    else if (cmd === "idea") {
+        if (msg_array.length < 2) {
             msg.reply("Want Onyx to have a new feature? Just add your idea after the -idea command, eg: \n `-idea Onyx should have image filters, preferably sepia or vintage filters :eyes:`")
         }
         console.log("FEATURE REQUEST:" + msg.content.slice(6, msg.content.length));
@@ -2189,10 +2190,58 @@ client.on('message', async msg => {
                 }
             });
     }
+
+    // Need to get an access token from the Spotify endpoint
+    // and then this token will then grant me access to the Spotify DB and JSON returner
+
+    else if (cmd === "spotify") {
+        if (msg_array.length < 2) {
+            msg.reply("You must add an artist along with your command. :eyes:")
+        }
+        else {
+            var artist = msg_array[1];
+            // Search Spotify for artist
+            var spotify_link = `https://api.spotify.com/v1/search/${artist}`
+        }
+    }
+
+    // Get stats on the server
+    // Different style dashboard images should be shown, such as sci-fi dashboards, etc.,
+    else if (cmd === "server"){
+        var guild = msg.guild;
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: guild.name,
+                        icon_url: guild.iconURL
+                    },
+                    title: `Server Stats for ${guild.name}`,
+                    fields:[
+                        {
+                            name: `Created At`,
+                            value: `${guild.createdAt}`,
+                        },
+                        {
+                            name: "Owner",
+                            value: `${guild.owner.user.username}`
+                        },
+                        {
+                            name: "Member Count",
+                            value: `${guild.memberCount}`
+                        }
+                    ]
+                }
+            });
+    }
+
+
+
     // Get server stats and make a dashboard graphic out of them.
     // Ship users with a more AI-driven approach.
 
-    //9END
+    //9END 
     // Typing Contest
     // CoinBin 
 
@@ -2309,16 +2358,16 @@ client.on('message', async msg => {
                         value: fun_cmds
                     },
                     {
-                        name: "Music Production Commands :loud_sound:",
-                        value: music_production_cmds
-                    },
-                    {
                         name: "Space Commands 🌌🌃",
                         value: space_cmds
                     },
                     {
                         name: "Message Formatting Commands :incoming_envelope: :speech_balloon:",
                         value: fmt_cmds
+                    },
+                    {
+                        name: "Meta Commands",
+                        value: meta_cmds
                     },
                     {
                         name: "Examples",
@@ -2336,7 +2385,6 @@ client.on('message', async msg => {
                 }
             });
         }
-
 
         var general_cmds = "```glsl" + "\n" +
             "avatar : POWER UP that avatar of yours. " + "\n" +
