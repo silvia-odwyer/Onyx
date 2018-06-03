@@ -2011,9 +2011,9 @@ client.on('message', async msg => {
             msg.reply("Please add some text so that I can convert it to upside-down text :eyes:")
         }
         else{
-            var text = msg.content.slice(11, msg.content.length);
+            var text = msg.content.slice(12, msg.content.length);
             console.log(text);
-            var converted_message = translateMessage(text, "upsidedown");
+            var converted_message = translateMessage(text, "upsidedown", alphabet);
             console.log(converted_message)
             msg.reply(converted_message)
         }
@@ -2248,7 +2248,9 @@ client.on('message', async msg => {
             });
     }
 
-
+    else if (cmd === "lightning"){
+        var string = "H͛e͛l͛l͛o͛ ͛t͛e͛x͛t͛ ͛s͛t͛r͛i͛n͛g͛ ͛m͛y͛ ͛o͛l͛d͛ ͛f͛r͛i͛e͛n͛d͛"
+    }
 
     // Get server stats and make a dashboard graphic out of them.
     // Ship users with a more AI-driven approach.
