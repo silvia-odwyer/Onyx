@@ -7,6 +7,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+// TO DO
+// MYSQL DB TO STORE RANKS AND ECONOMY SYSTEM
+// https://developers.gfycat.com/#gfycat-developer-portal
 
 // API KEYS
 let token_obj = require(`token.json`);
@@ -26,6 +29,8 @@ var youtube_creds = require("youtube-creds.json")
 var youtube_api_key = youtube_creds["api_key"]
 var pixabay_creds = require("pixabay_creds.json")
 var pixabay_api_key = pixabay_creds["api_key"];
+var report_channel = require("report_channel.json");
+var channel_id = report_channel["channel"]
 // var spotify_creds = require("spotify_creds.json");
 
 // RESOURCES
@@ -226,18 +231,21 @@ client.on('ready', () => {
 });
 
 client.on('message', async msg => {
+
     if (msg.author.bot) return;
 
     if (msg.content[0] != bot_prefix && !(msg.content.split(" ").includes("@Onyx"))) {
         return;
     }
     else {
-        console.log(`Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`);
-
+        var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
+        console.log(message)
         try {
             fs.appendFile('test.txt', `\nMessage Content: ${msg_content} Author: ${msg_author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
                 if (err) throw err;
             });
+
+            client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
         }
         catch (error) {
             console.log(error)
@@ -252,7 +260,6 @@ client.on('message', async msg => {
     var write_to_file = ""
 
     var msg_author = msg.author.username;
-    console.log(msg.guild.name);
 
     // Necessary for choosing random colours for rich embeds
     var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
@@ -2203,20 +2210,6 @@ client.on('message', async msg => {
             });
     }
 
-    // Need to get an access token from the Spotify endpoint
-    // and then this token will then grant me access to the Spotify DB and JSON returner
-
-    else if (cmd === "spotify") {
-        if (msg_array.length < 2) {
-            msg.reply("You must add an artist along with your command. :eyes:")
-        }
-        else {
-            var artist = msg_array[1];
-            // Search Spotify for artist
-            var spotify_link = `https://api.spotify.com/v1/search/${artist}`
-        }
-    }
-
     // Get stats on the server
     // Different style dashboard images should be shown, such as sci-fi dashboards, etc.,
     else if (cmd === "server"){
@@ -2246,6 +2239,54 @@ client.on('message', async msg => {
                     ]
                 }
             });
+    }
+
+    else if (cmd === "invite"){
+        var onyx_invite_link = "https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0"
+        msg.channel.send(
+            {
+                embed: {
+                    color: randomColour,
+                    author: {
+                        name: guild.name,
+                        icon_url: guild.iconURL
+                    },
+                    title: `Onyx Invite Link`,
+                    fields:[
+                        {
+                            name: `Link`,
+                            value: `${onyx_invite_link}`
+                        }
+                    ]
+                }
+            });
+    }
+
+    // INCOMPLETE
+    
+    // ANNOTATE GIFS WITH YOUR OWN CAPTIONS (thanks to https://developers.gfycat.com/#gfycat-developer-portal)
+    else if (cmd === "gif"){
+        // gif [template] TOP TEXT-BOTTOM TEXT
+        var msg = msg.content.slice(4, msg.content.length)
+        console.log(msg)
+        var template = msg.split(" ")[0]
+        console.log(template)
+        var top_text = msg.slice(template.length, msg.content.length).split("-");
+        console.log(top_text)
+    }
+    
+    // Need to get an access token from the Spotify endpoint
+    // and then this token will then grant me access to the Spotify DB and JSON returner
+
+    else if (cmd === "spotify") {
+        if (msg_array.length < 2) {
+            msg.reply("You must add an artist along with your command. :eyes:")
+        }
+        else {
+            var artist = msg_array[1];
+            // Search Spotify for artist
+            var spotify_link = `https://api.spotify.com/v1/search/${artist}`
+        }
     }
 
     else if (cmd === "lightning"){
@@ -2304,7 +2345,7 @@ client.on('message', async msg => {
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm` `1337` `adv1337` `binary`"
             var social_cmds = "`wave` `poke`"
             var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
-            var meta_cmds = "`info` `creator` `idea` `server`"
+            var meta_cmds = "`info` `creator` `idea` `server` `invite`"
             var example_cmds = "`-earth` \n `-meme onedoesnotsimply Meme's top text-Meme's bottom text`"
             // var search_header = "```ml" + "\n" +
             //     "Info Commands 🔍" + "\n" +
