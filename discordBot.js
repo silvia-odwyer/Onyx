@@ -238,6 +238,7 @@ client.on('message', async msg => {
         return;
     }
     else {
+        // Logging
         var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
         console.log(message)
         try {
@@ -267,37 +268,42 @@ client.on('message', async msg => {
     var randomColour = colour_array[randomNumber];
 
     if (cmd === "ask") {
-        var question = msg.content.slice(5, msg.content.length);
-        console.log(question)
-        var url_encoded_question = question.split(" ").join("%20");
+        if (msg_array.length < 2) {
+            msg.reply("Try adding a question to your command :eyes:")
+        }
+        else {
+            var question = msg.content.slice(5, msg.content.length);
+            console.log(question)
+            var url_encoded_question = question.split(" ").join("%20");
 
-        var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_question}&output=json`
+            var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_question}&output=json`
 
-        fetch(ask_link)
-            .then(res => res.json())
-            .then((out) => {
-                var num_pods = out.queryresult.numpods;
-                if (num_pods === 0) {
-                    msg.reply("Sorry, Wolfram|Alpha doesn't have an answer for that question. Try again maybe? :D")
-                }
-                else {
-                    console.log(out.queryresult)
-                    var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
-                    console.log(interpretation)
+            fetch(ask_link)
+                .then(res => res.json())
+                .then((out) => {
+                    var num_pods = out.queryresult.numpods;
+                    if (num_pods === 0) {
+                        msg.reply("Sorry, Wolfram|Alpha doesn't have an answer for that question. Try again maybe? :D")
+                    }
+                    else {
+                        console.log(out.queryresult)
+                        var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
+                        console.log(interpretation)
 
-                    var answer = out.queryresult.pods[1].subpods[0].plaintext;
-                    console.log(answer)
+                        var answer = out.queryresult.pods[1].subpods[0].plaintext;
+                        console.log(answer)
 
-                    msg.channel.send({
-                        embed: {
-                            color: randomColour,
-                            title: `${interpretation}`,
-                            description: answer
-                        }
-                    });
-                }
-            })
-            .catch(err => { throw err });
+                        msg.channel.send({
+                            embed: {
+                                color: randomColour,
+                                title: `${interpretation}`,
+                                description: answer
+                            }
+                        });
+                    }
+                })
+                .catch(err => { throw err });
+        }
     }
 
     else if (cmd === "name") {
@@ -701,9 +707,9 @@ client.on('message', async msg => {
         }
     }
 
-    else if (cmd === "old-define") {
+    else if (cmd === "oldDefine") {
         if (msg_array.length < 2) {
-            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "old-define dancing`");
+            msg.reply("You must specifiy a word to define, eg: `" + `${bot_prefix}` + "oldDefine dancing`");
         }
         else {
             var word = msg.content.slice(8, msg_content.length)
@@ -2013,11 +2019,11 @@ client.on('message', async msg => {
             })
             .catch(err => { throw err });
     }
-    else if (cmd === "upsidedown"){
-        if (msg_array.length < 2){
+    else if (cmd === "upsidedown") {
+        if (msg_array.length < 2) {
             msg.reply("Please add some text so that I can convert it to upside-down text :eyes:")
         }
-        else{
+        else {
             var text = msg.content.slice(12, msg.content.length);
             console.log(text);
             var converted_message = translateMessage(text, "upsidedown", alphabet);
@@ -2212,7 +2218,7 @@ client.on('message', async msg => {
 
     // Get stats on the server
     // Different style dashboard images should be shown, such as sci-fi dashboards, etc.,
-    else if (cmd === "server"){
+    else if (cmd === "server") {
         var guild = msg.guild;
         msg.channel.send(
             {
@@ -2223,7 +2229,7 @@ client.on('message', async msg => {
                         icon_url: guild.iconURL
                     },
                     title: `Server Stats for ${guild.name}`,
-                    fields:[
+                    fields: [
                         {
                             name: `Created At`,
                             value: `${guild.createdAt}`,
@@ -2241,7 +2247,7 @@ client.on('message', async msg => {
             });
     }
 
-    else if (cmd === "invite"){
+    else if (cmd === "invite") {
         var onyx_invite_link = "https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0"
         msg.channel.send(
             {
@@ -2252,7 +2258,7 @@ client.on('message', async msg => {
                         icon_url: guild.iconURL
                     },
                     title: `Onyx Invite Link`,
-                    fields:[
+                    fields: [
                         {
                             name: `Link`,
                             value: `${onyx_invite_link}`
@@ -2263,9 +2269,9 @@ client.on('message', async msg => {
     }
 
     // INCOMPLETE
-    
+
     // ANNOTATE GIFS WITH YOUR OWN CAPTIONS (thanks to https://developers.gfycat.com/#gfycat-developer-portal)
-    else if (cmd === "gif"){
+    else if (cmd === "gif") {
         // gif [template] TOP TEXT-BOTTOM TEXT
         var msg = msg.content.slice(4, msg.content.length)
         console.log(msg)
@@ -2274,7 +2280,7 @@ client.on('message', async msg => {
         var top_text = msg.slice(template.length, msg.content.length).split("-");
         console.log(top_text)
     }
-    
+
     // Need to get an access token from the Spotify endpoint
     // and then this token will then grant me access to the Spotify DB and JSON returner
 
@@ -2289,7 +2295,7 @@ client.on('message', async msg => {
         }
     }
 
-    else if (cmd === "lightning"){
+    else if (cmd === "lightning") {
         var string = "H͛e͛l͛l͛o͛ ͛t͛e͛x͛t͛ ͛s͛t͛r͛i͛n͛g͛ ͛m͛y͛ ͛o͛l͛d͛ ͛f͛r͛i͛e͛n͛d͛"
     }
 
@@ -2339,7 +2345,7 @@ client.on('message', async msg => {
             }
         }
         else {
-            var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `old-define` `bitcoin` `acronym` `getem` `name` `rhyme`"
+            var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `oldDefine` `bitcoin` `acronym` `getem` `name` `rhyme`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = " `cats` `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
             var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm` `1337` `adv1337` `binary`"
@@ -2519,7 +2525,7 @@ client.login(token);
 // Ideas
 
 // Maybe include text to speech for definitions if possible.
-// Whereis Earth at this moment in time?
+// Where is Earth at this moment in time?
 // Allow the bot's answer be primarily on the time when asked with "How are you?"
 // Natural Language Processing -- this would be implemented with an NLP lib of some sort.
 // Create images using profile pics

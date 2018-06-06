@@ -89,7 +89,8 @@ Right now, you can play samples, and overlay/combine samples together.
 | search        | Get all the synonyms for a word.                                                                 |  `-search azure `   |
 | bitcoin       | Retrieve today's bitcoin rates.                                                                  |    `-bitcoin`  |
 | acronym       | Get the meaning of an acronym. --> acronym lol                                                   | `-acronym rofl` |
-| define        | Get an old-style definition of a word like it's 1859.                                            |  `-define dancing`  |
+| oldDefine        | Get an old-style definition of a word like it's 1859.                                            |  `-oldDefine dancing`  |
+| define        | Get a definition of a word.                                        |  `-define dancing`  |
 | translate     | Translate text to a variety of languages, including French (fr), Italian (it), German (de), and more! | `-translate fr How are you?`|
 | identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |`-identify Hello there, how are you?` |
 | getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-getem hearts `  |
@@ -112,7 +113,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | Command       | Description   | Examples  |
 | ------------- |:----------------------------------------------------------------------------------------------:| --------- |
 | qr            | Generate a QR code in black & white. Create a multi-coloured QR code with the `qr+` command.              |  `-qr This is a qr-encoded message`|
-| qr+            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `-qr fff 000 This is a qr-encoded message`|
+| qr+            | Generate a qr code with two HEX colours and your message encoded as a QR code.                   |  `-qr+ fff 000 This is a qr-encoded message`|
 |pls react      | Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉                                |  `-pls react`   |
 | emojify       | Convert your message into an emojipasta. Adds emojis related to words found within the message. | `-emojify I loooove emojis`     |
 |cs_jokes     | Get a coding/computer science-related joke.                         |  `-cs_jokes`   |
@@ -153,6 +154,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | idea           |Submit an idea for a new bot feature.               |  `-idea New image filters please! Would love to see some sepia filters :eyes:`|
 |creator      | Get info. on who coded Onyx :eyes:          |  `-creator`   |
 |info      | Get info. about Onyx, such as what language she's coded in, and more.    |  `-info`   |
+|invite      | Get Onyx's invite link, so that she can be invited to other servers.   |  `-invite`   |
 
 
 ## Features On The Way
