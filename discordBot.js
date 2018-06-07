@@ -2200,9 +2200,11 @@ client.on('message', async msg => {
         if (msg_array.length < 2) {
             msg.reply("Want Onyx to have a new feature? Just add your idea after the -idea command, eg: \n `-idea Onyx should have image filters, preferably sepia or vintage filters :eyes:`")
         }
-        console.log("FEATURE REQUEST:" + msg.content.slice(6, msg.content.length));
 
-        msg.channel.send(
+        else {
+            console.log("FEATURE REQUEST:" + msg.content.slice(6, msg.content.length));
+
+            msg.channel.send(
             {
                 embed: {
                     color: randomColour,
@@ -2214,6 +2216,7 @@ client.on('message', async msg => {
                     description: "Your feature request has been submitted successfully :eyes: \nSilvia will review it very soon, and you never know, it just might become a new feature. \n (Keep in mind that Silvia won't accept NSFW commands, however.)",
                 }
             });
+        }
     }
 
     // Get stats on the server
