@@ -2,7 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch')
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
-var name = "ask"
+var name = "astronauts"
 module.exports = class AstronautsCommand extends commando.Command {
     constructor(client) {
         super(client, {
@@ -10,9 +10,9 @@ module.exports = class AstronautsCommand extends commando.Command {
             aliases: [],
             group: 'space',
             memberName: 'astronauts',
-            description: "",
+            description: "Find out how many astronauts are aboard the International Space Station.",
             details: oneLine`
-				${cmd_info_obj[name]}
+            Find out how many astronauts are aboard the International Space Station.
 			`,
             examples: ["astronauts"],
 
@@ -48,8 +48,6 @@ module.exports = class AstronautsCommand extends commando.Command {
                         description: astro_output
                     }
                 });
-
-
             })
             .catch(err => { throw err });
 
