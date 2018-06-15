@@ -9,12 +9,16 @@ Onyx has over forty commands, including those for:
 - interacting with IBM's Watson API 
 - getting information on any topic
 
+## Get Stickers From Giphy!
+![Get Stickers With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/sticker_example.gif "Yes, you can search GIPHY for stickers!")
+
 ## Make Memes!
 ![Make Memes With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/meme_example.gif "Yes, you can even make memes!")
 
 A complete list of currently working commands can be found below.
 
 ## UPDATES
+- Get stickers from GIPHY. :eyes:
 - Meta Commands now available! Get server stats, submit ideas to Silvia, and more. (More to be added)
 - YouTube Integration Now Here! Search for your favourite videos, watch, and enjoy!
 - Search Pixabay for public domain photos. `-pixabay night sky`

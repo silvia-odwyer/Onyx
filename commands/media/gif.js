@@ -3,22 +3,22 @@ const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 const request = require("request");
 
-var name = "qr+"
-module.exports = class MemeCommand extends commando.Command {
+var name = "gif"
+module.exports = class GIFCommand extends commando.Command {
     constructor(client) {
         super(client, {
-            name: 'qr+',
+            name: 'gif',
             aliases: [],
             group: 'media',
-            memberName: 'qr+',
-            description: "Generate a multi-coloured QR code, using two hex values: -qr+ [hex code] [hex code] Text \n Sample Hex Codes: 572, 828, 0ff, 6a6, 909, fff, 000",
-            details: "Generate a multi-coloured QR code, using two hex values: -qr+ [hex code] [hex code] Text \n Sample Hex Codes: 572, 828, 0ff, 6a6, 909, fff, 000",
-            examples: ["qr+ 000 fff Hey there!"],
+            memberName: 'gif',
+            description: "Caption a GIF with text of your choice.",
+            details: "Caption a GIF with text of your choice.",
+            examples: ["gif [link] That Feeling When-Someone Invites Onyx To Their Server "],
 
             args: [
                 {
                     key: 'text',
-                    prompt: 'Make sure to include two hex codes and then text or a link, eg: `qr+ 000 fff Hey there!`',
+                    prompt: 'Make sure to include the link to a gfycat GIF and text, eg: `qr+ 000 fff Hey there!`',
                     type: 'string'
                 }
             ]
