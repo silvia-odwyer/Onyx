@@ -1,12 +1,12 @@
 {
-  "name": "cjsbot",
+  "name": "Onyx Discord Bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "bot.js",
+  "description": "A bot that allows you to make memes, caption GIFS, and more!",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Silvia O'Dwyer (silvia-odwyer)",
   "license": "ISC",
   "dependencies": {
     "cat-ascii-faces": "^2.0.0",
