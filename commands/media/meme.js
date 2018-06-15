@@ -29,14 +29,14 @@ module.exports = class MemeCommand extends commando.Command {
         });
     }
 
-    async run(msg, {text}) {
+    async run(msg, { text }) {
         // Necessary for choosing random colours for rich embeds
         var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
-        
-        var msg_array = text.split(" ");
-        var msg_content = msg.message.content;
+        try {
+            var msg_array = text.split(" ");
+            var msg_content = msg.message.content;
 
 
             // var first_words_length = msg_array[0].length + msg_array[1].length + 2;
@@ -72,10 +72,12 @@ module.exports = class MemeCommand extends commando.Command {
                 console.log(m3me_url)
                 msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
             });
-        
-        // catch (error) {
-        //     msg.reply("There was an error; if your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
-        // }
+        }
+
+
+        catch (error) {
+            msg.reply("There was an error; if your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
+        }
         function getRandomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
