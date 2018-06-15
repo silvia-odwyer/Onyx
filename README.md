@@ -1,4 +1,5 @@
 # NodeJS Discord Bot
+[UPDATE 15.06.2018: Get stickers from GIPHY! See below]
 Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot coded using Discord.JS and Node.JS.
 
 Onyx has over forty commands, including those for:
@@ -10,7 +11,7 @@ Onyx has over forty commands, including those for:
 - getting information on any topic
 
 ## Get Stickers From Giphy!
-![Get Stickers With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/sticker_example.gif "Yes, you can search GIPHY for stickers!")
+![Get Stickers With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/sticker_examples.gif "Yes, you can search GIPHY for stickers!")
 
 ## Make Memes!
 ![Make Memes With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/meme_example.gif "Yes, you can even make memes!")
@@ -18,7 +19,7 @@ Onyx has over forty commands, including those for:
 A complete list of currently working commands can be found below.
 
 ## UPDATES
-- Get stickers from GIPHY. :eyes:
+- Get stickers from GIPHY. 👀
 - Meta Commands now available! Get server stats, submit ideas to Silvia, and more. (More to be added)
 - YouTube Integration Now Here! Search for your favourite videos, watch, and enjoy!
 - Search Pixabay for public domain photos. `-pixabay night sky`
@@ -26,7 +27,6 @@ A complete list of currently working commands can be found below.
 - Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
 - Get rhyming words. `-rhyme red`
-- Overlaying of audio fully fixed.
 - Check how popular your name is with `-name [your name]`
 
 ## Invite To Your Server
