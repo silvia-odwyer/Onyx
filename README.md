@@ -1,4 +1,8 @@
 # NodeJS Discord Bot
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
+![GitHub top language](https://img.shields.io/github/languages/top/badges/shields.svg)
 [UPDATE 15.06.2018: Get stickers from GIPHY! See below]
 Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot coded using Discord.JS and Node.JS.
 
