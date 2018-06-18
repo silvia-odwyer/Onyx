@@ -2,8 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 
-var giphy_creds_obj = require("giphy_creds.json");
-var giphy_api_key = giphy_creds_obj["api_key"];
+
 var name = "avatar"
 var happy_emoji = ["😃", "🤣", "👌", "😍", "👌", "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "👀"]
 
@@ -45,15 +44,15 @@ module.exports = class AvatarCommand extends commando.Command {
         else if (msg_array.length === 1) {
             // Need to check if the user is actually in the server
 
-            try {
                 // map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
-                var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0].substring(0, avatar_link.length - 4);
+                var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
+                avatar_link = avatar_link.substring(0, avatar_link.length - 4);
                 avatar_link += "1024" // Photo can only be 1024 in size.
                 msg.channel.send(avatar_link);
-            }
-            catch (error) {
-                msg.channel.send("404: That User Doesn't Exist :(")
-            }
+            
+            // catch (error) {
+            //     msg.channel.send("404: That User Doesn't Exist :(")
+            // }
         }
         else {
             msg.reply("I can only send one avatar per command.")

@@ -33,8 +33,6 @@ module.exports = class HelpCommand extends commando.Command {
 
         if (args.length === 0) {
 
-
-
             // Command Categories
             var search_cmds = " `acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
@@ -159,8 +157,6 @@ module.exports = class HelpCommand extends commando.Command {
                     }
                 });
             }
-
-
         }
 
         function getRandomNumber(min, max) {
