@@ -18,23 +18,17 @@ sqlite.open("./database.sqlite3");
 
 const client = new commando.Client({
 	owner: owner_discord_id,
-	commandPrefix: '-'
+	commandPrefix: '-',
+	disableEveryone: true,
+	unknownCommandResponse: false
 });
 
-// Command Categories
-var search_cmds = " `yt` `ask` `photo` `news` `population` `pixabay` `translate` `search` `define` `oldDefine` `bitcoin` `acronym` `getem` `name` `rhyme`"
-var space_cmds = "`neo` `earth` `iss` `astronauts` "
-var fun_cmds = " `cats` `asciiFaces` `captcha` `xkcd` `qr` `qr+` `meme` `identify` `emojify` `cs_jokes` `pls react`"
-var fmt_cmds = "`reverse` `pyramid` `randomCase` `replaceB` `letterEm` `1337` `adv1337` `binary`"
-var social_cmds = "`wave` `poke`"
-var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
-var meta_cmds = "`info` `creator` `idea` `server` `invite`"
 
 var bot_prefix = "-"
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}`);
-		// client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
-		client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
+	// client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
+	client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
 });
 
 // Error handling
@@ -50,9 +44,9 @@ client.on('reconnecting', () => { console.warn('Onyx is reconnecting...'); })
 
 // Command specific event listeners that come with the Commando module
 client.on('commandError', (cmd, err) => {
-		if (err instanceof commando.FriendlyError) return;
-		console.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err);
-	})
+	if (err instanceof commando.FriendlyError) return;
+	console.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err);
+})
 	.on('commandBlocked', (msg, reason) => {
 		console.log(oneLine`
 			Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
@@ -100,13 +94,14 @@ client.on('commandError', (cmd, err) => {
 			var jsonSettings = JSON.parse(settings);
 			prefix = jsonSettings.prefix;
 		}
+		console.log("THIS SERVER'S PREFIX IS" + prefix);
 
-		if (msg.content === "-help"){
+		if (msg.content === "-help") {
 			msg.reply("My custom prefix for this server is: " + prefix);
 			msg.channel.send("Type " + prefix + "help for a full list of commands.")
 		}
 
-		if (msg.content[0] != prefix || msg.content != "-help") {
+		if (msg.content[0] != prefix && msg.content != "-help") {
 			console.log("Not equal to prefix.")
 			console.log(prefix)
 			console.log(msg.content[0])
@@ -152,6 +147,8 @@ client.setProvider(
 ).catch(console.error);
 
 client.registry
+	.registerDefaultTypes()
+
 	.registerGroups([['util', "Util"], ["media", "Media commands: YouTube, meme creation, GIF captioning, getting comics, search images, etc.,"],
 	["fun", "Fun commands: All sorts of entertaining commands can be found here. "],
 	["search", "Search commands: Search YouTube, ask Onyx questions, get answers to anything, get data, definitions, etc.,"],
@@ -160,8 +157,8 @@ client.registry
 	["space", "Space commands: Get live NASA footage, ISS coordinates, and space imagery."],
 	["meta", "Meta commands: Get info about your server, about Onyx, who coded her, etc.,"],
 	])
-	.registerDefaults()
-	.registerTypesIn(path.join(__dirname, 'types'))
+	.registerDefaultGroups()
+	.registerDefaultCommands({help:false})
 	.registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.login(token);
