@@ -3,6 +3,9 @@ const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
 
+var youtube_creds = require("youtube-creds.json");
+var youtube_api_key = youtube_creds["api_key"];
+
 var name = "yt"
 module.exports = class YTCommand extends commando.Command {
     constructor(client) {
