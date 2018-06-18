@@ -1,18 +1,21 @@
+
+
+let token_obj = require(`token.json`);
+var token = token_obj["token"];
+let silvia_channel_id_obj = require(`silvia_channel_id.json`);
+var silvia_channel_id = silvia_channel_id_obj["silvia_channel_id"];
+let owner_id_obj = require(`owner_discord_id.json`);
+var owner_discord_id = owner_id_obj["owner_discord_id"]
+var report_channel = require("report_channel.json")
+var channel_id = report_channel["channel"]
+
+// NPM MODULES
 const commando = require('discord.js-commando');
 const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
 sqlite.open("./database.sqlite3");
 
-let token_obj = require(`token.json`);
-var token = token_obj["token"];
-let silvia_channel_id_obj = require(`silvia_channel_id.json`);
-var silvia_channel_id = silvia_channel_id_obj["silvia_channel_id"];
-
-let owner_id_obj = require(`owner_discord_id.json`);
-var owner_discord_id = owner_id_obj["owner_discord_id"]
-var report_channel = require("report_channel.json")
-var channel_id = report_channel["channel"]
 const client = new commando.Client({
 	owner: owner_discord_id,
 	commandPrefix: '-'
@@ -55,6 +58,7 @@ client.on('commandError', (cmd, err) => {
 			Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
 			blocked; ${reason}
 		`);
+		msg.reply("Command has been blocked.")
 	})
 	.on('commandPrefixChange', (guild, prefix) => {
 		console.log(oneLine`
@@ -99,7 +103,7 @@ client.on('commandError', (cmd, err) => {
 
 		if (msg.content === "-help"){
 			msg.reply("My custom prefix for this server is: " + prefix);
-			msg.channel.send("Type : " + prefix + "help for a full list of commands.")
+			msg.channel.send("Type " + prefix + "help for a full list of commands.")
 		}
 
 		if (msg.content[0] != prefix || msg.content != "-help") {
@@ -149,10 +153,10 @@ client.setProvider(
 
 client.registry
 	.registerGroups([['util', "Util"], ["media", "Media commands: YouTube, meme creation, GIF captioning, getting comics, search images, etc.,"],
-	["fun", "Fun commands: Misc commands with no category. Take a look! "],
-	["search", "Search commands: Ask Onyx questions, get answers to anything, get data, etc.,"],
-	["message_formatting", "Format your messages."],
-	["social", "Social commands!"],
+	["fun", "Fun commands: All sorts of entertaining commands can be found here. "],
+	["search", "Search commands: Search YouTube, ask Onyx questions, get answers to anything, get data, definitions, etc.,"],
+	["message_formatting", "Format your messages, translate them to 1337, binary, emojipastas, and more."],
+	["social", "Social commands: Get avatars, wave and poke people. More on the way."],
 	["space", "Space commands: Get live NASA footage, ISS coordinates, and space imagery."],
 	["meta", "Meta commands: Get info about your server, about Onyx, who coded her, etc.,"],
 	])
