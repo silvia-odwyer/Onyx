@@ -1,3 +1,4 @@
+
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
@@ -14,65 +15,52 @@ module.exports = class ReplaceBCommand extends commando.Command {
             memberName: 'replace',
             description: "Replaces all b emoji.",
             details: oneLine`
-				${cmd_info_obj[name]}
+            Replaces all b emoji.
 			`,
-            examples: ["[cmd_info_obj[`${name}_examples`]]"]
+            examples: ["replace-b look at the b's everyone"],
+
+            args: [
+                {
+                    key: 'text',
+                    prompt: "What text would you like to convert to replace the B's of?",
+                    type: 'string'
+                }
+            ]
+
         });
     }
 
-    async run(msg, args) {
-        var guild_id = msg.message.channel.guild.id
-        var row = await sql.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-        var prefix;
+    async run(msg, { text }) {
 
-        // If undefined, then no special prefixes corresponding to that server were found.
-        if (row === undefined){
-            prefix = client.commandPrefix;
-        }
-        else {
-            var settings = row.settings;
-            var jsonSettings = JSON.parse(settings);
-            prefix = jsonSettings.prefix;
-        }
-        
+
         // WITHOUT ASYNC/AWAIT
         // sql.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`).then(row => {
         //     if (!row) {
         //         prefix = client.commandPrefix;
         //     } else {
-            
+
         //     }
         // }).catch(() => {
         //     console.error;
         // });
-        console.log("PREFIX:" + prefix);
 
-        var msg_content = msg.message.content.toLowerCase();
-        var msg_array = msg_content.split(" ");
+        var string = text.toLowerCase();
 
         var reply = "";
-        if (msg_array.length > 1) {
-            var string = msg_content.slice(prefix.length + 11, msg.length);
-
-            var letter;
-            var emoji_string = ""
-            for (var i = 0; i < string.length; i += 1) {
-                letter = string[i];
-                if (letter === "b") {
-                    var b_emoji = `:b:`;
-                    emoji_string += b_emoji;
-                }
-                else {
-                    emoji_string += letter;
-                }
-
+        var letter;
+        var emoji_string = ""
+        for (var i = 0; i < string.length; i += 1) {
+            letter = string[i];
+            if (letter === "b") {
+                var b_emoji = `:b:`;
+                emoji_string += b_emoji;
             }
-            reply = emoji_string
-        }
+            else {
+                emoji_string += letter;
+            }
 
-        else {
-            reply = "You need to include a message along with the command, eg: `-replaceB`"
         }
+        reply = emoji_string
 
         return msg.reply(reply);
     }

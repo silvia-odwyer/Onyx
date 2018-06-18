@@ -27,9 +27,11 @@ var social_cmds = "`wave` `poke`"
 var music_production_cmds = "`futurebass`, `fx`, `trapdrums`, `riser`, + other samples [type `-music_cmds` for samples]"
 var meta_cmds = "`info` `creator` `idea` `server` `invite`"
 
-
+var bot_prefix = "-"
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}`);
+		// client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
+		client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
 });
 
 // Error handling
@@ -59,6 +61,7 @@ client.on('commandError', (cmd, err) => {
 			Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`}
 			${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
 		`);
+
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
 		console.log(oneLine`
@@ -77,6 +80,7 @@ client.on('commandError', (cmd, err) => {
 	.on('message', async msg => {
 		if (msg.author.bot || msg.channel.id === silvia_channel_id) return;
 
+
 		// Check Prefix
 		var guild_id = msg.channel.guild.id
 		console.log(guild_id)
@@ -93,7 +97,12 @@ client.on('commandError', (cmd, err) => {
 			prefix = jsonSettings.prefix;
 		}
 
-		if (msg.content[0] != prefix) {
+		if (msg.content === "-help"){
+			msg.reply("My custom prefix for this server is: " + prefix);
+			msg.channel.send("Type : " + prefix + "help for a full list of commands.")
+		}
+
+		if (msg.content[0] != prefix || msg.content != "-help") {
 			console.log("Not equal to prefix.")
 			console.log(prefix)
 			console.log(msg.content[0])
@@ -139,7 +148,7 @@ client.setProvider(
 ).catch(console.error);
 
 client.registry
-	.registerGroups([['math', 'Math'], ['util', "Util"], ["media", "Media commands: YouTube, meme creation, GIF captioning, getting comics, search images, etc.,"],
+	.registerGroups([['util', "Util"], ["media", "Media commands: YouTube, meme creation, GIF captioning, getting comics, search images, etc.,"],
 	["fun", "Fun commands: Misc commands with no category. Take a look! "],
 	["search", "Search commands: Ask Onyx questions, get answers to anything, get data, etc.,"],
 	["message_formatting", "Format your messages."],

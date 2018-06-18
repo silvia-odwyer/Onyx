@@ -13,12 +13,12 @@ module.exports = class GIFCommand extends commando.Command {
             group: 'media',
             memberName: 'gif',
             description: "Search GIPHY for GIFS!",
-            details: "Search GIPHY for GIFS! Use the power of GIFS to convey your message.",
+            details: "Search GIPHY for GIFS!",
             examples: ["word2gif"],
             args: [
                 {
                     key: 'text',
-                    prompt: 'Make sure to add some search terms so I know what stickers to get you :eyes:',
+                    prompt: 'Make sure to add some search terms so I know what GIFs to get you :eyes:',
                     type: 'string'
                 }
             ]

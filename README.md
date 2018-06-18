@@ -1,13 +1,18 @@
 # NodeJS Discord Bot
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
-![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
 ![GitHub top language](https://img.shields.io/github/languages/top/badges/shields.svg)
+![Github commits (since latest release)](https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/latest.svg)
+![Powered by NodeJS](https://img.shields.io/badge/powered%20by-nodejs-blue.svg)
+![Deployed on Heroku](https://heroku-badge.herokuapp.com/?app=onyx-running&root=index.js)
+
 [UPDATE 15.06.2018: Get stickers from GIPHY! See below]
-Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot coded using Discord.JS and Node.JS.
+Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot powered by Node.JS, and coded using
+the Discord.JS library.
 
 Onyx has over forty commands, including those for:
 - meme generation
+- gif and sticker searching
 - searching YouTube
 - music production
 - fetching info/live imagery from NASA
