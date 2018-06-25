@@ -27,8 +27,8 @@ function getRandomNumber(min, max) {
 var bot_prefix = "-"
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}`);
-	// client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
-	client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
+	client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
+	// client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
 });
 
 // Error handling
@@ -45,7 +45,10 @@ client.on('reconnecting', () => { console.warn('Onyx is reconnecting...'); })
 // Command specific event listeners that come with the Commando module
 client.on('commandError', (cmd, err) => {
 	if (err instanceof commando.FriendlyError) return;
-	console.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err);
+	var message = `Error in command ${cmd.groupID}:${cmd.memberName}, ${err}`;
+	client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+
+
 })
 	.on('commandBlocked', (msg, reason) => {
 		console.log(oneLine`
@@ -53,20 +56,17 @@ client.on('commandError', (cmd, err) => {
 			blocked; ${reason}
 		`);
 		msg.reply("Command has been blocked.")
+
 	})
 	.on('commandPrefixChange', (guild, prefix) => {
-		console.log(oneLine`
-			Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`}
-			${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-		`);
+		var message = `Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
+		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
 
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
-		console.log(oneLine`
-			Command ${command.groupID}:${command.memberName}
-			${enabled ? 'enabled' : 'disabled'}
-			${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-		`);
+		var message = `Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
+		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+
 	})
 	.on('groupStatusChange', (guild, group, enabled) => {
 		console.log(oneLine`
@@ -76,9 +76,8 @@ client.on('commandError', (cmd, err) => {
 		`);
 	})
 	.on('message', async msg => {
-		if (msg.author.bot || msg.channel.id === silvia_channel_id) return;
-
-
+		if (msg.author.bot ) return;
+		// || msg.channel.id === silvia_channel_id
 		// Check Prefix
 		var guild_id = msg.channel.guild.id
 		console.log(guild_id)
@@ -94,17 +93,14 @@ client.on('commandError', (cmd, err) => {
 			var jsonSettings = JSON.parse(settings);
 			prefix = jsonSettings.prefix;
 		}
-		console.log("THIS SERVER'S PREFIX IS" + prefix);
+		console.log(`Server: ${guild_id} Prefix: ${prefix}`);
 
 		if (msg.content === "-help") {
 			msg.reply("My custom prefix for this server is: " + prefix);
 			msg.channel.send("Type " + prefix + "help for a full list of commands.")
 		}
 
-		if (msg.content[0] != prefix && msg.content != "-help") {
-			console.log("Not equal to prefix.")
-			console.log(prefix)
-			console.log(msg.content[0])
+		if (msg.split(" ")[0] != prefix && msg.content != "-help") {
 			return;
 		}
 		else {
