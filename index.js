@@ -6,7 +6,6 @@ let owner_id_obj = require(`owner_discord_id.json`);
 var owner_discord_id = owner_id_obj["owner_discord_id"]
 var report_channel = require("report_channel.json")
 var channel_id = report_channel["channel"]
-
 // NPM MODULES
 const commando = require('discord.js-commando');
 const path = require('path');
@@ -68,11 +67,15 @@ client.on('commandError', (cmd, err) => {
 		if (check === undefined) {
 			console.log("Custom prefix does not exist.");
 
-			await sql.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
+			await sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
 		}
 		else {
 			console.log("Custom prefix does exist.");
-			await sql.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
+
+			var inputData = [guild_id, json_encoded_prefix];
+			// await sqlite.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
+			await sqlite.run("UPDATE settings SET settings=? WHERE guild=?", inputData);
+		
 		}
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
