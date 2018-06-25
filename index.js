@@ -12,6 +12,30 @@ const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
 sqlite.open("./database.sqlite3");
+var connection;
+
+function handleDisconnect() {
+	connection = mysql.createConnection(db_config); // Recreate the connection, since
+	// the old one cannot be reused.
+
+	connection.connect(function (err) {              // The server is either down
+		if (err) {                                     // or restarting (takes a while sometimes).
+			console.log('error when connecting to db:', err);
+			setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+		}                                     // to avoid a hot loop, and to allow our node script to
+	});                                     // process asynchronous requests in the meantime.
+	// If you're also serving http, display a 503 error.
+	connection.on('error', function (err) {
+		console.log('db error', err);
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+			handleDisconnect();                         // lost due to either server restart, or a
+		} else {                                      // connnection idle timeout (the wait_timeout
+			throw err;                                  // server variable configures this)
+		}
+	});
+}
+
+handleDisconnect();
 
 const client = new commando.Client({
 	owner: owner_discord_id,
@@ -62,7 +86,53 @@ client.on('commandError', (cmd, err) => {
 		// Check if the guild's prefix exists
 		var guild_id = guild.id;
 		var check = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-		var json_encoded_prefix = `"prefix":"${prefix}"`
+
+		var sql = "CREATE TABLE IF NOT EXISTS custom_prefixes (guild_id VARCHAR(255), custom_prefix VARCHAR(255))";
+		connection.query(sql, function (err, result) {
+			if (err) throw err;
+		});
+		var json_encoded_prefix = `"prefix":"${prefix}"`;
+		// await connection.query("INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
+
+		// var sql1 = `INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (${guild_id}, ${json_encoded_prefix})`;
+		// connection.query(sql1, function (err, result) {
+		//   if (err) throw err;
+		//   console.log("1 record inserted");
+		// });
+
+		var delete_cmd = "DELETE * FROM custom_prefixes";
+
+		connection.query(delete_cmd, function (err, result, fields) {
+			if (err) throw err;
+		  });
+
+		var sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
+
+		connection.query(sql2, function (err, result, fields) {
+			if (err) throw err;
+			console.log(result);
+			// // If result is found 
+			if (result.length > 0) {
+			 	console.log("Found MATCHING RESULT");
+			 	var custom_prefix_res = result[0].custom_prefix;
+				 console.log(custom_prefix_res);
+			}
+				// var update = `UPDATE custom_prefixes SET custom_prefix='${prefix}' WHERE guild_id='${guild_id}'`;
+
+				// connection.query(update, function (error, result) {
+				// 	if (error) throw error;
+				// 	console.log("1 record updated successfully.");
+				//   });
+			//}
+			 else {
+			 	console.log("No custom prefix found for this server DB UPDATE")
+			}
+		  });
+
+		// var result_cleardb = await connection.query(`SELECT * FROM custom_prefixes WHERE guild_id = ${guild_id}`);
+		// console.log(result_cleardb);
+
+
 		// If undefined, then no special prefixes corresponding to that server were found.
 		if (check === undefined) {
 			console.log("Custom prefix does not exist.");
@@ -75,8 +145,15 @@ client.on('commandError', (cmd, err) => {
 			var inputData = [guild_id, json_encoded_prefix];
 			// await sqlite.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
 			await sqlite.run("UPDATE settings SET settings=? WHERE guild=?", inputData);
-		
+
 		}
+
+		var check2 = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+		var settings = check2.settings;
+		var jsonSettings = JSON.parse(settings);
+		prefix = jsonSettings.prefix;
+		console.log(`PREFIX NOW SET TO: ${prefix}`);
+
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
 		var message = `Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
@@ -91,11 +168,10 @@ client.on('commandError', (cmd, err) => {
 		`);
 	})
 	.on('message', async msg => {
-		if (msg.author.bot ) return;
+		if (msg.author.bot) return;
 		// || msg.channel.id === silvia_channel_id
 		// Check Prefix
 		var guild_id = msg.channel.guild.id
-		console.log(guild_id)
 		var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
 		var prefix;
 
@@ -108,7 +184,7 @@ client.on('commandError', (cmd, err) => {
 			var jsonSettings = JSON.parse(settings);
 			prefix = jsonSettings.prefix;
 		}
-		console.log(`Server: ${guild_id} Prefix: ${prefix}`);
+		// console.log(`Server: ${guild_id} Prefix: ${prefix}`);
 
 		if (msg.content === "-help") {
 			msg.reply("My custom prefix for this server is: " + prefix);
@@ -147,7 +223,7 @@ client.on("guildCreate", guild => {
 	var randomColour = colour_array[randomNumber];
 
 	guild.owner.send({
-	
+
 		embed: {
 			color: randomColour,
 			// author: {
@@ -167,7 +243,7 @@ client.on("guildCreate", guild => {
 				name: "Getting Help & Support",
 				value: "Have a bug to report? Want to chat to Onyx's maintainer? Join [Onyx's Support Server](https://discord.gg/cSWHaEK), a fun community that gets insider access to Onyx's development. \n Or add @Silvia923#9909 on Discord, I'm always here to chat."
 			}
-			], 
+			],
 			footer: {
 				text: "Coded by Silvia923#9909 <3"
 			}
@@ -205,7 +281,7 @@ client.registry
 	["meta", "Meta commands: Get info about your server, about Onyx, who coded her, etc.,"],
 	])
 	.registerDefaultGroups()
-	.registerDefaultCommands({help:false})
+	.registerDefaultCommands({ help: false })
 	.registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.login(token);
