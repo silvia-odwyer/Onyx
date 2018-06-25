@@ -47,8 +47,6 @@ client.on('commandError', (cmd, err) => {
 	if (err instanceof commando.FriendlyError) return;
 	var message = `Error in command ${cmd.groupID}:${cmd.memberName}, ${err}`;
 	client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
-
-
 })
 	.on('commandBlocked', (msg, reason) => {
 		console.log(oneLine`
@@ -58,10 +56,24 @@ client.on('commandError', (cmd, err) => {
 		msg.reply("Command has been blocked.")
 
 	})
-	.on('commandPrefixChange', (guild, prefix) => {
+	.on('commandPrefixChange', async (guild, prefix) => {
 		var message = `Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
-		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
 
+		// Check if the guild's prefix exists
+		var guild_id = guild.id;
+		var check = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+		var json_encoded_prefix = `"prefix":"${prefix}"`
+		// If undefined, then no special prefixes corresponding to that server were found.
+		if (check === undefined) {
+			console.log("Custom prefix does not exist.");
+
+			await sql.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
+		}
+		else {
+			console.log("Custom prefix does exist.");
+			await sql.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
+		}
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
 		var message = `Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
@@ -100,7 +112,7 @@ client.on('commandError', (cmd, err) => {
 			msg.channel.send("Type " + prefix + "help for a full list of commands.")
 		}
 
-		if (msg.split(" ")[0] != prefix && msg.content != "-help") {
+		if ((msg.content.split(" ")[0] != prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
 			return;
 		}
 		else {
