@@ -11,26 +11,26 @@ const commando = require('discord.js-commando');
 const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
-sqlite.open("./database.sqlite3");
-var connection;
+sqlite.open("./database.sqlite3");var connection;
+var sql2;
 
 function handleDisconnect() {
 	connection = mysql.createConnection(db_config); // Recreate the connection, since
 	// the old one cannot be reused.
 
 	connection.connect(function (err) {              // The server is either down
-		if (err) {                                     // or restarting (takes a while sometimes).
+		if (err) {                                     // or restarting 
 			console.log('error when connecting to db:', err);
-			setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-		}                                     // to avoid a hot loop, and to allow our node script to
-	});                                     // process asynchronous requests in the meantime.
-	// If you're also serving http, display a 503 error.
+			setTimeout(handleDisconnect, 2000); // Introduce a delay before attempting to reconnect,
+		}
+	});
+
 	connection.on('error', function (err) {
 		console.log('db error', err);
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-			handleDisconnect();                         // lost due to either server restart, or a
-		} else {                                      // connnection idle timeout (the wait_timeout
-			throw err;                                  // server variable configures this)
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			handleDisconnect();
+		} else {
+			throw err;
 		}
 	});
 }
@@ -94,64 +94,62 @@ client.on('commandError', (cmd, err) => {
 		var json_encoded_prefix = `"prefix":"${prefix}"`;
 		// await connection.query("INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
 
-		// var sql1 = `INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (${guild_id}, ${json_encoded_prefix})`;
-		// connection.query(sql1, function (err, result) {
-		//   if (err) throw err;
-		//   console.log("1 record inserted");
-		// });
+		// var delete_cmd = "DELETE FROM custom_prefixes";
 
-		var delete_cmd = "DELETE * FROM custom_prefixes";
-
-		connection.query(delete_cmd, function (err, result, fields) {
-			if (err) throw err;
-		  });
-
-		var sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
+		// connection.query(delete_cmd, function (err, result, fields) {
+		// 	if (err) throw err;
+		//   });
+		sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
 
 		connection.query(sql2, function (err, result, fields) {
 			if (err) throw err;
 			console.log(result);
 			// // If result is found 
 			if (result.length > 0) {
-			 	console.log("Found MATCHING RESULT");
-			 	var custom_prefix_res = result[0].custom_prefix;
-				 console.log(custom_prefix_res);
-			}
-				// var update = `UPDATE custom_prefixes SET custom_prefix='${prefix}' WHERE guild_id='${guild_id}'`;
+				console.log("Found MATCHING RESULT");
+				var custom_prefix_res = result[0].custom_prefix;
+				console.log(custom_prefix_res);
 
-				// connection.query(update, function (error, result) {
-				// 	if (error) throw error;
-				// 	console.log("1 record updated successfully.");
-				//   });
-			//}
-			 else {
-			 	console.log("No custom prefix found for this server DB UPDATE")
+				var update = `UPDATE custom_prefixes SET custom_prefix = '${prefix}' WHERE guild_id = '${guild_id}'`;
+
+				connection.query(update, function (error, result, fields) {
+					if (error) throw error;
+					console.log("1 record updated successfully.");
+				});
 			}
-		  });
+			else {
+				console.log("No custom prefix found for this server");
+				var sql1 = `INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (${guild_id}, ${prefix})`;
+				connection.query(sql1, function (err, result) {
+					if (err) throw err;
+					console.log("1 record inserted");
+				});
+			}
+		});
 
 		// var result_cleardb = await connection.query(`SELECT * FROM custom_prefixes WHERE guild_id = ${guild_id}`);
 		// console.log(result_cleardb);
 
 
 		// If undefined, then no special prefixes corresponding to that server were found.
-		if (check === undefined) {
-			console.log("Custom prefix does not exist.");
+		// if (check === undefined) {
+		// 	console.log("Custom prefix does not exist.");
 
-			await sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
-		}
-		else {
-			console.log("Custom prefix does exist.");
+		// 	await sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
+		// }
+		// else {
+		// 	console.log("Custom prefix does exist.");
 
-			var inputData = [guild_id, json_encoded_prefix];
-			// await sqlite.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
-			await sqlite.run("UPDATE settings SET settings=? WHERE guild=?", inputData);
+		// 	var inputData = [guild_id, json_encoded_prefix];
+		// 	// await sqlite.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
+		// 	await sqlite.run("UPDATE settings SET settings=? WHERE guild=?", inputData);
 
-		}
+		// }
 
-		var check2 = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-		var settings = check2.settings;
-		var jsonSettings = JSON.parse(settings);
-		prefix = jsonSettings.prefix;
+		// var check2 = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+		// var settings = check2.settings;
+		// var jsonSettings = JSON.parse(settings);
+		// prefix = jsonSettings.prefix;
 		console.log(`PREFIX NOW SET TO: ${prefix}`);
 
 	})
@@ -172,43 +170,58 @@ client.on('commandError', (cmd, err) => {
 		// || msg.channel.id === silvia_channel_id
 		// Check Prefix
 		var guild_id = msg.channel.guild.id
-		var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+		// var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
 		var prefix;
 
-		// If undefined, then no special prefixes corresponding to that server were found.
-		if (row === undefined) {
-			prefix = client.commandPrefix;
-		}
-		else {
-			var settings = row.settings;
-			var jsonSettings = JSON.parse(settings);
-			prefix = jsonSettings.prefix;
-		}
+		// // If undefined, then no special prefixes corresponding to that server were found.
+		// if (row === undefined) {
+		// 	prefix = client.commandPrefix;
+		// }
+		// else {
+		// 	var settings = row.settings;
+		// 	var jsonSettings = JSON.parse(settings);
+		// 	prefix = jsonSettings.prefix;
+		// }
 		// console.log(`Server: ${guild_id} Prefix: ${prefix}`);
+		sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
 
-		if (msg.content === "-help") {
-			msg.reply("My custom prefix for this server is: " + prefix);
-			msg.channel.send("Type " + prefix + "help for a full list of commands.")
-		}
-
-		if ((msg.content.split(" ")[0] != prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
-			return;
-		}
-		else {
-			// Logging
-			var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
-			console.log(message)
-			try {
-				// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
-				// 	if (err) throw err;
-				// });
-
-				client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+		connection.query(sql2, function (err, result, fields) {
+			if (err) throw err;
+			// // If result is found 
+			if (result.length > 0) {
+				prefix = result[0].custom_prefix;
 			}
-			catch (error) {
-				console.log(error)
+			else if (result.length < 1){
+				prefix = client.commandPrefix;
 			}
-		}
+
+			if (msg.content === "-help") {
+				msg.reply("My custom prefix for this server is: " + prefix);
+				msg.channel.send("Type " + prefix + "help for a full list of commands.")
+			}
+	
+			if ((msg.content.split(" ")[0] != prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
+				console.log(`${msg.content.split(" ")[0]}Prefix not equal to ${prefix}`)
+				return;
+			}
+			else {
+				// Logging
+				var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
+				console.log(message)
+				try {
+					// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
+					// 	if (err) throw err;
+					// });
+	
+					client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+				}
+				catch (error) {
+					console.log(error)
+				}
+			}
+		});
+
+	
 	});
 
 client.on("guildCreate", guild => {
