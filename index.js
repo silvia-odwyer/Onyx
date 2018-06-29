@@ -12,6 +12,7 @@ const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
 sqlite.open("./database.sqlite3");var connection;
+var connection;
 var sql2;
 
 function handleDisconnect() {
@@ -48,10 +49,40 @@ function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 var bot_prefix = "-"
-client.on('ready', () => {
+client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
 	client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 	// client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
+
+	// // RE-INITIALIZE SQLITE DB
+	await sqlite.get("DELETE FROM settings");
+
+	// var select_all = "SELECT guild_id, custom_prefix FROM custom_prefixes";
+
+	// connection.query(select_all, function (err, result, fields) {
+	// 	if (err) throw err;
+	// 	console.log("RE-INITIALIZATION OF SQLITE DB");
+	// 	console.log(result);
+	// 	// // // If result is found 
+	// 	var group;
+	// 	for (var i = 0; i < result.length; i++) {
+	// 		group = result[i];
+	// 		console.log(group);
+	// 		var guild_id_cleardb = group["guild_id"];
+	// 		console.log(guild_id_cleardb)
+	// 		var custom_prefix_cleardb = group["custom_prefix"];
+	// 		console.log(custom_prefix_cleardb)
+	// 		var json_encoded_prefix_cleardb = `'prefix':'${custom_prefix_cleardb}'`;
+
+	// 		sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id_cleardb, json_encoded_prefix_cleardb]);
+
+	// 	}
+	// });
+
+	// sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", ["hi", "'prefix':'hi'"]);
+	// var total_res = await sqlite.run("SELECT * FROM settings");
+	// console.log(total_res)
+
 });
 
 // Error handling
@@ -85,7 +116,7 @@ client.on('commandError', (cmd, err) => {
 
 		// Check if the guild's prefix exists
 		var guild_id = guild.id;
-		var check = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+		// var check = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
 
 		var sql = "CREATE TABLE IF NOT EXISTS custom_prefixes (guild_id VARCHAR(255), custom_prefix VARCHAR(255))";
 		connection.query(sql, function (err, result) {
@@ -172,6 +203,39 @@ client.on('commandError', (cmd, err) => {
 		var guild_id = msg.channel.guild.id
 		// var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
 		var prefix;
+		var message;
+
+		if (msg.content.split(" ")[0] === "-") {
+			// Logging
+			message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
+			console.log(message)
+			try {
+				// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
+				// 	if (err) throw err;
+				// });
+				// May move back.
+
+				client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+			}
+			catch (error) {
+				console.log(error)
+			}
+		}
+
+		else if (message.isMentioned(client.user)){
+			message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
+			console.log(message)
+			try {
+
+				client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+			}
+			catch (error) {
+				console.log(error)
+			}
+		}
+		else {
+			return;
+		}
 
 		// // If undefined, then no special prefixes corresponding to that server were found.
 		// if (row === undefined) {
@@ -191,37 +255,20 @@ client.on('commandError', (cmd, err) => {
 			if (result.length > 0) {
 				prefix = result[0].custom_prefix;
 			}
-			else if (result.length < 1){
+			else if (result.length < 1) {
 				prefix = client.commandPrefix;
 			}
 
-			if (msg.content === "-help") {
-				msg.reply("My custom prefix for this server is: " + prefix);
-				msg.channel.send("Type " + prefix + "help for a full list of commands.")
-			}
-	
-			if ((msg.content.split(" ")[0] != prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
-				console.log(`${msg.content.split(" ")[0]}Prefix not equal to ${prefix}`)
-				return;
-			}
-			else {
-				// Logging
-				var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
-				console.log(message)
-				try {
-					// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
-					// 	if (err) throw err;
-					// });
-	
-					client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
-				}
-				catch (error) {
-					console.log(error)
-				}
-			}
+			// if (msg.content === "-help") {
+			// 	msg.reply("My custom prefix for this server is: " + prefix);
+			// 	msg.channel.send("Type " + prefix + "help for a full list of commands.")
+			// }
+
+			// if ((msg.content.split(" ")[0] == prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
+
 		});
 
-	
+
 	});
 
 client.on("guildCreate", guild => {
@@ -245,8 +292,8 @@ client.on("guildCreate", guild => {
 			// },
 			title: `A Quick Getting Started Guide`,
 			fields: [{
-				name: "Changing My Prefix In Your Server",
-				value: "My default prefixes are `-` and `@Onyx#4347`, but you can change my prefix to whatever you like using `-prefix`.\n Just go to one of your server's channels, and type `-prefix [your desired prefix]`. \n For example, if you wanted to change to ! you'd type `-prefix !`"
+				name: "My Prefixes",
+				value: "My default prefixes are `-` and `@Onyx#4347`",
 			},
 			{
 				name: "Seeing All Of My Commands",
@@ -264,6 +311,19 @@ client.on("guildCreate", guild => {
 
 	})
 
+	// Logging 
+	var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
+	console.log(message)
+	try {
+		// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
+		// 	if (err) throw err;
+		// });
+
+		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
+	}
+	catch (error) {
+		console.log(error)
+	}
 });
 
 client.on("guildDelete", guild => {
