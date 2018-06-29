@@ -205,7 +205,7 @@ client.on('commandError', (cmd, err) => {
 		var prefix;
 		var message;
 
-		if (msg.content.split(" ")[0] === "-") {
+		if (msg.content.split(" ")[0] === "-" || msg.content.split("")[0] === "-") {
 			// Logging
 			message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
 			console.log(message)
@@ -222,9 +222,16 @@ client.on('commandError', (cmd, err) => {
 			}
 		}
 
-		else if (message.isMentioned(client.user)){
+		else if (msg.isMentioned(client.user)){
+
+			if (msg.content.length === 21) { // Just Onyx was mentioned and no other text accompanied it.
+				msg.reply("My prefix is -")
+				msg.channel.send("You can also mention me before commands also.")
+				msg.channel.send("Examples:\n @Onyx sticker tropical\n -sticker lol")
+			}
 			message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
 			console.log(message)
+			console.log(msg.content.length);
 			try {
 
 				client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
@@ -258,13 +265,6 @@ client.on('commandError', (cmd, err) => {
 			else if (result.length < 1) {
 				prefix = client.commandPrefix;
 			}
-
-			// if (msg.content === "-help") {
-			// 	msg.reply("My custom prefix for this server is: " + prefix);
-			// 	msg.channel.send("Type " + prefix + "help for a full list of commands.")
-			// }
-
-			// if ((msg.content.split(" ")[0] == prefix || msg.content.split(" ")[0] != "@Onyx") && msg.content != "-help") {
 
 		});
 
