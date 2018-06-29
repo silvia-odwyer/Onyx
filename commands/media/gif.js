@@ -14,11 +14,11 @@ module.exports = class GIFCommand extends commando.Command {
             memberName: 'gif',
             description: "Search GIPHY for GIFS!",
             details: "Search GIPHY for GIFS!",
-            examples: ["word2gif"],
+            examples: ["gif"],
             args: [
                 {
                     key: 'text',
-                    prompt: 'Make sure to add some search terms so I know what GIFs to get you :eyes:',
+                    prompt: 'What GIFS would you like me to get you? I will include your next message as search terms :eyes:',
                     type: 'string'
                 }
             ]
@@ -28,21 +28,22 @@ module.exports = class GIFCommand extends commando.Command {
     async run(msg, { text }) {
         var limit = 5;
         var search_term = text;
-        var giphy_endpoint = `https://api.giphy.com/v1/gifs/search?rating=g&api_key=${giphy_api_key}&limit=${limit}&s=${search_term}`
-
+        var giphy_endpoint = `https://api.giphy.com/v1/gifs/search?rating=g&api_key=${giphy_api_key}&limit=${limit}&q=${search_term}`
+        console.log(giphy_endpoint)
         fetch(giphy_endpoint)
             .then(res => res.json())
             .then((out) => {
-                if (data.length === 0) {
-                    msg.reply("Couldn't find any matching GIFS :(")
+                console.log(out)
+                 if (out.data.length === 0) {
+                     msg.reply("Couldn't find any matching GIFS :(")
                 }
                 else {
                     var randomNumber = getRandomNumber(0, limit - 1)
-                    var giphy_link = out.data.bitly_gif_url
+                    var giphy_link = out.data[randomNumber].bitly_gif_url
                     console.log(giphy_link)
                     msg.reply(giphy_link)
 
-                    // Send an embed with a local image inside
+                     // Send an embed with a local image inside
                     msg.channel.send({
                         files: [
                             "media/powered_by_giphy.png",

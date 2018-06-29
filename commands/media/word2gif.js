@@ -18,7 +18,7 @@ module.exports = class WordToGIFCommand extends commando.Command {
             args: [
                 {
                     key: 'text',
-                    prompt: 'Make sure to add some search terms so I know what stickers to get you :eyes:',
+                    prompt: 'What word(s) would you like to translate into GIPHY GIFs? Your next message will count as these. :eyes:',
                     type: 'string'
                 }
             ]

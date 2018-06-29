@@ -35,7 +35,7 @@ module.exports = class InfoCommand extends commando.Command {
         else {
             // If undefined, then no special prefixes corresponding to that server were found.
             if (row === undefined) {
-                prefix = client.commandPrefix;
+                prefix = this.client.commandPrefix;
             }
             else {
                 var settings = row.settings;
@@ -60,7 +60,7 @@ module.exports = class InfoCommand extends commando.Command {
                     },
                     {
                         name: "Get Started",
-                        value: "To get started, just type `" + prefix + "help."
+                        value: "To get started, just type `" + prefix + "help`"
                     },
                     // {
                     //     name: "It's Open Source",

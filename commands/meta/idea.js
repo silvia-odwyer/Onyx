@@ -25,7 +25,8 @@ module.exports = class IdeaCommand extends commando.Command {
                 embed: {
                     color: randomColour,
                     author: {
-                        name: client.user.username
+                        name: this.client.user.username,
+                        icon_url : this.client.user.avatarURL
                     },
                     title: `Thanks So Much!`,
                     description: "Your feature request has been submitted successfully :eyes: \nSilvia will review it very soon, and you never know, it just might become a new feature. \n (Keep in mind that Silvia won't accept NSFW commands, however.)",

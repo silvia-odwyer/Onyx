@@ -14,13 +14,13 @@ module.exports = class StickerCommand extends commando.Command {
             group: 'media',
             memberName: 'sticker',
             description: "Search GIPHY for stickers.",
-            details: "Search GIPHY for stickers",
+            details: "Search GIPHY for stickers.",
             examples: ["sticker retro vibes"],
 
             args: [
                 {
                     key: 'text',
-                    prompt: 'Make sure to add some search terms so I know what stickers to get you :eyes:',
+                    prompt: 'What stickers would you like me to get you? Your next message will be included as search terms so I know what stickers to get you :eyes:',
                     type: 'string'
                 }
             ]

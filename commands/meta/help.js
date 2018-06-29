@@ -31,44 +31,46 @@ module.exports = class HelpCommand extends commando.Command {
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
 
+        var prefix;
+        var prefix_message = "";
+        if (channel_type === "dm") {
+            prefix = ""
+        }
+        else if (channel_type === "group") {
+            prefix = "@Onyx#4347"
+        }
+        else {
+            // Check Prefix
+            var guild_id = msg.channel.guild.id
+            console.log(guild_id)
+            var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
+
+
+            // If undefined, then no special prefixes corresponding to that server were found.
+            if (row === undefined) {
+                prefix = this.client.commandPrefix;
+            }
+            else {
+                var settings = row.settings;
+                var jsonSettings = JSON.parse(settings);
+                prefix = jsonSettings.prefix;
+            }
+
+            prefix_message = `Just prepend the prefix ${prefix} before any of the following commands:`
+        }
+
         if (args.length === 0) {
 
             // Command Categories
             var search_cmds = " `acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = " `cats` `ascii-faces` `captcha` `xkcd` `qr`  `identify`  `rhyme`"
+            var fun_cmds = " `cats` `ascii-faces` `captcha` `xkcd` `qr` `rhyme`"
             var fmt_cmds = "`reverse` `pyramid` `random-case` `replace-b` `letter-em` `1337` `emojify` `adv1337` `binary`"
             var social_cmds = " `avatar` `wave` `poke`"
             var meta_cmds = "`info` `creator` `idea` `server` `invite`"
 
-            var prefix;
-            var prefix_message = "";
-            if (channel_type === "dm") {
-                prefix = ""
-            }
-            else if (channel_type === "group") {
-                prefix = "@Onyx#4347"
-            }
-            else {
-                // Check Prefix
-                var guild_id = msg.channel.guild.id
-                console.log(guild_id)
-                var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-
-
-                // If undefined, then no special prefixes corresponding to that server were found.
-                if (row === undefined) {
-                    prefix = client.commandPrefix;
-                }
-                else {
-                    var settings = row.settings;
-                    var jsonSettings = JSON.parse(settings);
-                    prefix = jsonSettings.prefix;
-                }
-
-                prefix_message = `Just prepend the prefix ${prefix} before any of the following commands:`
-            }
+         
 
             msg.channel.send({
                 embed: {
@@ -112,7 +114,7 @@ module.exports = class HelpCommand extends commando.Command {
                     },
                     {
                         name: "Get More Info. On A Command",
-                        value: "To get more info. on a command, type `" + `${prefix}help` + " `command`" + "\n eg: `" + prefix + "help word2sticker`"
+                        value: "To get more info. on a command, type `" + `${prefix}help` + " command`" + "\n\neg: `" + prefix + "help word2sticker`"
                     }
                     ],
                     footer: {
@@ -148,6 +150,11 @@ module.exports = class HelpCommand extends commando.Command {
                         fields: [{
                             name: "Examples",
                             value: "`" + `${examples}` + "`"
+                            
+                        },
+                        {
+                            name: "Custom Prefix ",
+                            value: `My custom prefix is ${prefix} so prepend this before the command.`
                         }
                         ],
                         footer: {
