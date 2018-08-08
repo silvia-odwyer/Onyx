@@ -26,11 +26,10 @@ module.exports = class PyramidCommand extends commando.Command {
     }
 
     async run(msg, { text }) {
+        var msg_char_length = text.split("");
         var msg_array = text.split(" ");
 
-        if (msg_array.length > 3) {
-
-
+        if (msg_char_length > 15) {
             var word_pyramid = "";
             var pyramid2 = " ";
             for (var i = 0; i < msg_array.length; i += 1) {
@@ -46,7 +45,7 @@ module.exports = class PyramidCommand extends commando.Command {
             msg.channel.send(pyramid2);
         }
 
-        else if (msg_array.length < 2) {
+        else if (msg_char_length < 15) {
             msg.reply("Try including more text with your command, eg: `pyramid Hello there`")
 
         }

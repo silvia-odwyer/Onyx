@@ -14,39 +14,39 @@ module.exports = class OldDefineCommand extends commando.Command {
             details: oneLine`
             Get an old-style definition of a word like it's ~~1857~~ 1657.
 			`,
-            examples: ["old-define universe"],
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'What word would you like to get an old-style definition of?',
-                    type: 'string'
-                }
-            ]
+            examples: ["old-define universe"]
         });
     }
 
-    async run(msg, { text }) {
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
-        var randomNumber = getRandomNumber(0, colour_array.length - 1);
-        var randomColour = colour_array[randomNumber];
-
-        var word = text;
-        word = word.toUpperCase();
-        var lowercase_word = word.toLowerCase();
-        var definition = ancient_dictionary[word];
-        if (definition != undefined) {
-            msg.reply("Found a definition")
-
-            msg.channel.send({
-                embed: {
-                    color: randomColour,
-                    title: "Ancient Definition for`" + `${lowercase_word}` + "`",
-                    description: definition,
-                }
-            });
+    async run(msg, args) {
+        var text = args;
+        if (args.length < 1) {
+            msg.reply("Add a word to your command, so I know what word to get an old-style definition of.\nEg: -old-define universe");
         }
+
         else {
-            msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
+            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var randomNumber = getRandomNumber(0, colour_array.length - 1);
+            var randomColour = colour_array[randomNumber];
+    
+            var word = text;
+            word = word.toUpperCase();
+            var lowercase_word = word.toLowerCase();
+            var definition = ancient_dictionary[word];
+            if (definition != undefined) {
+                msg.reply("Found a definition")
+    
+                msg.channel.send({
+                    embed: {
+                        color: randomColour,
+                        title: "Ancient Definition for`" + `${lowercase_word}` + "`",
+                        description: definition,
+                    }
+                });
+            }
+            else {
+                msg.channel.send("Couldn't find a definition :( Try another word, maybe? :D")
+            }
         }
         function getRandomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -15,19 +15,18 @@ module.exports = class AskCommand extends commando.Command {
             details: oneLine`
             Get stats on your first name
 			`,
-            examples: ["name silvia"],
-
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'What first name would you like to search for?',
-                    type: 'string'
-                }
-            ]
+            examples: ["name silvia"]
         });
     }
 
-    async run(msg, { text }) {
+    async run(msg, args) {
+        var text = args;
+        if (args.length < 1) {
+            msg.reply("Add a name to your command, so that I know what name to get stats of :eyes:\nEg: -name silvia")
+        }
+
+        else {
+
         // Necessary for choosing random colours for rich embeds
         var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
@@ -96,6 +95,7 @@ module.exports = class AskCommand extends commando.Command {
                     }
                 })
                 .catch(err => { throw err });
+        }
         }
         function getRandomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -14,19 +14,18 @@ module.exports = class SynonymsCommand extends commando.Command {
             details: oneLine`
             Get all the synonyms for a word.
 			`,
-            examples: ["synonyms azure"],
-
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'What word would you like to get synonyms of?',
-                    type: 'string'
-                }
-            ]
+            examples: ["synonyms azure"]
         });
     }
 
-    async run(msg, { text }) {
+    async run(msg, args) {
+        var text = args;
+        if (args.length < 1) {
+            msg.reply("Add a word to your command, so I know what word to get synonyms of.\nEg: `-synonyms azure`");
+        }
+
+        else {
+            
         // Necessary for choosing random colours for rich embeds
         var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
@@ -70,6 +69,7 @@ module.exports = class SynonymsCommand extends commando.Command {
                     }
                 });
             }
+        }
         }
         function getRandomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;

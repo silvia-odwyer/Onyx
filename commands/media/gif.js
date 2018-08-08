@@ -14,46 +14,46 @@ module.exports = class GIFCommand extends commando.Command {
             memberName: 'gif',
             description: "Search GIPHY for GIFS!",
             details: "Search GIPHY for GIFS!",
-            examples: ["gif"],
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'What GIFS would you like me to get you? I will include your next message as search terms :eyes:',
-                    type: 'string'
-                }
-            ]
+            examples: ["gif"]
         });
     }
 
-    async run(msg, { text }) {
-        var limit = 5;
-        var search_term = text;
-        var giphy_endpoint = `https://api.giphy.com/v1/gifs/search?rating=g&api_key=${giphy_api_key}&limit=${limit}&q=${search_term}`
-        console.log(giphy_endpoint)
-        fetch(giphy_endpoint)
-            .then(res => res.json())
-            .then((out) => {
-                console.log(out)
-                 if (out.data.length === 0) {
-                     msg.reply("Couldn't find any matching GIFS :(")
-                }
-                else {
-                    var randomNumber = getRandomNumber(0, limit - 1)
-                    var giphy_link = out.data[randomNumber].bitly_gif_url
-                    console.log(giphy_link)
-                    msg.reply(giphy_link)
+    async run(msg, args) {
+        var text = args;
+        if (args.length < 2) {
+            msg.reply("Add some search terms to your command, so I know what GIFS to get you. :grin:");
+        }
 
-                     // Send an embed with a local image inside
-                    msg.channel.send({
-                        files: [
-                            "media/powered_by_giphy.png",
-                        ]
-                    })
-                        .catch(console.error);
-                }
-
-            })
-            .catch(err => { throw err });
+        else {
+            var limit = 5;
+            var search_term = text;
+            var giphy_endpoint = `https://api.giphy.com/v1/gifs/search?rating=g&api_key=${giphy_api_key}&limit=${limit}&q=${search_term}`
+            console.log(giphy_endpoint)
+            fetch(giphy_endpoint)
+                .then(res => res.json())
+                .then((out) => {
+                    console.log(out)
+                     if (out.data.length === 0) {
+                         msg.reply("Couldn't find any matching GIFS :(")
+                    }
+                    else {
+                        var randomNumber = getRandomNumber(0, limit - 1)
+                        var giphy_link = out.data[randomNumber].bitly_gif_url
+                        console.log(giphy_link)
+                        msg.reply(giphy_link)
+    
+                         // Send an embed with a local image inside
+                        msg.channel.send({
+                            files: [
+                                "media/powered_by_giphy.png",
+                            ]
+                        })
+                            .catch(console.error);
+                    }
+    
+                })
+                .catch(err => { throw err });
+        }
 
         function getRandomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -115,6 +115,10 @@ module.exports = class HelpCommand extends commando.Command {
                     {
                         name: "Get More Info. On A Command",
                         value: "To get more info. on a command, type `" + `${prefix}help` + " command`" + "\n\neg: `" + prefix + "help word2sticker`"
+                    },
+                    {
+                        name: "Prepend My Prefix - Before A Command",
+                        value : "Prepend - before any of the commands, or mention me before a command.\nEg: -sticker tropical\n@Onyx sticker lol"
                     }
                     ],
                     footer: {
@@ -149,7 +153,7 @@ module.exports = class HelpCommand extends commando.Command {
                         description: `${cmd_info}`,
                         fields: [{
                             name: "Examples",
-                            value: "`" + `${examples}` + "`"
+                            value: "`" + `${prefix}${examples}` + "`"
                             
                         },
                         {
