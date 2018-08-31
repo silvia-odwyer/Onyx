@@ -11,7 +11,7 @@ const commando = require('discord.js-commando');
 const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
-sqlite.open("./database.sqlite3");var connection;
+sqlite.open("./database.sqlite3");
 var connection;
 var sql2;
 
@@ -36,7 +36,7 @@ function handleDisconnect() {
 	});
 }
 
-handleDisconnect();
+// handleDisconnect();
 
 const client = new commando.Client({
 	owner: owner_discord_id,
@@ -53,36 +53,6 @@ client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag}`);
 	client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
 	// client.user.setActivity(`${bot_prefix}help | Now with sticker & GIF cmds!`);
-
-	// // RE-INITIALIZE SQLITE DB
-	await sqlite.get("DELETE FROM settings");
-
-	// var select_all = "SELECT guild_id, custom_prefix FROM custom_prefixes";
-
-	// connection.query(select_all, function (err, result, fields) {
-	// 	if (err) throw err;
-	// 	console.log("RE-INITIALIZATION OF SQLITE DB");
-	// 	console.log(result);
-	// 	// // // If result is found 
-	// 	var group;
-	// 	for (var i = 0; i < result.length; i++) {
-	// 		group = result[i];
-	// 		console.log(group);
-	// 		var guild_id_cleardb = group["guild_id"];
-	// 		console.log(guild_id_cleardb)
-	// 		var custom_prefix_cleardb = group["custom_prefix"];
-	// 		console.log(custom_prefix_cleardb)
-	// 		var json_encoded_prefix_cleardb = `'prefix':'${custom_prefix_cleardb}'`;
-
-	// 		sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id_cleardb, json_encoded_prefix_cleardb]);
-
-	// 	}
-	// });
-
-	// sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", ["hi", "'prefix':'hi'"]);
-	// var total_res = await sqlite.run("SELECT * FROM settings");
-	// console.log(total_res)
-
 });
 
 // Error handling
@@ -114,74 +84,7 @@ client.on('commandError', (cmd, err) => {
 		var message = `Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`} ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.`;
 		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
 
-		// Check if the guild's prefix exists
-		var guild_id = guild.id;
-		// var check = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-
-		var sql = "CREATE TABLE IF NOT EXISTS custom_prefixes (guild_id VARCHAR(255), custom_prefix VARCHAR(255))";
-		connection.query(sql, function (err, result) {
-			if (err) throw err;
-		});
-		var json_encoded_prefix = `"prefix":"${prefix}"`;
-		// await connection.query("INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
-
-		// var delete_cmd = "DELETE FROM custom_prefixes";
-
-		// connection.query(delete_cmd, function (err, result, fields) {
-		// 	if (err) throw err;
-		//   });
-		sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
-
-		connection.query(sql2, function (err, result, fields) {
-			if (err) throw err;
-			console.log(result);
-			// // If result is found 
-			if (result.length > 0) {
-				console.log("Found MATCHING RESULT");
-				var custom_prefix_res = result[0].custom_prefix;
-				console.log(custom_prefix_res);
-
-				var update = `UPDATE custom_prefixes SET custom_prefix = '${prefix}' WHERE guild_id = '${guild_id}'`;
-
-				connection.query(update, function (error, result, fields) {
-					if (error) throw error;
-					console.log("1 record updated successfully.");
-				});
-			}
-			else {
-				console.log("No custom prefix found for this server");
-				var sql1 = `INSERT INTO custom_prefixes (guild_id, custom_prefix) VALUES (${guild_id}, ${prefix})`;
-				connection.query(sql1, function (err, result) {
-					if (err) throw err;
-					console.log("1 record inserted");
-				});
-			}
-		});
-
-		// var result_cleardb = await connection.query(`SELECT * FROM custom_prefixes WHERE guild_id = ${guild_id}`);
-		// console.log(result_cleardb);
-
-
-		// If undefined, then no special prefixes corresponding to that server were found.
-		// if (check === undefined) {
-		// 	console.log("Custom prefix does not exist.");
-
-		// 	await sqlite.run("INSERT INTO settings (guild, settings) VALUES (?, ?)", [guild_id, json_encoded_prefix]);
-		// }
-		// else {
-		// 	console.log("Custom prefix does exist.");
-
-		// 	var inputData = [guild_id, json_encoded_prefix];
-		// 	// await sqlite.run(`UPDATE settings WHERE guild = "${guild_id}" SET settings AS ${json_encoded_prefix}`, [guild_id, json_encoded_prefix]);
-		// 	await sqlite.run("UPDATE settings SET settings=? WHERE guild=?", inputData);
-
-		// }
-
-		// var check2 = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
-		// var settings = check2.settings;
-		// var jsonSettings = JSON.parse(settings);
-		// prefix = jsonSettings.prefix;
-		console.log(`PREFIX NOW SET TO: ${prefix}`);
+		console.log(`PREFIX CHANGE REQUEST: ${prefix}`);
 
 	})
 	.on('commandStatusChange', (guild, command, enabled) => {
@@ -244,16 +147,6 @@ client.on('commandError', (cmd, err) => {
 			return;
 		}
 
-		// // If undefined, then no special prefixes corresponding to that server were found.
-		// if (row === undefined) {
-		// 	prefix = client.commandPrefix;
-		// }
-		// else {
-		// 	var settings = row.settings;
-		// 	var jsonSettings = JSON.parse(settings);
-		// 	prefix = jsonSettings.prefix;
-		// }
-		// console.log(`Server: ${guild_id} Prefix: ${prefix}`);
 		sql2 = `SELECT custom_prefix FROM custom_prefixes WHERE guild_id = ${guild_id}`;
 
 		connection.query(sql2, function (err, result, fields) {
@@ -272,7 +165,7 @@ client.on('commandError', (cmd, err) => {
 	});
 
 client.on("guildCreate", guild => {
-	var message = `JOINED NEW SERVER: Joined a new server called: ${guild.name} (id: ${guild.id}). This server has ${guild.memberCount} members! :D`;
+	var message = `JOINED NEW SERVER: Joined a new server called: ${guild.name} (id: ${guild.id}). This server has ${guild.memberCount} members! :D NOW IN: I'm now in ${client.guilds.size} servers :D`;
 	console.log(message);
 	client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
 	client.user.setActivity(`${bot_prefix}help | Running on ${client.guilds.size} servers`);
@@ -300,6 +193,18 @@ client.on("guildCreate", guild => {
 				value: "In this DM, you can see all of my commands by typing `help` and you can run commands in this DM by typing `command` (I don't require any prefix in DMs)."
 			},
 			{
+				name: ":film_frames: Watch YouTube Videos",
+				value: "If you want to search for YouTube videos, just type yt or -yt in a server, accompanied by keywords.\nEg: `-yt greyhound swedish house mafia`\nThis is one of Onyx's most popular commands!"
+			},
+			{
+				name: ":star: React With GIFs or Stickers",
+				value: "React to server drama or stories with GIFS and/or stickers. Just type -sticker or -gif, along with keywords."
+			},
+			{
+				name: "See All My Commands",
+				value: "Visit my [official website](https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/), for all my commands! ^^ <3"
+			},
+			{
 				name: "Getting Help & Support",
 				value: "Have a bug to report? Want to chat to Onyx's maintainer? Join [Onyx's Support Server](https://discord.gg/cSWHaEK), a fun community that gets insider access to Onyx's development. \n Or add @Silvia923#9909 on Discord, I'm always here to chat."
 			}
@@ -311,19 +216,6 @@ client.on("guildCreate", guild => {
 
 	})
 
-	// Logging 
-	var message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`
-	console.log(message)
-	try {
-		// fs.appendFile('test.txt', `\nMessage Content: ${msg.content} Author: ${msg.author} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${msg.guild.memberCount} Region: ${msg.guild.region}`, (err) => {
-		// 	if (err) throw err;
-		// });
-
-		client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`)
-	}
-	catch (error) {
-		console.log(error)
-	}
 });
 
 client.on("guildDelete", guild => {
