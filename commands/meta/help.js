@@ -21,10 +21,6 @@ module.exports = class HelpCommand extends commando.Command {
     }
 
     async run(msg, args) {
-
-        // Necessary for choosing random colours for rich embeds
-        // Might implement rich embeds in the future.
-        console.log("args" + args);
         var channel_type = msg.message.channel.type;
 
         var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
@@ -62,15 +58,14 @@ module.exports = class HelpCommand extends commando.Command {
         if (args.length === 0) {
 
             // Command Categories
-            var search_cmds = " `acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
+            var new_cmds = "`card`"
+            var search_cmds = "`acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = " `cats` `ascii-faces` `captcha` `xkcd` `qr` `rhyme`"
             var fmt_cmds = "`reverse` `pyramid` `random-case` `replace-b` `letter-em` `1337` `emojify` `adv1337` `binary`"
-            var social_cmds = " `avatar` `wave` `poke`"
+            var social_cmds = "`card` `avatar` `wave` `poke`"
             var meta_cmds = "`info` `creator` `idea` `server` `invite`"
-
-         
 
             msg.channel.send({
                 embed: {
@@ -85,6 +80,10 @@ module.exports = class HelpCommand extends commando.Command {
                         url: this.client.user.avatarURL
                     },
                     fields: [{
+                        name : "New Commands for 2019 :eyes:",
+                        value: new_cmds
+                    },
+                        {
                         name: "Search Commands :information_source:",
                         value: search_cmds
                     },

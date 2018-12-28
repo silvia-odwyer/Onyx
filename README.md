@@ -1,15 +1,19 @@
-# NodeJS Discord Bot
+# Onyx Discord Bot
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 ![GitHub top language](https://img.shields.io/github/languages/top/badges/shields.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
 ![Powered by NodeJS](https://img.shields.io/badge/powered%20by-nodejs-blue.svg)
 
-[UPDATE 15.06.2018: Get stickers from GIPHY! See below]
+Onyx is a multi-purpose media and utility bot, containing over 50 commands to help you bring the best of the web to your server.
+
+Make memes, send electronic cards, get answers to everything, and more, with Onyx. This bot is powered by Node.JS, and coded using
+the Discord.JS library.
+
 Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot powered by Node.JS, and coded using
 the Discord.JS library.
 
-Onyx has over forty commands, including those for:
+Onyx has over fifty commands, including those for:
 - meme generation
 - gif and sticker searching
 - searching YouTube
@@ -26,7 +30,8 @@ Onyx has over forty commands, including those for:
 
 A complete list of currently working commands can be found below.
 
-## UPDATES
+## UPDATES: 28/12/2018
+- Send cool eCards and GIFts to other users!
 - Get stickers from GIPHY. 👀
 - Meta Commands now available! Get server stats, submit ideas to Silvia, and more. (More to be added)
 - YouTube Integration Now Here! Search for your favourite videos, watch, and enjoy!
@@ -105,7 +110,7 @@ Right now, you can play samples, and overlay/combine samples together.
 | define        | Get a definition of a word.                                        |  `-define dancing`  |
 | translate     | Translate text to a variety of languages, including French (fr), Italian (it), German (de), and more! | `-translate fr How are you?`|
 | identify      | Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too! |`-identify Hello there, how are you?` |
-| getem         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-getem hearts `  |
+| emoji         | Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.| `-emoji hearts `  |
 | population    | Get the total number of humans on Earth right now.                                               |   `-population`   |
 | rhyme    |  Get words that rhyme with a word of your choice.                                  |   `-rhyme red`   |
 | name    |  Find out how popular your first name is, plus get stats on it.                                  |   `-name Markus`   |
@@ -156,8 +161,8 @@ Right now, you can play samples, and overlay/combine samples together.
 | avatar        | See your, or someone else's avatar.        |  `-avatar @Silvia923` or `-avatar`    |
 | wave          | Wave at another user! |   `-wave @Silvia923`   |
 | poke          | Poke another user! | `-poke @somebody`     |
-<!-- | gift          | Send a gift to another user! |      |
-| setPresence   | Change the bot's playing/presence message to another random message (not user-defined).|     | -->
+| gift          | Send a gift to another user! | `-gift @Silvia923`|
+| card          | Send a card to another user, with your message attached| `-card @Silvia923 Happy Birthday!`|
 
 ### Meta Commands
 | Command       | Description   | Examples  |
