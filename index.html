@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Onyx Discord Bot Documentation - Onyx Discord Bot</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Onyx Discord Bot Documentation";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Onyx Discord Bot</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Onyx Discord Bot Documentation</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#onyx-discord-bot-documentation">Onyx Discord Bot Documentation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#updates-28122018">UPDATES: 28/12/2018</a></li>
+        
+            <li><a class="toctree-l3" href="#invite-to-your-server">Invite To Your Server</a></li>
+        
+            <li><a class="toctree-l3" href="#test-onyx-out-in-this-support-server">Test Onyx Out In This Support Server</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#commands">Commands</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#media-commands">Media Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#spaceastronomynasa-commands">Space/Astronomy/NASA Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#search-commands">Search Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#fun-commands">Fun Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#message-formatting-commands">Message Formatting Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#social-commands">Social Commands</a></li>
+        
+            <li><a class="toctree-l3" href="#meta-commands">Meta Commands</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Onyx Discord Bot</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Onyx Discord Bot Documentation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="onyx-discord-bot-documentation">Onyx Discord Bot Documentation</h1>
+<p>Onyx is a multi-purpose media and utility bot, containing over 50 commands to help you bring the best of the web to your server.</p>
+<p>Make memes, send electronic cards, get answers to everything, and more, with Onyx. This bot is powered by Node.JS, and coded using
+the Discord.JS library.</p>
+<p>Onyx has over fifty commands, including those for:</p>
+<ul>
+<li>
+<p>meme generation</p>
+</li>
+<li>
+<p>gif and sticker searching</p>
+</li>
+<li>
+<p>searching YouTube</p>
+</li>
+<li>
+<p>music production</p>
+</li>
+<li>
+<p>fetching info/live imagery from NASA</p>
+</li>
+<li>
+<p>interacting with IBM's Watson API </p>
+</li>
+<li>
+<p>getting information on any topic</p>
+</li>
+</ul>
+<p>A complete list of currently working commands can be found below.</p>
+<h2 id="updates-28122018">UPDATES: 28/12/2018</h2>
+<ul>
+<li>Send cool eCards and GIFts to other users!</li>
+<li>Get stickers from GIPHY. 👀</li>
+<li>Meta Commands now available! Get server stats, submit ideas to Silvia, and more. (More to be added)</li>
+<li>YouTube Integration Now Here! Search for your favourite videos, watch, and enjoy!</li>
+<li>Search Pixabay for public domain photos. <code>-pixabay night sky</code></li>
+<li>Get random cute Ascii Faces!</li>
+<li>Get public domain, stunning images from Unsplash with <code>-photo</code></li>
+<li>Captcha generation now possible! <code>-captcha Only humans can read this.</code></li>
+<li>Get rhyming words. <code>-rhyme red</code></li>
+<li>Check how popular your name is with <code>-name [your name]</code></li>
+</ul>
+<h2 id="invite-to-your-server">Invite To Your Server</h2>
+<p><a href="https://discordapp.com/oauth2/authorize?&amp;client_id=444948120573313024&amp;scope=bot&amp;permissions=0">Just click here to invite Onyx to your server!</a></p>
+<h2 id="test-onyx-out-in-this-support-server">Test Onyx Out In This Support Server</h2>
+<p>If you want to test Onyx out before adding her to your server, <a href="https://discord.gg/cSWHaEK">just join this server</a>, and leave when you want.
+Onyx runs 24/7, so she'll always be online. :D</p>
+<h1 id="commands">Commands</h1>
+<p>NB: Prepend a hyphen before any of the commands below.</p>
+<h3 id="media-commands">Media Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>meme</td>
+<td align="center">Make a meme, using a variety of templates. Separate the meme's top and bottom text using a hyphen.</td>
+<td><code>-meme waitingskeleton This is top text-This is bottom text</code></td>
+</tr>
+<tr>
+<td>meme_templates</td>
+<td align="center">Get a list of all meme templates available.</td>
+<td><code>-meme_templates</code></td>
+</tr>
+<tr>
+<td>yt</td>
+<td align="center">Search YouTube for your favourite videos. Returns the first search result video.</td>
+<td><code>-yt Swedish House Mafia greyhound</code></td>
+</tr>
+<tr>
+<td>xkcd</td>
+<td align="center">(Nerd Humour) Get today's XKCD comic, or a randomized XKCD comic.</td>
+<td><code>-xkcd</code> or <code>-xkcd today</code></td>
+</tr>
+<tr>
+<td>photo</td>
+<td align="center">Search Unsplash for public domain, stunning images of your choice.</td>
+<td><code>-unsplash night sky</code></td>
+</tr>
+<tr>
+<td>pixabay</td>
+<td align="center">Search Pixabay for public domain images.</td>
+<td><code>-pixabay night sky</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="spaceastronomynasa-commands">Space/Astronomy/NASA Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th align="right">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>earth</td>
+<td align="center">See live footage of Earth, as seen from the NOAA DSCVRY probe.</td>
+<td align="right"><code>-earth</code></td>
+</tr>
+<tr>
+<td>neo</td>
+<td align="center">Find out how many Near-Earth objects are near Earth right now.</td>
+<td align="right"><code>-neo</code></td>
+</tr>
+<tr>
+<td>astronauts</td>
+<td align="center">Find out how many astronauts are aboard the International Space Station.</td>
+<td align="right"><code>-astronauts</code></td>
+</tr>
+<tr>
+<td>iss</td>
+<td align="center">Get the location of the International Space Station. Updates every second.</td>
+<td align="right"><code>-iss</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Get Live Earth Footage" src="https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/earth_example.gif" title="Get live footage of Earth from NASA!" /></p>
+<h3 id="search-commands">Search Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>search</td>
+<td align="center">Get all the synonyms for a word.</td>
+<td><code>-search azure</code></td>
+</tr>
+<tr>
+<td>bitcoin</td>
+<td align="center">Retrieve today's bitcoin rates.</td>
+<td><code>-bitcoin</code></td>
+</tr>
+<tr>
+<td>acronym</td>
+<td align="center">Get the meaning of an acronym. --&gt; acronym lol</td>
+<td><code>-acronym rofl</code></td>
+</tr>
+<tr>
+<td>oldDefine</td>
+<td align="center">Get an old-style definition of a word like it's 1859.</td>
+<td><code>-oldDefine dancing</code></td>
+</tr>
+<tr>
+<td>define</td>
+<td align="center">Get a definition of a word.</td>
+<td><code>-define dancing</code></td>
+</tr>
+<tr>
+<td>translate</td>
+<td align="center">Translate text to a variety of languages, including French (fr), Italian (it), German (de), and more!</td>
+<td><code>-translate fr How are you?</code></td>
+</tr>
+<tr>
+<td>identify</td>
+<td align="center">Identify what language a piece of text is in, plus the result includes Watson AI's confidence levels too!</td>
+<td><code>-identify Hello there, how are you?</code></td>
+</tr>
+<tr>
+<td>emoji</td>
+<td align="center">Search for emojis related to a certain search term. Get happy emojis, cute emojis, hearts, etc.</td>
+<td><code>-emoji hearts</code></td>
+</tr>
+<tr>
+<td>population</td>
+<td align="center">Get the total number of humans on Earth right now.</td>
+<td><code>-population</code></td>
+</tr>
+<tr>
+<td>rhyme</td>
+<td align="center">Get words that rhyme with a word of your choice.</td>
+<td><code>-rhyme red</code></td>
+</tr>
+<tr>
+<td>name</td>
+<td align="center">Find out how popular your first name is, plus get stats on it.</td>
+<td><code>-name Markus</code></td>
+</tr>
+<tr>
+<td>ask</td>
+<td align="center">Ask Onyx anything, and she'll provide an answer from Wolfram Alpha, an information engine.</td>
+<td><code>-ask is there life on Mars</code></td>
+</tr>
+</tbody>
+</table>
+<!-- | slowblur      | Add a gentler blur effect to an image. |    |
+| extremeblur   | Add a stronger blur effect to an image.|     |
+| dotify        |Add this cool effect to an image.|      |
+| invert        | Invert an image, so that it's mirror image is seen. |    |
+| flip          | Flip an image, so that its mirror image will be displayed. |      |
+| sepia         | Add a sepia effect to an image (image URLs supported, as well as local images).|      |
+| imgedit       | Add random effects and filters to an image. |      | -->
+
+<h3 id="fun-commands">Fun Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qr</td>
+<td align="center">Generate a QR code in black &amp; white. Create a multi-coloured QR code with the <code>qr+</code> command.</td>
+<td><code>-qr This is a qr-encoded message</code></td>
+</tr>
+<tr>
+<td>qr+</td>
+<td align="center">Generate a qr code with two HEX colours and your message encoded as a QR code.</td>
+<td><code>-qr+ fff 000 This is a qr-encoded message</code></td>
+</tr>
+<tr>
+<td>pls react</td>
+<td align="center">Get a tonload of reactions for no reason. 👀 🤣 😃 😄 😅 😆 😉</td>
+<td><code>-pls react</code></td>
+</tr>
+<tr>
+<td>emojify</td>
+<td align="center">Convert your message into an emojipasta. Adds emojis related to words found within the message.</td>
+<td><code>-emojify I loooove emojis</code></td>
+</tr>
+<tr>
+<td>cs_jokes</td>
+<td align="center">Get a coding/computer science-related joke.</td>
+<td><code>-cs_jokes</code></td>
+</tr>
+<tr>
+<td>captcha</td>
+<td align="center">Turn plaintext into a captcha.</td>
+<td><code>-captcha Hello there</code></td>
+</tr>
+<tr>
+<td>cats</td>
+<td align="center">Get a load of cuuuute cat ascii faces</td>
+<td><code>-cats</code></td>
+</tr>
+<tr>
+<td>asciiFaces</td>
+<td align="center">Get a load of cuuuute ascii faces ^^</td>
+<td><code>-asciiFaces</code></td>
+</tr>
+<tr>
+<td>poll</td>
+<td align="center">Create a poll. Just append a question onto your command, and the reactions will symbolise votes.</td>
+<td><code>-poll Do you want more text channels?</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="message-formatting-commands">Message Formatting Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>randomCase</td>
+<td align="center">Randomize every letter in a sentence's case, so iT tUrnS oUt lIke ThIS.</td>
+<td><code>-randomCase this is a sample sentence</code></td>
+</tr>
+<tr>
+<td>letterEm</td>
+<td align="center">Convert all the letters in a message to emoji letters.</td>
+<td><code>-letterEm These letters look like emojis.</code></td>
+</tr>
+<tr>
+<td>replaceB</td>
+<td align="center">Replace all the b's in a message with the 🅱️ emoji.</td>
+<td><code>-replaceB Bye bye letter B's!</code></td>
+</tr>
+<tr>
+<td>pyramid</td>
+<td align="center">Convert a sentence into a word pyramid. Try it out!</td>
+<td><code>-pyramid This text looks like a pyramid.</code></td>
+</tr>
+<tr>
+<td>reverse</td>
+<td align="center">Reverse your message.</td>
+<td><code>-reverse Hello There</code></td>
+</tr>
+<tr>
+<td>binary</td>
+<td align="center">Translate a message to binary.</td>
+<td><code>-binary Hello There</code></td>
+</tr>
+<tr>
+<td>1337</td>
+<td align="center">Translate a message to 1337.</td>
+<td><code>-1337 Hello There</code></td>
+</tr>
+<tr>
+<td>adv1337</td>
+<td align="center">Translate a message to advanced 1337.</td>
+<td><code>-adv1337 Hello There</code></td>
+</tr>
+</tbody>
+</table>
+<!-- | fmt           | Format your message so that it displays in a certain font or colour, or is encoded in binary, 1337, etc |      | -->
+
+<h3 id="social-commands">Social Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th align="right">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avatar</td>
+<td align="center">See your, or someone else's avatar.</td>
+<td align="right"><code>-avatar @Silvia923</code> or <code>-avatar</code></td>
+</tr>
+<tr>
+<td>wave</td>
+<td align="center">Wave at another user!</td>
+<td align="right"><code>-wave @Silvia923</code></td>
+</tr>
+<tr>
+<td>poke</td>
+<td align="center">Poke another user!</td>
+<td align="right"><code>-poke @somebody</code></td>
+</tr>
+<tr>
+<td>gift</td>
+<td align="center">Send a gift to another user!</td>
+<td align="right"><code>-gift @Silvia923</code></td>
+</tr>
+<tr>
+<td>setPresence</td>
+<td align="center">Change the bot's playing/presence message to another random message (not user-defined).</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="meta-commands">Meta Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th align="center">Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>server</td>
+<td align="center">Get server stats, such as member count, when the server was created, and more...</td>
+<td><code>-server</code></td>
+</tr>
+<tr>
+<td>idea</td>
+<td align="center">Submit an idea for a new bot feature.</td>
+<td><code>-idea New image filters please! Would love to see some sepia filters :eyes:</code></td>
+</tr>
+<tr>
+<td>creator</td>
+<td align="center">Get info. on who coded Onyx :eyes:</td>
+<td><code>-creator</code></td>
+</tr>
+<tr>
+<td>info</td>
+<td align="center">Get info. about Onyx, such as what language she's coded in, and more.</td>
+<td><code>-info</code></td>
+</tr>
+<tr>
+<td>invite</td>
+<td align="center">Get Onyx's invite link, so that she can be invited to other servers.</td>
+<td><code>-invite</code></td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.0.4
+Build Date UTC : 2018-12-28 15:56:20
+-->
