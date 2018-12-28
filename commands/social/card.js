@@ -39,9 +39,9 @@ module.exports = class eCardCommand extends commando.Command {
     } else {
       // User didn't enter any keywords
       msg.reply(
-        "Try mentioning a person eg: `" +
+        "Try mentioning a person and appending a message, eg: `" +
           `${this.client.commandPrefix}` +
-          " @someone`"
+          " @someone Happy Birthday!`"
       );
     }
 
@@ -59,7 +59,7 @@ module.exports = class eCardCommand extends commando.Command {
       Jimp.read(image, (err, image) => {
         if (err) throw err;
 
-        Jimp.loadFont(Jimp.FONT_SANS_32_WHITE).then(font => {
+        Jimp.loadFont(Jimp.FONT_SANS_16_WHITE).then(font => {
           image.resize(300, 300);
 
           image.print(font, 20, 150, `To: ${receiver}`);

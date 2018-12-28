@@ -29,11 +29,6 @@ module.exports = class WaveCommand extends commando.Command {
     }
 
     async run(msg, { text }) {
-        // Necessary for choosing random colours for rich embeds
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
-        var randomNumber = getRandomNumber(0, colour_array.length - 1);
-        var randomColour = colour_array[randomNumber];
-
         var sender = msg.message.author;
         var receiver = text.split(" ")[0];
 
