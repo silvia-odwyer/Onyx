@@ -29,14 +29,14 @@ module.exports = class GIFCommand extends commando.Command {
             console.log(search_terms)
             for (var j = 0; j < search_terms.length; j += 1) {
                 var reply = "";
-                var search_term = search_terms[j]
-                var char_matched_emojis = getEmoji(search_term, emoji)
-    
+                let search_term = search_terms[j]
+                let char_matched_emojis = getEmoji(search_term, emoji)
+                
                 if (char_matched_emojis.length > 0) {
                     msg.reply(`${search_term} emoji: ${char_matched_emojis.join(" ")}`)
                 }
                 else {
-                    reply = `No emoji found for ${search_term}`
+                    msg.reply(`No emoji found for ${search_term}`);
                 }
             }
     

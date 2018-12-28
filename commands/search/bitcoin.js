@@ -30,10 +30,10 @@ module.exports = class BitcoinCommand extends commando.Command {
             .then(res => res.json())
             .then((out) => {
                 var bitcoin_info = out;
-                //var randomNumber = getRandomNumber(0, bitcoin_info.length)
+                console.log(bitcoin_info);
 
-                var usd_currency = bitcoin_info[1]
-                var eur_currency = bitcoin_info[2]
+                var usd_currency = bitcoin_info[0]
+                var eur_currency = bitcoin_info[1]
                 console.log(usd_currency)
 
                 var bc_to_usd = usd_currency.ask;
