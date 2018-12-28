@@ -7,7 +7,7 @@
 
 Onyx is a multi-purpose media and utility bot, containing over 50 commands to help you bring the best of the web to your server.
 
-Make memes, send electronic cards, get answers to everything, and more, with Onyx. This bot is powered by Node.JS, and coded using
+Watch YouTube videos, search for GIFs and stickers, get answers to everything, and more, with Onyx. This bot is powered by Node.JS, and coded using
 the Discord.JS library.
 
 Make electronic music, memes, edit images, get answers to everything, and more, with Onyx, a Discord bot powered by Node.JS, and coded using
@@ -21,6 +21,9 @@ Onyx has over fifty commands, including those for:
 - fetching info/live imagery from NASA
 - interacting with IBM's Watson API 
 - getting information on any topic
+
+## Documentation
+[View documentation relating to Onyx's commands and usage here.](https://silvia-odwyer.github.io/Onyx)
 
 ## Get Stickers From Giphy!
 ![Get Stickers With This Command](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/sticker_examples.gif "Yes, you can search GIPHY for stickers!")
