@@ -3,11 +3,33 @@ const fetch = require("node-fetch");
 const Discord = require("discord.js");
 
 var song_dict = {
-  electronic: [
+  lofi: [
     {
       name: "Starfall",
       author: "Venera's Kiss",
       author_link: "https://icons8.com/music/author//author/veneras-kiss-1"
+    },
+    {
+      name: "Acid Summer",
+      author: "Venera's Kiss",
+      author_link: "https://icons8.com/music/author//author/veneras-kiss-1"
+    },
+    {
+      name: "Peace",
+      author: "Venera's Kiss",
+      author_link: "https://icons8.com/music/author//author/veneras-kiss-1"
+    }
+  ],
+  synthwave: [
+    {
+      name: "Activation",
+      author: "Spaceinvader",
+      author_link: "https://icons8.com/music/author//author/spaceinvader"
+    },
+    {
+      name: "Escape From Reality",
+      author: "Spaceinvader",
+      author_link: "https://icons8.com/music/author//author/spaceinvader"
     }
   ]
 };
@@ -69,16 +91,8 @@ module.exports = class PlayCommand extends commando.Command {
             msg.channel.send({
               embed: {
                 color: randomColour,
-                title: `Music By: `,
-                description: `Music by ${song.author} ${
-                  song.author_link
-                } from <https://icons8.com/music>Fugue"`,
-                fields: [
-                  {
-                    name: "Link",
-                    value: `${song.author}`
-                  }
-                ],
+                title: `:fast_forward: Playing ${song.name} `,
+                description: `Playing ${song.name} by [${song.author}](${song.author_link}) from [Fugue](https://icons8.com/music)"`,
                 footer: {
                   text: "Coded by Silvia923#9909 <3"
                 }
