@@ -2,8 +2,9 @@ const commando = require("discord.js-commando");
 const fetch = require("node-fetch");
 const Discord = require("discord.js");
 
-var queue = [];
+var guildsQueue = {"Sample" : ["song1", "song2"]};
 var isPlayingSong = false;
+var connection;
 
 var song_dict = {
   lofi: [
@@ -70,10 +71,10 @@ var song_dict = {
 module.exports = class PlayCommand extends commando.Command {
   constructor(client) {
     super(client, {
-      name: "play",
+      name: "playmusic",
       aliases: [],
       group: "media",
-      memberName: "play",
+      memberName: "playmusic",
       description:
         "Play music of different genres, such as electronic, synthwave, etc.,",
       details:
@@ -84,7 +85,7 @@ module.exports = class PlayCommand extends commando.Command {
 
   async run(msg, args) {
     if (args.length < 2) {
-      msg.reply("You didn't specify a genre, eg: `-play synthwave`");
+      msg.reply("You didn't specify a genre, eg: `-playmusic synthwave`");
     } else {
       let msg_array = args.split(" ");
 
@@ -119,41 +120,37 @@ module.exports = class PlayCommand extends commando.Command {
         let isConnectedToVoice = msg.channel.guild.voiceConnection;
         let genre = msg_array[0];
 
-        if (isConnectedToVoice) {
+        if (isPlayingSong) {
+        msg.reply("Please type your command after this song. Thanks.");
           let song = getSong(genre);
+            // msg.reply(`Queued a ${genre} song.`);
+            // if (guild_id in guildsQueue) {
+            //     console.log("in guild already")
+            //     let queue = guildsQueue[guild_id];
+            //     queue.push(song);
+            //     console.log("QUEUE", queue);
+            // }
+            // else {
+            //     console.log("guild not in guildsqueue")
+            //     guildsQueue[guild_id] = [song];
+            // }
 
-          if (isPlayingSong) {
-            msg.reply(`Queued a ${genre} song.`);
-            queue.push(song);
-            console.log("QUEUE", queue);
-          }
+          
         } else {
           voiceChannel
             .join()
             .then(connection => {
               let song = getSong(genre);
-              sendSongMesage(msg, song, randomColour);
-
-              const dispatcher = connection.playFile(`./${song.name}.mp3`);
-              isPlayingSong = true;
-
-              dispatcher.on("end", end => {
-                if (queue.length > 0) {
-                  sendSongMesage(msg, queue[0], randomColour);
-                  connection.playFile(`./${queue[0].name}.mp3`);
-                  queue.pop();
-                } else {
-                  isPlayingSong = false;
-                  voiceChannel.leave();
-                }
-              });
+              sendSongMessage(msg, song, randomColour);
+              
+              playFile(song, connection, guild_id, msg, randomColour);
             })
             .catch(err => console.log(err));
         }
       }
     }
 
-    function sendSongMesage(msg, song, randomColour) {
+    function sendSongMessage(msg, song, randomColour) {
       // Link to song
       msg.channel.send({
         embed: {
@@ -166,7 +163,28 @@ module.exports = class PlayCommand extends commando.Command {
       });
     }
 
-    function playFile(song) {}
+    function playFile(song, connection, guild_id, msg, randomColour) {
+        const dispatcher = connection.playFile(`./${song.name}.mp3`);
+        isPlayingSong = true;
+
+        dispatcher.on("end", end => {
+        //     console.log(guildsQueue);
+        //   if (guild_id in guildsQueue) {
+        //      // if (guildsQueue[guild_id].length > 0) {
+        //         let queue = guildsQueue[guild_id];
+        //         let song = queue.pop();
+        //         setTimeout(function() {
+        //         playFile(song, connection, guild_id, msg, randomColour);}, 500);
+        //         sendSongMessage(msg, queue[0], randomColour);
+        //     //}
+          
+        //   } 
+        //   else {
+            isPlayingSong = false;
+            voiceChannel.leave();
+        //}
+        });
+    }
 
     function getSong(genre) {
       let songs = song_dict[genre];
