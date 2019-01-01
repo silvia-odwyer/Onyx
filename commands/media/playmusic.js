@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const Discord = require("discord.js");
 
 var guildsQueue = {"Sample" : ["song1", "song2"]};
-var isPlayingSong = false;
+var statuses = {}
 var connection;
 
 var song_dict = {
@@ -120,29 +120,27 @@ module.exports = class PlayCommand extends commando.Command {
         let isConnectedToVoice = msg.channel.guild.voiceConnection;
         let genre = msg_array[0];
 
-        if (isPlayingSong) {
-        msg.reply("Please type your command after this song. Thanks.");
-          let song = getSong(genre);
-            // msg.reply(`Queued a ${genre} song.`);
-            // if (guild_id in guildsQueue) {
-            //     console.log("in guild already")
-            //     let queue = guildsQueue[guild_id];
-            //     queue.push(song);
-            //     console.log("QUEUE", queue);
-            // }
-            // else {
-            //     console.log("guild not in guildsqueue")
-            //     guildsQueue[guild_id] = [song];
-            // }
-
-          
+        if (guild_id in statuses && statuses[guild_id] == true) {
+            msg.reply("Please type your command after this song. Thanks.");
+            let song = getSong(genre);
+              // msg.reply(`Queued a ${genre} song.`);
+              // if (guild_id in guildsQueue) {
+              //     console.log("in guild already")
+              //     let queue = guildsQueue[guild_id];
+              //     queue.push(song);
+              //     console.log("QUEUE", queue);
+              // }
+              // else {
+              //     console.log("guild not in guildsqueue")
+              //     guildsQueue[guild_id] = [song];
+              // }
         } else {
           voiceChannel
             .join()
             .then(connection => {
               let song = getSong(genre);
               sendSongMessage(msg, song, randomColour);
-              
+
               playFile(song, connection, guild_id, msg, randomColour);
             })
             .catch(err => console.log(err));
@@ -165,8 +163,7 @@ module.exports = class PlayCommand extends commando.Command {
 
     function playFile(song, connection, guild_id, msg, randomColour) {
         const dispatcher = connection.playFile(`./${song.name}.mp3`);
-        isPlayingSong = true;
-
+        statuses[guild_id] = true;
         dispatcher.on("end", end => {
         //     console.log(guildsQueue);
         //   if (guild_id in guildsQueue) {
@@ -180,7 +177,7 @@ module.exports = class PlayCommand extends commando.Command {
           
         //   } 
         //   else {
-            isPlayingSong = false;
+          statuses[guild_id] = false;
             voiceChannel.leave();
         //}
         });
