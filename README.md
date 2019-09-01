@@ -36,14 +36,11 @@ A complete list of currently working commands can be found below.
 ## UPDATES: 28/12/2018
 - Send cool eCards and GIFts to other users!
 - Get stickers from GIPHY. 👀
-- Meta Commands now available! Get server stats, submit ideas to Silvia, and more. (More to be added)
 - YouTube Integration Now Here! Search for your favourite videos, watch, and enjoy!
 - Search Pixabay for public domain photos. `-pixabay night sky`
 - Get random cute Ascii Faces!
 - Get public domain, stunning images from Unsplash with `-photo`
 - Captcha generation now possible! `-captcha Only humans can read this.`
-- Get rhyming words. `-rhyme red`
-- Check how popular your name is with `-name [your name]`
 
 ## Invite To Your Server
 [Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
@@ -187,6 +184,15 @@ I am applying for API keys for the following APIs, so that's why their developme
 
 ## Invite To Your Server (In case you didn't see above ^^)
 [Just click here to invite Onyx to your server!](https://discordapp.com/oauth2/authorize?&client_id=444948120573313024&scope=bot&permissions=0)
+
+## Run The Bot 
+To run Onyx on your own server:
+
+1. Clone this repo. 
+2. Install dependencies with `npm install`.
+3. Get the required API keys and fill them in. 
+4. `npm start`
+
 
 ## Test Onyx Out In This Support Server
 If you want to test Onyx out before adding her to your server, [just join this server](https://discord.gg/cSWHaEK), and leave when you want.

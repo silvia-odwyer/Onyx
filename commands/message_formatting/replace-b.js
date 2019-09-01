@@ -1,7 +1,6 @@
 
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
-let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 var name = "replace-b"
 const sql = require("sqlite");
 sql.open("./database.sqlite3");
