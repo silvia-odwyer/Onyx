@@ -3,7 +3,7 @@ const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 const request = require("request");
 
-module.exports = class PyramidCommand extends commando.Command {
+module.exports = class GitReposCommand extends commando.Command {
     constructor(client) {
         super(client, {
             name: 'gitrepos',

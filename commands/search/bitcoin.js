@@ -34,7 +34,7 @@ module.exports = class BitcoinCommand extends commando.Command {
 
                 var usd_currency = bitcoin_info[0]
                 var eur_currency = bitcoin_info[1]
-                console.log(usd_currency)
+                console.log(usd_currency);
 
                 var bc_to_usd = usd_currency.ask;
                 console.log(bc_to_usd)

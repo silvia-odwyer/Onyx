@@ -3,7 +3,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch')
 
-let cmd_info_obj = require(`commands_info.json`); // Provides information on each command, plus examples of each command's usage.
+let cmd_info_obj = require(`./assets/commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 
 module.exports = class IntlSpaceStationCommand extends commando.Command {
 	constructor(client) {

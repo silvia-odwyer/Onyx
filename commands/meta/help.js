@@ -2,7 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
 sqlite.open("./database.sqlite3");
-const commands_info = require("commands_info.json")
+const commands_info = require("./assets/commands_info.json")
 
 var name = "help"
 module.exports = class HelpCommand extends commando.Command {
@@ -58,7 +58,7 @@ module.exports = class HelpCommand extends commando.Command {
         if (args.length === 0) {
 
             // Command Categories
-            var new_cmds = "`card`"
+            var new_cmds = "`card` `playmusic` and `stop` `gift` `wave`"
             var search_cmds = "`acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
@@ -82,6 +82,10 @@ module.exports = class HelpCommand extends commando.Command {
                     fields: [{
                         name : "New Commands for 2019 :eyes:",
                         value: new_cmds
+                    },
+                    {
+                        name : "You Can Now Play Music",
+                        value: "With the new 2019 update, you can now play music in a certain genre, such as synthwave or lofi.\nJust type `-play music lofi` and `-stop` if you want Onyx to leave the channel. Check it out!"
                     },
                         {
                         name: "Search Commands :information_source:",
@@ -118,6 +122,10 @@ module.exports = class HelpCommand extends commando.Command {
                     {
                         name: "Prepend My Prefix - Before A Command",
                         value : "Prepend - before any of the commands, or mention me before a command.\nEg: -sticker tropical\n@Onyx sticker lol"
+                    },
+                    {
+                        name: "For More Info on Commands",
+                        value : "For a complete command table, with info on usage, check out [my command page](https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/commands.html)."
                     }
                     ],
                     footer: {
