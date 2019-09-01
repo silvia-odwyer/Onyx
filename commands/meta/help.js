@@ -2,7 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
 sqlite.open("./database.sqlite3");
-const commands_info = require("./assets/commands_info.json")
+const commands_info = require("assets/commands_info.json")
 
 var name = "help"
 module.exports = class HelpCommand extends commando.Command {

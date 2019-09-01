@@ -1,6 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
-let ancient_dictionary = require(`./assets/dictionary.json`); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
+let ancient_dictionary = require(`assets/dictionary.json`); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
 
 var name = "old-define"
 module.exports = class OldDefineCommand extends commando.Command {
