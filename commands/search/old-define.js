@@ -1,6 +1,5 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
-let ancient_dictionary = require(`assets/dictionary.json`); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
 
 var name = "old-define"
 module.exports = class OldDefineCommand extends commando.Command {
@@ -19,6 +18,8 @@ module.exports = class OldDefineCommand extends commando.Command {
     }
 
     async run(msg, args) {
+        var ancient_dictionary = require("./assets/dictionary.json"); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
+
         var text = args;
         if (args.length < 1) {
             msg.reply("Add a word to your command, so I know what word to get an old-style definition of.\nEg: -old-define universe");

@@ -3,7 +3,6 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch')
 
-let cmd_info_obj = require(`assets/commands_info.json`); // Provides information on each command, plus examples of each command's usage.
 var name = "earth"
 module.exports = class EarthCommand extends commando.Command {
 	constructor(client) {
@@ -14,7 +13,7 @@ module.exports = class EarthCommand extends commando.Command {
 			memberName: 'earth',
 			description: "cmd_info_obj[name]",
 			details: oneLine`
-				${cmd_info_obj[name]}
+				View a photo of Earth from space!
 			`,
 			examples: ["[cmd_info_obj[`${name}_examples`]]"],
 		});
