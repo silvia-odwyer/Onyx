@@ -1,10 +1,11 @@
 {
-  "name": "Onyx Discord Bot",
+  "name": "onyx-discord-bot",
   "version": "1.0.0",
   "description": "A bot that allows you to make memes, caption GIFS, and more!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "Silvia O'Dwyer (silvia-odwyer)",
   "license": "ISC",
