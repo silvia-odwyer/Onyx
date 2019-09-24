@@ -42,17 +42,25 @@ module.exports = class AvatarCommand extends commando.Command {
         }
         // User Wants Someone Else's Avatar
         else if (msg_array.length === 1) {
-            // Need to check if the user is actually in the server
 
-                // map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
-                var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
-                avatar_link = avatar_link.substring(0, avatar_link.length - 4);
-                avatar_link += "1024" // Photo can only be 1024 in size.
-                msg.channel.send(avatar_link);
-            
-            // catch (error) {
-            //     msg.channel.send("404: That User Doesn't Exist :(")
-            // }
+				if ( msg_array[1].contains("@"){
+					// get avatar by @mention
+					
+					
+					// map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
+					var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
+					avatar_link = avatar_link.substring(0, avatar_link.length - 4);
+					avatar_link += "1024" // Photo can only be 1024 in size.
+				}
+				else{
+					// get avatar by userid
+					
+					let userid = msg_array[1];
+					user = await client.fetchUser(userid, true)
+						  .catch(error => console.log(error) );
+					let avatar_link = (user !== null && user !== undefined) ? user.displayAvatarURL : "Invalid user id \"" + userid + "\".";
+				}
+				msg.channel.send(avatar_link);
         }
         else {
             msg.reply("I can only send one avatar per command.")
