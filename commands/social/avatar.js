@@ -22,7 +22,7 @@ module.exports = class AvatarCommand extends commando.Command {
     async run(msg, args) {
         console.log(args.length)
         var msg_array = args.split(" ");
-     
+        console.log("array", msg_array);
         var user = ""
 
         // User Wants Their Avatar
@@ -34,7 +34,7 @@ module.exports = class AvatarCommand extends commando.Command {
             var randomCompliment = avatar_compliments[randomNumber];
 
             msg.channel.send(randomCompliment + "\n" + msg.author.avatarURL);
-            for (var i = 0; i < 10; i += 1) {
+            for (var i = 0; i < 3; i += 1) {
                 var randomNumber = getRandomNumber(0, happy_emoji.length - 1);
                 var randomEmoji = happy_emoji[randomNumber];
                 msg.react(randomEmoji)
@@ -42,23 +42,29 @@ module.exports = class AvatarCommand extends commando.Command {
         }
         // User Wants Someone Else's Avatar
         else if (msg_array.length === 1) {
-
-				if ( msg_array[1].contains("@"){
-					// get avatar by @mention
-					
-					
-					// map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
-					var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
-					avatar_link = avatar_link.substring(0, avatar_link.length - 4);
-					avatar_link += "1024" // Photo can only be 1024 in size.
+            let name = String(msg_array[0]);
+            console.log(name);
+			if ( name.startsWith('<@') && name.endsWith('>')){
+			    // get avatar by @mention
+				console.log("mention");
+				// map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
+				var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
+				avatar_link = avatar_link.substring(0, avatar_link.length - 4);
+				avatar_link += "1024" // Photo can only be 1024 in size.
 				}
-				else{
+				else {
 					// get avatar by userid
-					
-					let userid = msg_array[1];
-					user = await client.fetchUser(userid, true)
-						  .catch(error => console.log(error) );
-					let avatar_link = (user !== null && user !== undefined) ? user.displayAvatarURL : "Invalid user id \"" + userid + "\".";
+                    let userid = name;
+                
+                    if (userid.startsWith('!')) {
+                        userid = userid.slice(1);
+                    }
+                    console.log("user id", userid);
+
+					user = await this.client.fetchUser(userid, true)
+						  .catch(error => console.log(error) );                    
+
+                          avatar_link = (user !== null && user !== undefined) ? user.displayAvatarURL : "Invalid user id \"" + userid + "\".";
 				}
 				msg.channel.send(avatar_link);
         }
