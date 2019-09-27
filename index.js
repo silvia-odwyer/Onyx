@@ -24,6 +24,7 @@ const client = new commando.Client({
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 var bot_prefix = "-";
 client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}`);
@@ -70,6 +71,7 @@ client
     console.log(`PREFIX CHANGE REQUEST: ${prefix}`);
   })
   .on("commandStatusChange", (guild, command, enabled) => {
+
     var message = `Command ${command.groupID}:${command.memberName} ${
       enabled ? "enabled" : "disabled"
     } ${guild ? `in guild ${guild.name} (${guild.id})` : "globally"}.`;
@@ -83,6 +85,11 @@ client
 		`);
   })
   .on("message", async msg => {
+
+    let commands = ["card", "playmusic", "gift", "wave", "acronym", "yt", "ask", "photo", "population", "pixabay", "synonyms", "define", "old-define", "bitcoin", "emoji", "name", "qr+",
+    "rsticker", "gif", "meme", "meme_templates", "sticker", "trending-gif", "word2gif", "word2sticker", "neo", "earth", "iss", "astronauts", "cats", "ascii-faces", "captcha", "xkcd", "qr", "rhyme", "reverse", 
+    "pyramid", "random-case", "replace-b", "letter-em", "1337", "emojify", "binary", "card", "avatar", "wave", "poke", "info", "creator", "idea", "server", "invite"];
+
     if (msg.author.bot) return;
     // || msg.channel.id === silvia_channel_id
     // Check Prefix
@@ -96,13 +103,17 @@ client
     }
 
     if (msg.content.split(" ")[0] === "-" || msg.content.split("")[0] === "-") {
-      // Logging
-      message = `${msg.content} Server: ${msg.guild.name} Server Count: ${
-        msg.guild.memberCount
-      } Region: ${msg.guild.region} Author: ${msg.author} Timestamp: ${
-        msg.createdTimestamp
-      } Date: ${msg.createdAt}`;
-      console.log(message);
+      let cmd_name = msg.content.split(" ")[0].substring(1, msg.content.length);
+      console.log("cmd name", cmd_name[0]);
+      if (commands.includes(cmd_name)) {
+        // Logging
+        message = `${msg.content} Server: ${msg.guild.name} Server Count: ${
+          msg.guild.memberCount
+        } Region: ${msg.guild.region} Timestamp: ${
+          msg.createdTimestamp
+        } Date: ${msg.createdAt}`;
+        console.log(message);
+      }
       try {
         client.channels.get(channel_id).send(`${message}`);
       } catch (error) {
