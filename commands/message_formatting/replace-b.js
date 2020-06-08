@@ -31,18 +31,6 @@ module.exports = class ReplaceBCommand extends commando.Command {
 
     async run(msg, { text }) {
 
-
-        // WITHOUT ASYNC/AWAIT
-        // sql.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`).then(row => {
-        //     if (!row) {
-        //         prefix = client.commandPrefix;
-        //     } else {
-
-        //     }
-        // }).catch(() => {
-        //     console.error;
-        // });
-
         var string = text.toLowerCase();
 
         var reply = "";

@@ -3,8 +3,7 @@ const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 const request = require("request");
 const formData = require('form-data'); // Needed for sending POST requests to servers.
-var giphy_creds_obj = require("giphy_creds.json");
-var giphy_api_key = giphy_creds_obj["api_key"];
+var giphy_api_key = process.env.GIPHY_API_KEY;
 var name = "word2sticker"
 module.exports = class WordToStickerCommand extends commando.Command {
     constructor(client) {

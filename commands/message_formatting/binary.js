@@ -48,7 +48,7 @@ module.exports = class BinaryCommand extends commando.Command {
             var translatedLetter = "";
         
             // EXTRACTING THE APPROPRIATE CHARACTER LIST.
-            var font_cmds_object = require('./assets/font_lists.json');
+            var font_cmds_object = require('../../assets/font_lists.json');
             var characterList = font_cmds_object[fontList];
         
             for (var i = 0; i < fmt_array.length; i += 1) {

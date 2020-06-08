@@ -1,7 +1,8 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-var emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
+var emoji = require("emojilib") // A JSON file containing emoji and their English meanings.
+emoji = emoji.lib;
 
 var name = "emoji"
 module.exports = class GIFCommand extends commando.Command {

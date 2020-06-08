@@ -1,8 +1,8 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-var unsplash_creds = require("unsplash_creds.json")
-var unsplash_client_id = unsplash_creds["client_id"]
+const unsplash_client_id = process.env.UNSPLASH_API_KEY;
+
 var name = "photo"
 module.exports = class PhotoCommand extends commando.Command {
     constructor(client) {

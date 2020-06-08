@@ -1,8 +1,8 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-const wolfram_alpha_obj = require("wolfram_alpha.json");
-const wolfram_alpha_id = wolfram_alpha_obj["app_id"];
+const wolfram_alpha_id = process.env.WOLFRAM_ALPHA_API_ID;
+
 var name = "name"
 module.exports = class AskCommand extends commando.Command {
     constructor(client) {

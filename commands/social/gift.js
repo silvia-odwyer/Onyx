@@ -1,7 +1,6 @@
 const commando = require("discord.js-commando");
 const fetch = require("node-fetch");
-const giphy = require("giphy_creds.json");
-const giphy_api_key = giphy["api_key"];
+const giphy_api_key = process.env.GIPHY_API_KEY;
 
 module.exports = class GiftCommand extends commando.Command {
   constructor(client) {

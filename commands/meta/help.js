@@ -20,7 +20,7 @@ module.exports = class HelpCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        var commands_info = require("./assets/commands_info.json")
+        var commands_info = require("../../assets/commands_info.json")
         var channel_type = msg.message.channel.type;
 
         var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]

@@ -1,7 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 
-
 var name = "reverse"
 module.exports = class ReverseCommand extends commando.Command {
     constructor(client) {

@@ -1,11 +1,8 @@
-let token_obj = require(`token.json`);
-var token = token_obj["token"];
-let silvia_channel_id_obj = require(`silvia_channel_id.json`);
-var silvia_channel_id = silvia_channel_id_obj["silvia_channel_id"];
-let owner_id_obj = require(`owner_discord_id.json`);
-var owner_discord_id = owner_id_obj["owner_discord_id"];
-var report_channel = require("report_channel.json");
-var channel_id = report_channel["channel"];
+require('dotenv').config();
+
+var token = process.env.TOKEN;
+var owner_discord_id = process.env.OWNER_DISCORD_ID;
+var channel_id = process.env.LOGGING_CHANNEL_ID;
 
 // NPM MODULES
 const commando = require("discord.js-commando");
@@ -107,9 +104,7 @@ client
       console.log("cmd name", cmd_name[0]);
       if (commands.includes(cmd_name)) {
         // Logging
-        message = `${msg.content} Server: ${msg.guild.name} Server Count: ${
-          msg.guild.memberCount
-        } Region: ${msg.guild.region} Timestamp: ${
+        message = `${msg.content} Timestamp: ${
           msg.createdTimestamp
         } Date: ${msg.createdAt}`;
         console.log(message);

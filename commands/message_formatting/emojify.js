@@ -1,6 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
-const emoji = require("emojilib/emojis.json") // A JSON file containing emoji and their English meanings.
+const emoji = require("emojilib") // A JSON file containing emoji and their English meanings.
 
 var name = "emojify"
 module.exports = class EmojifyCommand extends commando.Command {
@@ -27,9 +27,8 @@ module.exports = class EmojifyCommand extends commando.Command {
     }
 
     async run(msg, { text }) {
-
         var word = text;
-        var keys = Object.keys(emoji);
+        var keys = Object.keys(emoji.lib);
 
         var msg_array = text.split(" ");
         

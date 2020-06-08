@@ -2,8 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 
-var pixabay_creds = require("pixabay_creds.json")
-var pixabay_api_key = pixabay_creds["api_key"];
+var pixabay_api_key = process.env.PIXABAY_API_KEY;
 
 var name = "pixabay"
 module.exports = class PixabayCommand extends commando.Command {

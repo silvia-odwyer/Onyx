@@ -2,8 +2,8 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 
-var giphy_creds_obj = require("giphy_creds.json");
-var giphy_api_key = giphy_creds_obj["api_key"];
+var giphy_api_key = process.env.GIPHY_API_KEY;
+
 var name = "word2gif"
 module.exports = class WordToGIFCommand extends commando.Command {
     constructor(client) {
