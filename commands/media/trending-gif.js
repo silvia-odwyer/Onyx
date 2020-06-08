@@ -30,7 +30,7 @@ module.exports = class TrendingGIFCommand extends commando.Command {
             .then((out) => {
                 console.log(out)
                 var randomNumber = getRandomNumber(0, limit - 1)
-                var giphy_link = out.data[randomNumber].bitly_gif_url
+                var giphy_link = out.data[randomNumber].embed_url;
                 console.log(giphy_link)
                 msg.reply(giphy_link)
                 

@@ -93,7 +93,7 @@ client
     var guild_id = msg.channel.guild.id;
     // var row = await sqlite.get(`SELECT * FROM settings WHERE guild ="${guild_id}"`);
     var prefix;
-    var message;
+    var message = "Message";
 
     if (msg.channel.type === "dm") {
       client.channels.get(channel_id).send(`${msg.content}`);
@@ -108,12 +108,14 @@ client
           msg.createdTimestamp
         } Date: ${msg.createdAt}`;
         console.log(message);
+
+        try {
+          client.channels.get(channel_id).send(`${message}`);
+        } catch (error) {
+          console.log(error);
+        }
       }
-      try {
-        client.channels.get(channel_id).send(`${message}`);
-      } catch (error) {
-        console.log(error);
-      }
+
     } else if (msg.isMentioned(client.user)) {
       if (msg.content.length === 21) {
         // Just Onyx was mentioned and no other text accompanied it.

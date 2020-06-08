@@ -1,6 +1,4 @@
 const commando = require('discord.js-commando');
-const oneLine = require('common-tags').oneLine;
-const fetch = require('node-fetch');
 var emoji = require("emojilib") // A JSON file containing emoji and their English meanings.
 emoji = emoji.lib;
 var youtube_api_key = process.env.YOUTUBE_API_KEY;
@@ -20,14 +18,14 @@ module.exports = class YTCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        var text = args;
+        var search_query = args;
+        console.log(search_query);
         if (args.length < 1 ) {
             msg.reply("Make sure to add some search terms so I know what YouTube video to get you :eyes:\nEg: `-yt Swedish House Mafia greyhound`");
         }
 
         else {
-
-            var search_query = msg.content.slice(4, msg.content.length);
+            console.log("SEARCH QUERY", search_query);
 
             const { google } = require('googleapis');
     
@@ -43,7 +41,7 @@ module.exports = class YTCommand extends commando.Command {
                     q: search_term,
                     type: 'video'
                 });
-                // console.log(res.data);
+
                 if (res.data.pageInfo.totalResults === 0) {
                     msg.reply("No results found :( Try another search maybe?")
                 }

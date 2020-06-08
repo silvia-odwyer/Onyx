@@ -40,7 +40,7 @@ module.exports = class WordToStickerCommand extends commando.Command {
                     else {
                         console.log(out)
                         var randomNumber = getRandomNumber(0, limit - 1);
-                        var giphy_link = out.data.bitly_gif_url
+                        var giphy_link = out.data.embed_url;
                         console.log(giphy_link)
                         msg.reply(giphy_link)
                         // Send an embed with a local image inside

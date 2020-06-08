@@ -34,13 +34,12 @@ module.exports = class StickerCommand extends commando.Command {
             fetch(giphy_endpoint)
                 .then(res => res.json())
                 .then((out) => {
-    
                     if (out.data.length === 0) {
                         msg.reply("Couldn't find any matching stickers :(")
                     }
                     else {
                         var randomNumber = getRandomNumber(0, limit - 1);
-                        var giphy_link = out.data[randomNumber].bitly_gif_url
+                        var giphy_link = out.data[randomNumber].embed_url;
                         console.log(giphy_link)
                         msg.reply(giphy_link)
                         // Send an embed with a local image inside
