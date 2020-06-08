@@ -190,9 +190,29 @@ To run Onyx on your own server:
 
 1. Clone this repo. 
 2. Install dependencies with `npm install`.
-3. Get the required API keys and fill them in. 
+3. Create a .env file at the root of the directory, and fill in the API keys and Discord IDs for the following:
+
+```
+TOKEN=
+WOLFRAM_ALPHA_API_ID=
+GIPHY_API_KEY=
+IMGFLIP_PASS=
+PIXABAY_API_KEY=
+UNSPLASH_API_KEY=
+YOUTUBE_API_KEY=
+OWNER_DISCORD_ID=
+LOGGING_CHANNEL_ID=
+```
+
+The LOGGING_CHANNEL_ID is the channel where you want your logs to go to. When the bot leaves or is added to a server, for example,
+a message notifying you of this will be sent to the logging channel with the specified ID.
+
 4. `npm start`
 
+Make sure to **never** commit your `.env` file to version control, as your token and API keys will get leaked and your bot 
+could become compromised. 
+
+If the bot is setup successfully and the token is correct, you'll start to see logging appear in the console. ^^
 
 ## Test Onyx Out In This Support Server
 If you want to test Onyx out before adding her to your server, [just join this server](https://discord.gg/cSWHaEK), and leave when you want.
