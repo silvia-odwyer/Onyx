@@ -83,7 +83,7 @@ client
   })
   .on("message", async msg => {
 
-    let commands = ["card", "playmusic", "gift", "wave", "acronym", "yt", "ask", "photo", "population", "pixabay", "synonyms", "define", "old-define", "bitcoin", "emoji", "name", "qr+",
+    let commands = ["card", "gift", "wave", "yt", "ask", "photo", "population", "pixabay", "synonyms", "define", "old-define", "bitcoin", "emoji", "name", "qr+",
     "rsticker", "gif", "meme", "meme_templates", "sticker", "trending-gif", "word2gif", "word2sticker", "neo", "earth", "iss", "astronauts", "cats", "ascii-faces", "captcha", "xkcd", "qr", "rhyme", "reverse", 
     "pyramid", "random-case", "replace-b", "letter-em", "1337", "emojify", "binary", "card", "avatar", "wave", "poke", "info", "creator", "idea", "server", "invite"];
 
@@ -123,11 +123,8 @@ client
         msg.channel.send("You can also mention me before commands also.");
         msg.channel.send("Examples:\n @Onyx sticker tropical\n -sticker lol");
       }
-      message = `Message: ${msg.content} Author: ${msg.author} Timestamp: ${
-        msg.createdTimestamp
-      } Date: ${msg.createdAt} Server: ${msg.guild.name} Server Count: ${
-        msg.guild.memberCount
-      } Region: ${msg.guild.region}`;
+      message = `Message: ${msg.content} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server Count: ${
+        msg.guild.memberCount} Region: ${msg.guild.region}`;
       console.log(message);
       console.log(msg.content.length);
       try {
@@ -184,11 +181,6 @@ client.on("guildCreate", guild => {
           name: "Seeing All Of My Commands",
           value:
             "In this DM, you can see all of my commands by typing `help` and you can run commands in this DM by typing `command` (I don't require any prefix in DMs)."
-        },
-        {
-          name: "New 2019 Commands!",
-          value:
-            "Play music with `-playmusic`, send gifts with `-gift` and eCards with `-card`\nThese are new to 2019!"
         },
         {
           name: ":film_frames: Watch YouTube Videos",
