@@ -1,9 +1,11 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-const request = require("request");
+const { URLSearchParams } = require('url');
 
 var imgflip_pass = process.env.IMGFLIP_PASS;
+var imgflip_username = process.env.IMGFLIP_USERNAME;
+
 var meme_dict = { "Idon'talways": "61532", "waitingskeleton": "4087833", "onedoesnotsimply": "61579", "braceyourselves": "61546", "party": "5496396", "fwp": "61539", "oprah": "28251713", "office": "563423", "wonka": "61582", "bf": "112126428", "yodawg": "101716", "spongebob": "102156234", "rollsafe": "89370399", "wtf": "245898", "toodamnhigh": "61580", "spongebob": "61581", "car": "124822590", "skeptical": "61520", "allthethings": "61533", "whatif": "100947", "grandma": "61556", "thenisaid": "922147" }
 
 var name = "meme"
@@ -36,11 +38,6 @@ module.exports = class MemeCommand extends commando.Command {
                 var msg_array = text.split(" ");
                 var msg_content = msg.message.content;
 
-                // var first_words_length = msg_array[0].length + msg_array[1].length + 2;
-                // console.log(first_words_length)
-                // var text = msg_content.slice(first_words_length, msg_content.length);
-                // console.log(text)
-
                 var template = msg_array[0]
 
                 var meme_text = text.slice(template.length + 1, text.length).split("-");
@@ -51,24 +48,22 @@ module.exports = class MemeCommand extends commando.Command {
 
                 var meme_type_id = meme_dict[template];
 
-                var formData = {
-                    // Pass a simple key-value pair
-                    template_id: meme_type_id,
-                    username: 'silvod9',
-                    password: imgflip_pass,
-                    text0: top_text,
-                    text1: bottom_text
-                };
-                request.post({ url: 'https://api.imgflip.com/caption_image', formData: formData }, function optionalCallback(err, httpResponse, body) {
-                    if (err) {
-                        return console.error('upload failed:', err);
-                    }
-                    console.log('M3me request successful!  Server responded with:', body);
-                    var json_m3me_obj = JSON.parse(body);
-                    var m3me_url = json_m3me_obj.data.url;
-                    console.log(m3me_url)
-                    msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
-                });
+
+                const params = new URLSearchParams();
+                params.append('template_id', meme_type_id);
+                params.append("username", imgflip_username)
+                params.append("password", imgflip_pass);
+                params.append("text0", top_text);
+                params.append("text1", bottom_text)
+                
+                fetch('https://api.imgflip.com/caption_image', { method: 'POST', body: params })
+                    .then(res => res.json())
+                    .then(json => {
+                    console.log('M3me request successful!  Server responded with:', json);
+                     var m3me_url = json.data.url;
+                     msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
+                    });
+
         }
         catch (error) {
             msg.reply("Make sure your command is like so: `-meme waitingskeleton This is top text-This is bottom text`\nIf your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")

@@ -1,6 +1,8 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const sqlite = require('sqlite');
+const Discord = require('discord.js');
+
 sqlite.open("./database.sqlite3");
 
 var name = "help"
@@ -21,9 +23,9 @@ module.exports = class HelpCommand extends commando.Command {
 
     async run(msg, args) {
         var commands_info = require("../../assets/commands_info.json")
-        var channel_type = msg.message.channel.type;
+        var channel_type = msg.channel.type;
 
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+        var colour_array = ["121199", "344700", "1308979", "1671185", "108816", "1609885", "615096"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
 
@@ -58,80 +60,37 @@ module.exports = class HelpCommand extends commando.Command {
         if (args.length === 0) {
 
             // Command Categories
-            var new_cmds = "`card` `playmusic` and `stop` `gift` `wave`"
-            var search_cmds = "`acronym` `yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
+            var search_cmds = "`yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
             var fun_cmds = " `cats` `ascii-faces` `captcha` `xkcd` `qr` `rhyme`"
             var fmt_cmds = "`reverse` `pyramid` `random-case` `replace-b` `letter-em` `1337` `emojify` `adv1337` `binary`"
-            var social_cmds = "`card` `avatar` `wave` `poke`"
+            var social_cmds = "`card` `gift` `avatar` `wave` `poke`"
             var meta_cmds = "`info` `creator` `idea` `server` `invite`"
 
+        const helpEmbed = new Discord.MessageEmbed()
+            .setColor(randomColour)
+            .setTitle("Onyx Commands")
+            .setURL('https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/')
+            .setAuthor('Onyx', this.client.user.avatarURL, 'https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website')
+            .setDescription(prefix_message)
+            .setThumbnail(this.client.user.avatarURL)
+            .addFields(
+                { name: 'Search Commands :information_source:', value: search_cmds },
+                { name: 'Media Commands :film_frames:', value: media_cmds },
+                { name: 'Social Commands :wave: :grinning: ', value: social_cmds},
+                { name: 'Fun Commands ✨', value: fun_cmds},
+                { name: 'Space Commands 🌌🌃', value: space_cmds},
+                { name: 'Message Formatting Commands :incoming_envelope: :speech_balloon: ', value: fmt_cmds},
+                { name: 'Meta Commamds ', value: meta_cmds},
+                { name: 'Get More Info. On A Command ', value: "To get more info. on a command, type `" + `${prefix}help` + " command`" + "\neg: `" + prefix + "help word2sticker`" },
+                { name: 'Prepend My Prefix - Before A Command', value: "Prepend - before any of the commands, or mention me before a command.\nEg: -sticker tropical\n@Onyx sticker lol" },
+                { name: 'For More Info on Commands', value: "For a complete command table, with info on usage, check out [my command page](https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/commands.html)." },
+                )
+            .setTimestamp()
+
             msg.channel.send({
-                embed: {
-                    color: randomColour,
-                    title: `Onyx Commands`,
-                    description: prefix_message,
-                    author: {
-                        name: "Onyx",
-                        icon_url: this.client.user.avatarURL
-                    },
-                    thumbnail: {
-                        url: this.client.user.avatarURL
-                    },
-                    fields: [{
-                        name : "New Commands for 2019 :eyes:",
-                        value: new_cmds
-                    },
-                    {
-                        name : "You Can Now Play Music",
-                        value: "With the new 2019 update, you can now play music in a certain genre, such as synthwave or lofi.\nJust type `-play music lofi` and `-stop` if you want Onyx to leave the channel. Check it out!"
-                    },
-                        {
-                        name: "Search Commands :information_source:",
-                        value: search_cmds
-                    },
-                    {
-                        name: "Media Commands :film_frames:",
-                        value: media_cmds
-                    },
-                    {
-                        name: "Social Commands :wave: :grinning: ",
-                        value: social_cmds
-                    },
-                    {
-                        name: "Fun Commands ✨",
-                        value: fun_cmds
-                    },
-                    {
-                        name: "Space Commands 🌌🌃",
-                        value: space_cmds
-                    },
-                    {
-                        name: "Message Formatting Commands :incoming_envelope: :speech_balloon:",
-                        value: fmt_cmds
-                    },
-                    {
-                        name: "Meta Commands",
-                        value: meta_cmds
-                    },
-                    {
-                        name: "Get More Info. On A Command",
-                        value: "To get more info. on a command, type `" + `${prefix}help` + " command`" + "\n\neg: `" + prefix + "help word2sticker`"
-                    },
-                    {
-                        name: "Prepend My Prefix - Before A Command",
-                        value : "Prepend - before any of the commands, or mention me before a command.\nEg: -sticker tropical\n@Onyx sticker lol"
-                    },
-                    {
-                        name: "For More Info on Commands",
-                        value : "For a complete command table, with info on usage, check out [my command page](https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/commands.html)."
-                    }
-                    ],
-                    footer: {
-                        text: "Coded by Silvia923#9909 <3"
-                    }
-                }
+                embed: helpEmbed
             })
 
         }

@@ -1,7 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-const request = require("request");
 
 var name = "qr+"
 module.exports = class MemeCommand extends commando.Command {
