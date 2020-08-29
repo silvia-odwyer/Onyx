@@ -1,8 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-const request = require("request");
-
 var giphy_api_key = process.env.GIPHY_API_KEY;
 
 var name = "wave"

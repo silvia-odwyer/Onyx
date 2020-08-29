@@ -31,7 +31,7 @@ module.exports = class PollCommand extends commando.Command {
         var randomColour = colour_array[randomNumber];
 
         var poll_question = text;
-        msg.channel.send("POLL");
+        msg.channel.send(poll_question);
         
         msg.channel.send(
             {

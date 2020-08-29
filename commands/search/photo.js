@@ -2,6 +2,7 @@ const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
 const unsplash_client_id = process.env.UNSPLASH_API_KEY;
+const Discord = require('discord.js');
 
 var name = "photo"
 module.exports = class PhotoCommand extends commando.Command {
@@ -26,7 +27,7 @@ module.exports = class PhotoCommand extends commando.Command {
 
         else {  
             // Necessary for choosing random colours for rich embeds
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["12119", "344700", "13089", "167118", "108816", "16098", "61509"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
 
@@ -49,24 +50,26 @@ module.exports = class PhotoCommand extends commando.Command {
                         }
                         var first_img_link = out.results[0].urls.raw
                         var first_img_user = out.results[0].user.username
-                        var random_img_link = out.results[randomImageIndex].urls.raw
+                        var random_img_link = out.results[randomImageIndex].urls.raw;
+
+                        console.log("random img link, ", out.results[randomImageIndex]);
                         var random_img_user = out.results[randomImageIndex].user.username
 
+                        const photoEmbed = new Discord.MessageEmbed()
+                        .setColor(randomColour)
+                        .setTitle(`Images From Unsplash Related To ${search_query}`)
+                        .setURL('https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/')
+                        .setAuthor('Onyx', this.client.user.avatarURL, 'https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website')
+                        .setDescription(`[${random_img_user}](https://unsplash.com/@${random_img_user}) on [Unsplash](https://unsplash.com)`)
+                        .setImage(random_img_link)
+                        .setThumbnail(this.client.user.avatarURL)
+                        .addFields(
+                            { name: 'Original Image', value: `[Original image found here](${out.results[randomImageIndex].links.html})`},
+                           )
                         msg.channel.send({
-                            embed: {
-                                color: randomColour,
-                                description: `[${random_img_user}](https://unsplash.com/@${random_img_user}) on [Unsplash](https://unsplash.com)`,
-                                title: `Images From Unsplash Related To ${search_query}`,
-                                image: {
-                                    url: random_img_link
-                                },
-                                fields: [
-                                    {
-                                        name: "Original Image",
-                                        value: "[Original image found here](https://unsplash.com)"
-                                    }]
-                            }
+                            embed: photoEmbed
                         });
+                        
                     }
 
                 })

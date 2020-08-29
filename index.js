@@ -26,7 +26,7 @@ var bot_prefix = "-";
 client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}`);
   client.user.setActivity(
-    `${bot_prefix}help | Running on ${client.guilds.size} servers`
+    `${bot_prefix}help | Running on ${client.guilds.cache.size} servers`
   );
 });
 
@@ -48,9 +48,10 @@ client
 // Command specific event listeners that come with the Commando module
 client
   .on("commandError", (cmd, err) => {
+    console.log("command error");
     if (err instanceof commando.FriendlyError) return;
     var message = `Error in command ${cmd.groupID}:${cmd.memberName}, ${err}`;
-    client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+    client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
   })
   .on("commandBlocked", (msg, reason) => {
     console.log(oneLine`
@@ -63,7 +64,7 @@ client
     var message = `Prefix ${
       prefix === "" ? "removed" : `changed to ${prefix || "the default"}`
     } ${guild ? `in guild ${guild.name} (${guild.id})` : "globally"}.`;
-    client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+    client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
 
     console.log(`PREFIX CHANGE REQUEST: ${prefix}`);
   })
@@ -72,7 +73,7 @@ client
     var message = `Command ${command.groupID}:${command.memberName} ${
       enabled ? "enabled" : "disabled"
     } ${guild ? `in guild ${guild.name} (${guild.id})` : "globally"}.`;
-    client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+    client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
   })
   .on("groupStatusChange", (guild, group, enabled) => {
     console.log(oneLine`
@@ -96,7 +97,7 @@ client
     var message = "Message";
 
     if (msg.channel.type === "dm") {
-      client.channels.get(channel_id).send(`${msg.content}`);
+      client.channels.cache.get(channel_id).send(`${msg.content}`);
     }
 
     if (msg.content.split(" ")[0] === "-" || msg.content.split("")[0] === "-") {
@@ -110,13 +111,13 @@ client
         console.log(message);
 
         try {
-          client.channels.get(channel_id).send(`${message}`);
+          client.channels.cache.get(channel_id).send(`${message}`);
         } catch (error) {
           console.log(error);
         }
       }
 
-    } else if (msg.isMentioned(client.user)) {
+    } else if (msg.mentions.has(client.user)) {
       if (msg.content.length === 21) {
         // Just Onyx was mentioned and no other text accompanied it.
         msg.reply("My prefix is -");
@@ -128,7 +129,7 @@ client
       console.log(message);
       console.log(msg.content.length);
       try {
-        client.channels.get(channel_id).send(`${message}`);
+        client.channels.cache.get(channel_id).send(`${message}`);
       } catch (error) {
         console.log(error);
       }
@@ -144,7 +145,7 @@ client.on("guildCreate", guild => {
     guild.memberCount
   } members! :D NOW IN: I'm now in ${client.guilds.size} servers :D`;
   console.log(message);
-  client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+  client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
   client.user.setActivity(
     `${bot_prefix}help | Running on ${client.guilds.size} servers`
   );
@@ -218,7 +219,7 @@ client.on("guildDelete", guild => {
   client.user.setActivity(
     `${bot_prefix}help | Running on ${client.guilds.size} servers`
   );
-  client.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+  client.cache.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
 });
 
 client.on("guildMemberAdd", member => {

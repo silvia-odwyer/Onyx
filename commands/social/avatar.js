@@ -33,7 +33,7 @@ module.exports = class AvatarCommand extends commando.Command {
             var randomNumber = getRandomNumber(0, avatar_compliments.length - 1);
             var randomCompliment = avatar_compliments[randomNumber];
 
-            msg.channel.send(randomCompliment + "\n" + msg.author.avatarURL);
+            msg.channel.send(randomCompliment + "\n" + msg.author.displayAvatarURL());
             for (var i = 0; i < 3; i += 1) {
                 var randomNumber = getRandomNumber(0, happy_emoji.length - 1);
                 var randomEmoji = happy_emoji[randomNumber];
@@ -48,9 +48,8 @@ module.exports = class AvatarCommand extends commando.Command {
 			    // get avatar by @mention
 				console.log("mention");
 				// map returns a list, in which I get the first element, then remove the last four chars of the link, so that the size can be changed.
-				var avatar_link = msg.message.mentions.users.map(u => u.avatarURL)[0]
-				avatar_link = avatar_link.substring(0, avatar_link.length - 4);
-				avatar_link += "1024" // Photo can only be 1024 in size.
+                var avatar_link = msg.mentions.users.map(u => u.avatarURL())[1];
+
 				}
 				else {
 					// get avatar by userid

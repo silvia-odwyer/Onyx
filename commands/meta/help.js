@@ -25,7 +25,7 @@ module.exports = class HelpCommand extends commando.Command {
         var commands_info = require("../../assets/commands_info.json")
         var channel_type = msg.channel.type;
 
-        var colour_array = ["121199", "344700", "1308979", "1671185", "108816", "1609885", "615096"]
+        var colour_array = ["121199", "344700", "130897", "167115", "108816", "160988", "615096"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
 
