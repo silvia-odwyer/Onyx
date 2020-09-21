@@ -29,7 +29,7 @@ module.exports = class CaptchaCommand extends commando.Command {
             console.log(args);
             var text = args;
             console.log(text);
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["12119", "34403", "13082", "16758", "10863", "16098", "6162"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
             text = "captcha " + text;

@@ -3,7 +3,6 @@ const oneLine = require('common-tags').oneLine;
 const fetch = require("node-fetch");
 const wolfram_alpha_id = process.env.WOLFRAM_ALPHA_API_ID;
 
-
 var name = "define"
 module.exports = class DefineCommand extends commando.Command {
     constructor(client) {
@@ -29,14 +28,15 @@ module.exports = class DefineCommand extends commando.Command {
         else {
 
             // Necessary for choosing random colours for rich embeds
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["12116", "37003", "1392", "1658", "1063", "16091", "61562"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
 
             var search_term = text;
-            search_term = "define" + search_term;
+            search_term = "define " + search_term;
             var url_encoded_search_term = search_term.split(" ").join("%20")
             var ask_link = `http://api.wolframalpha.com/v2/query?appid=${wolfram_alpha_id}&input=${url_encoded_search_term}&output=json`
+            console.log("ask link: ", ask_link);
 
             fetch(ask_link)
                 .then(res => res.json())
@@ -47,10 +47,9 @@ module.exports = class DefineCommand extends commando.Command {
                     }
                     else {
                         var interpretation = out.queryresult.pods[0].subpods[0].plaintext;
-                        console.log(interpretation)
 
                         var answer = out.queryresult.pods[1].subpods[0].plaintext;
-                        console.log(answer)
+
 
                         msg.channel.send({
                             embed: {

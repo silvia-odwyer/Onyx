@@ -1,6 +1,7 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
+const Discord = require('discord.js');
 
 var pixabay_api_key = process.env.PIXABAY_API_KEY;
 
@@ -26,7 +27,7 @@ module.exports = class PixabayCommand extends commando.Command {
 
         else {
             // Necessary for choosing random colours for rich embeds
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["12119", "34472", "1308979", "1671182", "108812", "160988", "6152"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
 
@@ -52,15 +53,21 @@ module.exports = class PixabayCommand extends commando.Command {
                             randomNumber = getRandomNumber(0, 9)
                         }
                         var random_img_link = out.hits[randomNumber].largeImageURL;
+
+                        console.log("result: ", out.hits[randomNumber]);
+
+                        const photoEmbed = new Discord.MessageEmbed()
+                        .setColor(randomColour)
+                        .setTitle(`Public Domain Image From Pixabay Related To ${search_term}`)
+                        .setURL('https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/')
+                        .setDescription(`[Original image found here](${out.hits[randomNumber].pageURL}) on [Pixabay](https://pixabay.com)`)
+                        .setImage(random_img_link)
+                        .setThumbnail(this.client.user.avatarURL)
+                        .addFields(
+                            { name: 'Original Image', value: `[Original image found here](${out.hits[randomNumber].pageURL})`},
+                           )
                         msg.channel.send({
-                            embed: {
-                                color: randomColour,
-                                description: `[Original image found here](${out.hits[randomNumber].pageURL}) on [Pixabay](https://pixabay.com)`,
-                                title: `Public Domain Image From Pixabay Related To ${search_term}`,
-                                image: {
-                                    url: random_img_link
-                                },
-                            }
+                            embed: photoEmbed
                         });
                     }
                 })

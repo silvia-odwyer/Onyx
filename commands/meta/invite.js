@@ -21,7 +21,7 @@ module.exports = class InviteCommand extends commando.Command {
 
     async run(msg, args) {
         // Necessary for choosing random colours for rich embeds
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+        var colour_array = ["11996", "4470", "30897", "67158", "1163", "16851", "6152"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
 

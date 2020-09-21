@@ -60,10 +60,10 @@ module.exports = class HelpCommand extends commando.Command {
         if (args.length === 0) {
 
             // Command Categories
-            var search_cmds = "`yt` `ask` `photo` `population` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
+            var search_cmds = "`yt` `ask` `photo` `pixabay` `synonyms` `define` `old-define` `bitcoin`  `emoji` `name` "
             var media_cmds = "`gif` `meme` `meme_templates` `qr+` `rsticker` `sticker` `trending-gif` `word2gif` `word2sticker`"
             var space_cmds = "`neo` `earth` `iss` `astronauts` "
-            var fun_cmds = " `cats` `ascii-faces` `captcha` `xkcd` `qr` `rhyme`"
+            var fun_cmds = " `cats` `ascii-faces` `captcha` `qr` `rhyme`"
             var fmt_cmds = "`reverse` `pyramid` `random-case` `replace-b` `letter-em` `1337` `emojify` `adv1337` `binary`"
             var social_cmds = "`card` `gift` `avatar` `wave` `poke`"
             var meta_cmds = "`info` `creator` `idea` `server` `invite`"

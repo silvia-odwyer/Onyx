@@ -1,7 +1,6 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require('node-fetch');
-const request = require("request");
 
 module.exports = class GitReposCommand extends commando.Command {
     constructor(client) {

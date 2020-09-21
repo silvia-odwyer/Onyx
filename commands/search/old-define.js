@@ -18,7 +18,7 @@ module.exports = class OldDefineCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        var ancient_dictionary = require("./assets/dictionary.json"); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
+        var ancient_dictionary = require("../../assets/dictionary.json"); // This is a JSON dictionary of words, with ancient definitions from the 19th and 20th Century.
 
         var text = args;
         if (args.length < 1) {
@@ -26,7 +26,7 @@ module.exports = class OldDefineCommand extends commando.Command {
         }
 
         else {
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["11996", "47003", "189792", "16858", "1063", "16851", "6152"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
     
