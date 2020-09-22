@@ -27,7 +27,7 @@ module.exports = class RhymeCommand extends commando.Command {
 
         else {
 
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+            var colour_array = ["12196", "3443", "13092", "16758", "10863", "16091", "612"]
             var randomNumber = getRandomNumber(0, colour_array.length - 1);
             var randomColour = colour_array[randomNumber];
             var msg_array = text.split(" ");

@@ -154,13 +154,13 @@ client.on("guildCreate", guild => {
     "I'm honoured to have been added to your server. ^.^ \n \nI come with over 50 media, fun, search, and social commands.\nHere's a quick getting started guide and summary of how to get started."
   );
   var colour_array = [
-    "1211996",
-    "3447003",
-    "13089792",
-    "16711858",
-    "1088163",
-    "16098851",
-    "6150962"
+    "1996",
+    "7003",
+    "1792",
+    "1858",
+    "1088",
+    "1609",
+    "6150"
   ];
   var randomNumber = getRandomNumber(0, colour_array.length - 1);
   var randomColour = colour_array[randomNumber];
