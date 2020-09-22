@@ -219,7 +219,8 @@ client.on("guildDelete", guild => {
   client.user.setActivity(
     `${bot_prefix}help | Running on ${client.guilds.size} servers`
   );
-  client.cache.channels.get(channel_id).send(`@Silvia923#9909 ${message}`);
+  client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
+  
 });
 
 client.on("guildMemberAdd", member => {
