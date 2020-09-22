@@ -24,7 +24,7 @@ module.exports = class AstronautsCommand extends commando.Command {
         var astro_link = "http://api.open-notify.org/astros.json";
 
         // Necessary for choosing random colours for rich embeds
-        var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+        var colour_array = ["12996", "34473", "13092", "1678", "1063", "1609", "612"]
         var randomNumber = getRandomNumber(0, colour_array.length - 1);
         var randomColour = colour_array[randomNumber];
 
@@ -35,6 +35,7 @@ module.exports = class AstronautsCommand extends commando.Command {
         fetch(astro_link)
             .then(res => res.json())
             .then((out) => {
+                console.log("response: ", out);
                 var astro_list = out;
                 var number_astronauts = astro_list["number"];
 

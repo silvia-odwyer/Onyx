@@ -26,7 +26,7 @@ module.exports = class WaveCommand extends commando.Command {
     }
 
     async run(msg, { text }) {
-        var sender = msg.message.author;
+        var sender = msg.author;
         var receiver = text.split(" ")[0];
 
         msg.channel.send(`${sender} just waved at ${receiver} :wave:`);

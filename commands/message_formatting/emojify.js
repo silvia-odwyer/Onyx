@@ -27,21 +27,20 @@ module.exports = class EmojifyCommand extends commando.Command {
     }
 
     async run(msg, { text }) {
+        
         var word = text;
-        var keys = Object.keys(emoji.lib);
+        var emoji_keys = Object.keys(emoji.lib);
 
         var msg_array = text.split(" ");
         
-        var msg_array_length = msg_array.length;
-
         var emojified_msg = "";
         var char_matched_emojis = [];
 
-        for (var i = 0; i < msg_array.length; i += 1) {
+        for (var i = 0; i < msg_array.length; i++) {
             char_matched_emojis = [];
             var word = msg_array[i];
 
-            char_matched_emojis = getEmoji(word, emoji, msg);
+            char_matched_emojis = getEmoji(word, emoji.lib, msg);
 
             if (char_matched_emojis.length > 0) {
                 // Get random matched emojis
@@ -60,7 +59,7 @@ module.exports = class EmojifyCommand extends commando.Command {
         
             var matched_emojis = [];
             var char_matched_emojis = [];
-            for (var k = 0; k < keys.length; k += 1) {
+            for (var k = 0; k < keys.length; k++) {
                 var keywords = emoji[keys[k]]["keywords"];
                 if (keys[k] === search_term) {
                     matched_emojis.push(keys[k])

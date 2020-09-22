@@ -30,7 +30,7 @@ module.exports = class IntlSpaceStationCommand extends commando.Command {
 
                 var iss_output = `Latitude: ${latitude}\nLongitude: ${longitude}`
 
-                var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
+                var colour_array = ["1216", "303", "13082", "1658", "1063", "1601", "6162"]
                 var randomNumber = getRandomNumber(0, colour_array.length - 1);
                 var randomColour = colour_array[randomNumber];
             

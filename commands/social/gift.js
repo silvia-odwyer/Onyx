@@ -16,27 +16,29 @@ module.exports = class GiftCommand extends commando.Command {
   }
 
   async run(msg, args) {
+
     if (args.length > 0) {
       let msg_array = args.split(" ");
-      let message = "";
-      var user = "";
-      let receiver = msg.mentions.members.first();
+      let first_arg = msg_array[0];
+
+      if (first_arg.startsWith('<@') && first_arg.endsWith('>')) {
+        first_arg = first_arg.slice(2, -1);
+    
+        if (first_arg.startsWith('!')) {
+          first_arg = first_arg.slice(1);
+        }
+    
+      let receiver = this.client.users.cache.get(first_arg);
 
       console.log(receiver.toString());
 
-      msg.mentions.members.forEach(function(guildMember, guildMemberId) {
-        console.log(guildMember.user.username);
-        receiver = guildMember.user;
-      });
-
-      let sender = msg.message.author;
+      let author = msg.author;
+      console.log("author")
 
       let limit = 20;
 
       let options = ["gifs", "stickers"];
       let ran_number = getRandomNumber(0, options.length - 1);
-
-      let option = options[ran_number];
 
       let giphy_link = `https://api.giphy.com/v1/gifs/trending?rating=g&api_key=${giphy_api_key}&limit=${limit}`;
       // GET A GIPHY GIF
@@ -60,8 +62,7 @@ module.exports = class GiftCommand extends commando.Command {
                 let giphy_gif_link = out.data[randomNumber].embed_url;
             }
 
-            let member_to_send = msg.mentions.members.first();
-            let messages = [`Ooh, look! ${receiver} received a GIFt from ${sender}!\n(It's trending on GIPHY btw)`, `${receiver} just received a trending :earth_africa: GIFt (get the pun? :wink:) from ${sender}!`, `This GIFt is trending :chart_with_upwards_trend: right now on GIPHY! From ${sender} to you ${receiver}`, `Hey ${receiver}! You received a trending :earth_americas: GIFt from ${receiver} :open_mouth:`]
+            let messages = [`Ooh, look! ${receiver} received a GIFt from ${author}!\n(It's trending on GIPHY btw)`, `${receiver} just received a trending :earth_africa: GIFt (get the pun? :wink:) from ${author}!`, `This GIFt is trending :chart_with_upwards_trend: right now on GIPHY! From ${author} to you ${receiver}`, `Hey ${receiver}! You received a trending :earth_americas: GIFt from ${author} :open_mouth:`]
             
             let ranMessage = messages[getRandomNumber(0, messages.length - 1)];
             msg.channel.send(ranMessage);
@@ -72,6 +73,7 @@ module.exports = class GiftCommand extends commando.Command {
           throw err;
         });
     } 
+  }
     
     else {
       // User didn't enter any keywords
