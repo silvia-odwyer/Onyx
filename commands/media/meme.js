@@ -24,30 +24,26 @@ module.exports = class MemeCommand extends commando.Command {
 
     async run(msg, args) {
         var text = args;
-        if (args.split(" ").length < 3) {
+        if (args.split(" ").length < 2) {
             msg.reply("To make a meme, the first word is the command, then the template you want (see templates by typing `meme_templates`), then the top text and bottom text separated by a hyphen, eg: -meme waitingskeleton This is top text-This is bottom text")
         }
 
         else {
-                
-            // Necessary for choosing random colours for rich embeds
-            var colour_array = ["1211996", "3447003", "13089792", "16711858", "1088163", "16098851", "6150962"]
-            var randomNumber = getRandomNumber(0, colour_array.length - 1);
-            var randomColour = colour_array[randomNumber];
+            console.log("running meme command ...");
             try {
                 var msg_array = text.split(" ");
-                var msg_content = msg.message.content;
+                console.log("msg array ", msg_array);
 
-                var template = msg_array[0]
+                var template = msg_array[0];
+                console.log("template: ", template);
 
                 var meme_text = text.slice(template.length + 1, text.length).split("-");
-                console.log(meme_text)
+                console.log("meme text", meme_text)
 
-                var top_text = meme_text[0]
-                var bottom_text = meme_text[1]
+                var top_text = meme_text[0];
+                var bottom_text = meme_text[1];
 
                 var meme_type_id = meme_dict[template];
-
 
                 const params = new URLSearchParams();
                 params.append('template_id', meme_type_id);
@@ -63,10 +59,9 @@ module.exports = class MemeCommand extends commando.Command {
                      var m3me_url = json.data.url;
                      msg.channel.send(`Meme created by ${msg.author} \n ${m3me_url}`)
                     });
-
         }
         catch (error) {
-            msg.reply("Make sure your command is like so: `-meme waitingskeleton This is top text-This is bottom text`\nIf your command wasn't the issue, then maybe something internally must've gone wrong. \n Silvia (my creator) is getting to work on it!")
+            msg.reply("Make sure your command is like so: `-meme waitingskeleton This is top text-This is bottom text`\nIf your command wasn't the issue, then maybe something internally must've gone wrong.")
         }
 
         }

@@ -83,6 +83,16 @@ module.exports = class HelpCommand extends commando.Command {
                 { name: 'Space Commands 🌌🌃', value: space_cmds},
                 { name: 'Message Formatting Commands :incoming_envelope: :speech_balloon: ', value: fmt_cmds},
                 { name: 'Meta Commamds ', value: meta_cmds},
+                {
+                    name: ":film_frames: Watch YouTube Videos",
+                    value:
+                      "If you want to search for YouTube videos, just type yt or -yt in a server, accompanied by keywords.\nEg: `-yt greyhound swedish house mafia`\nThis is one of Onyx's most popular commands!"
+                },
+                {
+                    name: ":star: React With GIFs or Stickers",
+                    value:
+                      "React with GIFS and/or stickers. Just type -sticker or -gif, along with keywords."
+                },
                 { name: 'Get More Info. On A Command ', value: "To get more info. on a command, type `" + `${prefix}help` + " command`" + "\neg: `" + prefix + "help word2sticker`" },
                 { name: 'Prepend My Prefix - Before A Command', value: "Prepend - before any of the commands, or mention me before a command.\nEg: -sticker tropical\n@Onyx sticker lol" },
                 { name: 'For More Info on Commands', value: "For a complete command table, with info on usage, check out [my command page](https://silvia-odwyer.github.io/Onyx-Discord-Bot-Website/commands.html)." },

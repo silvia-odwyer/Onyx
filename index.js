@@ -117,7 +117,7 @@ client
         }
       }
 
-    } else if (msg.mentions.has(client.user)) {
+    } else if (msg.mentions.has(client.user) && (msg.content.indexOf("@everyone") == -1) && (msg.content.indexOf("@here") == -1)) {
       if (msg.content.length === 21) {
         // Just Onyx was mentioned and no other text accompanied it.
         msg.reply("My prefix is -");
@@ -143,11 +143,11 @@ client.on("guildCreate", guild => {
     guild.name
   } (id: ${guild.id}). This server has ${
     guild.memberCount
-  } members! :D NOW IN: I'm now in ${client.guilds.size} servers :D`;
+  } members! :D NOW IN: I'm now in ${client.guilds.cache.size} servers :D`;
   console.log(message);
   client.channels.cache.get(channel_id).send(`@Silvia923#9909 ${message}`);
   client.user.setActivity(
-    `${bot_prefix}help | Running on ${client.guilds.size} servers`
+    `${bot_prefix}help | Running on ${client.guilds.cache.size} servers`
   );
 
   guild.owner.send(
