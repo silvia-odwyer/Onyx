@@ -1,7 +1,7 @@
 const commando = require('discord.js-commando');
 const oneLine = require('common-tags').oneLine;
 const fetch = require("node-fetch");
-const wolfram_alpha_id = process.env.WOLFRAM_ALPHA_API_ID;
+const wolfram_alpha_id = process.env.WOLFRAM_ALPHA_APP_ID;
 
 var name = "define"
 module.exports = class DefineCommand extends commando.Command {
