@@ -51,7 +51,7 @@ Onyx runs 24/7, so she'll always be online. :D
 
 ## Onyx In Action
 ### Ask Onyx Anything You Like!
-![Ask Onyx Anything You Like!](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/ask_example.gif "Ask Onyx Anything You Like!")
+![Ask Onyx Anything You Like!](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/ask_example.gif "Ask Onyx Anything You Like!")
 
 ![Ask Onyx Anything You Like! (Yes, even questions like this!)](https://github.com/silvia-odwyer/NodeJS-Discord-Bot/blob/master/media/ask2_example.gif "Ask Onyx Anything You Like!  (Yes, even questions like this!)")
 
