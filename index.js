@@ -102,13 +102,7 @@ client
 
     if (msg.content.split(" ")[0] === "-" || msg.content.split("")[0] === "-") {
       let cmd_name = msg.content.split(" ")[0].substring(1, msg.content.length);
-      console.log("cmd name", cmd_name[0]);
       if (commands.includes(cmd_name)) {
-        // Logging
-        message = `${msg.content} Timestamp: ${
-          msg.createdTimestamp
-        } Date: ${msg.createdAt}`;
-        console.log(message);
 
         try {
           client.channels.cache.get(channel_id).send(`${message}`);
@@ -126,8 +120,6 @@ client
       }
       message = `Message: ${msg.content} Timestamp: ${msg.createdTimestamp} Date: ${msg.createdAt} Server Count: ${
         msg.guild.memberCount} Region: ${msg.guild.region}`;
-      console.log(message);
-      console.log(msg.content.length);
       try {
         client.channels.cache.get(channel_id).send(`${message}`);
       } catch (error) {
